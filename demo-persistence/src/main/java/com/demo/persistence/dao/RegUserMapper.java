@@ -1,6 +1,6 @@
 package com.demo.persistence.dao;
 
-import com.demo.entity.RegUser;
+import com.demo.model.RegUser;
 
 public interface RegUserMapper {
     int deleteByPrimaryKey(Long id);

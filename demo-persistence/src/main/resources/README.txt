@@ -34,7 +34,7 @@ generatorConfig.xml 参数配置详解
             targetPackage     指定生成的model生成所在的包名
             targetProject     指定在该项目下所在的路径
         -->
-        <javaModelGenerator targetPackage="com.demo.entity" targetProject="src/main/java">
+        <javaModelGenerator targetPackage="com.demo.model" targetProject="src/main/java">
             <!-- 是否对model添加 构造函数 -->
             <!--<property name="constructorBased" value="true"/>-->
 

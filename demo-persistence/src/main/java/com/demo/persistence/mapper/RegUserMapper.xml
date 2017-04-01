@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.demo.persistence.dao.RegUserMapper" >
-  <resultMap id="BaseResultMap" type="com.demo.entity.RegUser" >
+  <resultMap id="BaseResultMap" type="com.demo.model.RegUser" >
     <id column="ID" property="id" jdbcType="BIGINT" />
     <result column="CODE" property="code" jdbcType="VARCHAR" />
     <result column="COMPANY_ID" property="companyId" jdbcType="DECIMAL" />
@@ -81,7 +81,7 @@
     delete from reg_user
     where ID = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.demo.entity.RegUser" >
+  <insert id="insert" parameterType="com.demo.model.RegUser" >
     insert into reg_user (ID, CODE, COMPANY_ID, 
       TYPE, LOGIN_NAME, PASSWORD, 
       NAME, DEPT, POSITION, 
@@ -121,7 +121,7 @@
       #{departmentId,jdbcType=DECIMAL}, #{isNewUser,jdbcType=DECIMAL}, #{bidlinkId,jdbcType=BIGINT}, 
       #{erpCode,jdbcType=VARCHAR}, #{erpId,jdbcType=VARCHAR}, #{novice,jdbcType=BIT})
   </insert>
-  <insert id="insertSelective" parameterType="com.demo.entity.RegUser" >
+  <insert id="insertSelective" parameterType="com.demo.model.RegUser" >
     insert into reg_user
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -476,7 +476,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.demo.entity.RegUser" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.demo.model.RegUser" >
     update reg_user
     <set >
       <if test="code != null" >
@@ -653,7 +653,7 @@
     </set>
     where ID = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.demo.entity.RegUser" >
+  <update id="updateByPrimaryKey" parameterType="com.demo.model.RegUser" >
     update reg_user
     set CODE = #{code,jdbcType=VARCHAR},
       COMPANY_ID = #{companyId,jdbcType=DECIMAL},

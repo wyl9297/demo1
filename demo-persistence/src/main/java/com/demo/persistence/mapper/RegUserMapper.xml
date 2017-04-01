@@ -1,0 +1,717 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.demo.persistence.dao.RegUserMapper" >
+  <resultMap id="BaseResultMap" type="com.demo.entity.RegUser" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="COMPANY_ID" property="companyId" jdbcType="DECIMAL" />
+    <result column="TYPE" property="type" jdbcType="DECIMAL" />
+    <result column="LOGIN_NAME" property="loginName" jdbcType="VARCHAR" />
+    <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="DEPT" property="dept" jdbcType="VARCHAR" />
+    <result column="POSITION" property="position" jdbcType="VARCHAR" />
+    <result column="SEX" property="sex" jdbcType="VARCHAR" />
+    <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+    <result column="TEL" property="tel" jdbcType="VARCHAR" />
+    <result column="FAX" property="fax" jdbcType="VARCHAR" />
+    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <result column="CHIEF" property="chief" jdbcType="VARCHAR" />
+    <result column="GRADE" property="grade" jdbcType="DECIMAL" />
+    <result column="ORIGIN" property="origin" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="WEB_TYPE" property="webType" jdbcType="VARCHAR" />
+    <result column="CHIEF_ID" property="chiefId" jdbcType="DECIMAL" />
+    <result column="FILLUSER" property="filluser" jdbcType="VARCHAR" />
+    <result column="FILLUSERTEL" property="fillusertel" jdbcType="VARCHAR" />
+    <result column="FILLCOMMENDER" property="fillcommender" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="DECIMAL" />
+    <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+    <result column="MARKING" property="marking" jdbcType="VARCHAR" />
+    <result column="COMPANYID_ORIGIN" property="companyidOrigin" jdbcType="DECIMAL" />
+    <result column="UPDATE_ORIGIN" property="updateOrigin" jdbcType="VARCHAR" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="LASTLOGIN_TIME" property="lastloginTime" jdbcType="TIMESTAMP" />
+    <result column="IS_EN_USER" property="isEnUser" jdbcType="DECIMAL" />
+    <result column="CLOSEREASON" property="closereason" jdbcType="VARCHAR" />
+    <result column="IS_SUBUSER" property="isSubuser" jdbcType="DECIMAL" />
+    <result column="REGISTER_SOURCE" property="registerSource" jdbcType="VARCHAR" />
+    <result column="NAME_EN" property="nameEn" jdbcType="VARCHAR" />
+    <result column="COMMU_ADDR" property="commuAddr" jdbcType="VARCHAR" />
+    <result column="COMMU_ADDR_ENGLIS" property="commuAddrEnglis" jdbcType="VARCHAR" />
+    <result column="ZIP_CODE" property="zipCode" jdbcType="VARCHAR" />
+    <result column="MAIN_PRODUCT" property="mainProduct" jdbcType="VARCHAR" />
+    <result column="BID_CHANNEL" property="bidChannel" jdbcType="VARCHAR" />
+    <result column="SALE_ID" property="saleId" jdbcType="DECIMAL" />
+    <result column="MAX_BROWSE_TIMES" property="maxBrowseTimes" jdbcType="DECIMAL" />
+    <result column="LAST_VISIT_IP" property="lastVisitIp" jdbcType="VARCHAR" />
+    <result column="INTENT" property="intent" jdbcType="VARCHAR" />
+    <result column="USER_ORIGIN" property="userOrigin" jdbcType="VARCHAR" />
+    <result column="LAST_LOGIN_IP" property="lastLoginIp" jdbcType="VARCHAR" />
+    <result column="SALE_NAME" property="saleName" jdbcType="VARCHAR" />
+    <result column="SALE_TIME" property="saleTime" jdbcType="TIMESTAMP" />
+    <result column="PARTMENTID" property="partmentid" jdbcType="DECIMAL" />
+    <result column="DISTRIBUTION_USER" property="distributionUser" jdbcType="VARCHAR" />
+    <result column="LOGIN_EMAIL" property="loginEmail" jdbcType="VARCHAR" />
+    <result column="IS_SPACE_USER" property="isSpaceUser" jdbcType="DECIMAL" />
+    <result column="DEPARTMENT_ID" property="departmentId" jdbcType="DECIMAL" />
+    <result column="IS_NEW_USER" property="isNewUser" jdbcType="DECIMAL" />
+    <result column="bidlink_id" property="bidlinkId" jdbcType="BIGINT" />
+    <result column="erp_code" property="erpCode" jdbcType="VARCHAR" />
+    <result column="erp_id" property="erpId" jdbcType="VARCHAR" />
+    <result column="NOVICE" property="novice" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, CODE, COMPANY_ID, TYPE, LOGIN_NAME, PASSWORD, NAME, DEPT, POSITION, SEX, MOBILE, 
+    TEL, FAX, EMAIL, CHIEF, GRADE, ORIGIN, CREATE_TIME, WEB_TYPE, CHIEF_ID, FILLUSER, 
+    FILLUSERTEL, FILLCOMMENDER, STATUS, CONTENT, MARKING, COMPANYID_ORIGIN, UPDATE_ORIGIN, 
+    UPDATE_TIME, LASTLOGIN_TIME, IS_EN_USER, CLOSEREASON, IS_SUBUSER, REGISTER_SOURCE, 
+    NAME_EN, COMMU_ADDR, COMMU_ADDR_ENGLIS, ZIP_CODE, MAIN_PRODUCT, BID_CHANNEL, SALE_ID, 
+    MAX_BROWSE_TIMES, LAST_VISIT_IP, INTENT, USER_ORIGIN, LAST_LOGIN_IP, SALE_NAME, SALE_TIME, 
+    PARTMENTID, DISTRIBUTION_USER, LOGIN_EMAIL, IS_SPACE_USER, DEPARTMENT_ID, IS_NEW_USER, 
+    bidlink_id, erp_code, erp_id, NOVICE
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from reg_user
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from reg_user
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.demo.entity.RegUser" >
+    insert into reg_user (ID, CODE, COMPANY_ID, 
+      TYPE, LOGIN_NAME, PASSWORD, 
+      NAME, DEPT, POSITION, 
+      SEX, MOBILE, TEL, FAX, 
+      EMAIL, CHIEF, GRADE, 
+      ORIGIN, CREATE_TIME, WEB_TYPE, 
+      CHIEF_ID, FILLUSER, FILLUSERTEL, 
+      FILLCOMMENDER, STATUS, CONTENT, 
+      MARKING, COMPANYID_ORIGIN, UPDATE_ORIGIN, 
+      UPDATE_TIME, LASTLOGIN_TIME, IS_EN_USER, 
+      CLOSEREASON, IS_SUBUSER, REGISTER_SOURCE, 
+      NAME_EN, COMMU_ADDR, COMMU_ADDR_ENGLIS, 
+      ZIP_CODE, MAIN_PRODUCT, BID_CHANNEL, 
+      SALE_ID, MAX_BROWSE_TIMES, LAST_VISIT_IP, 
+      INTENT, USER_ORIGIN, LAST_LOGIN_IP, 
+      SALE_NAME, SALE_TIME, PARTMENTID, 
+      DISTRIBUTION_USER, LOGIN_EMAIL, IS_SPACE_USER, 
+      DEPARTMENT_ID, IS_NEW_USER, bidlink_id, 
+      erp_code, erp_id, NOVICE)
+    values (#{id,jdbcType=BIGINT}, #{code,jdbcType=VARCHAR}, #{companyId,jdbcType=DECIMAL}, 
+      #{type,jdbcType=DECIMAL}, #{loginName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{dept,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, #{fax,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{chief,jdbcType=VARCHAR}, #{grade,jdbcType=DECIMAL}, 
+      #{origin,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{webType,jdbcType=VARCHAR}, 
+      #{chiefId,jdbcType=DECIMAL}, #{filluser,jdbcType=VARCHAR}, #{fillusertel,jdbcType=VARCHAR}, 
+      #{fillcommender,jdbcType=VARCHAR}, #{status,jdbcType=DECIMAL}, #{content,jdbcType=VARCHAR}, 
+      #{marking,jdbcType=VARCHAR}, #{companyidOrigin,jdbcType=DECIMAL}, #{updateOrigin,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{lastloginTime,jdbcType=TIMESTAMP}, #{isEnUser,jdbcType=DECIMAL}, 
+      #{closereason,jdbcType=VARCHAR}, #{isSubuser,jdbcType=DECIMAL}, #{registerSource,jdbcType=VARCHAR}, 
+      #{nameEn,jdbcType=VARCHAR}, #{commuAddr,jdbcType=VARCHAR}, #{commuAddrEnglis,jdbcType=VARCHAR}, 
+      #{zipCode,jdbcType=VARCHAR}, #{mainProduct,jdbcType=VARCHAR}, #{bidChannel,jdbcType=VARCHAR}, 
+      #{saleId,jdbcType=DECIMAL}, #{maxBrowseTimes,jdbcType=DECIMAL}, #{lastVisitIp,jdbcType=VARCHAR}, 
+      #{intent,jdbcType=VARCHAR}, #{userOrigin,jdbcType=VARCHAR}, #{lastLoginIp,jdbcType=VARCHAR}, 
+      #{saleName,jdbcType=VARCHAR}, #{saleTime,jdbcType=TIMESTAMP}, #{partmentid,jdbcType=DECIMAL}, 
+      #{distributionUser,jdbcType=VARCHAR}, #{loginEmail,jdbcType=VARCHAR}, #{isSpaceUser,jdbcType=DECIMAL}, 
+      #{departmentId,jdbcType=DECIMAL}, #{isNewUser,jdbcType=DECIMAL}, #{bidlinkId,jdbcType=BIGINT}, 
+      #{erpCode,jdbcType=VARCHAR}, #{erpId,jdbcType=VARCHAR}, #{novice,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.demo.entity.RegUser" >
+    insert into reg_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="companyId != null" >
+        COMPANY_ID,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="loginName != null" >
+        LOGIN_NAME,
+      </if>
+      <if test="password != null" >
+        PASSWORD,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="dept != null" >
+        DEPT,
+      </if>
+      <if test="position != null" >
+        POSITION,
+      </if>
+      <if test="sex != null" >
+        SEX,
+      </if>
+      <if test="mobile != null" >
+        MOBILE,
+      </if>
+      <if test="tel != null" >
+        TEL,
+      </if>
+      <if test="fax != null" >
+        FAX,
+      </if>
+      <if test="email != null" >
+        EMAIL,
+      </if>
+      <if test="chief != null" >
+        CHIEF,
+      </if>
+      <if test="grade != null" >
+        GRADE,
+      </if>
+      <if test="origin != null" >
+        ORIGIN,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="webType != null" >
+        WEB_TYPE,
+      </if>
+      <if test="chiefId != null" >
+        CHIEF_ID,
+      </if>
+      <if test="filluser != null" >
+        FILLUSER,
+      </if>
+      <if test="fillusertel != null" >
+        FILLUSERTEL,
+      </if>
+      <if test="fillcommender != null" >
+        FILLCOMMENDER,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="content != null" >
+        CONTENT,
+      </if>
+      <if test="marking != null" >
+        MARKING,
+      </if>
+      <if test="companyidOrigin != null" >
+        COMPANYID_ORIGIN,
+      </if>
+      <if test="updateOrigin != null" >
+        UPDATE_ORIGIN,
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME,
+      </if>
+      <if test="lastloginTime != null" >
+        LASTLOGIN_TIME,
+      </if>
+      <if test="isEnUser != null" >
+        IS_EN_USER,
+      </if>
+      <if test="closereason != null" >
+        CLOSEREASON,
+      </if>
+      <if test="isSubuser != null" >
+        IS_SUBUSER,
+      </if>
+      <if test="registerSource != null" >
+        REGISTER_SOURCE,
+      </if>
+      <if test="nameEn != null" >
+        NAME_EN,
+      </if>
+      <if test="commuAddr != null" >
+        COMMU_ADDR,
+      </if>
+      <if test="commuAddrEnglis != null" >
+        COMMU_ADDR_ENGLIS,
+      </if>
+      <if test="zipCode != null" >
+        ZIP_CODE,
+      </if>
+      <if test="mainProduct != null" >
+        MAIN_PRODUCT,
+      </if>
+      <if test="bidChannel != null" >
+        BID_CHANNEL,
+      </if>
+      <if test="saleId != null" >
+        SALE_ID,
+      </if>
+      <if test="maxBrowseTimes != null" >
+        MAX_BROWSE_TIMES,
+      </if>
+      <if test="lastVisitIp != null" >
+        LAST_VISIT_IP,
+      </if>
+      <if test="intent != null" >
+        INTENT,
+      </if>
+      <if test="userOrigin != null" >
+        USER_ORIGIN,
+      </if>
+      <if test="lastLoginIp != null" >
+        LAST_LOGIN_IP,
+      </if>
+      <if test="saleName != null" >
+        SALE_NAME,
+      </if>
+      <if test="saleTime != null" >
+        SALE_TIME,
+      </if>
+      <if test="partmentid != null" >
+        PARTMENTID,
+      </if>
+      <if test="distributionUser != null" >
+        DISTRIBUTION_USER,
+      </if>
+      <if test="loginEmail != null" >
+        LOGIN_EMAIL,
+      </if>
+      <if test="isSpaceUser != null" >
+        IS_SPACE_USER,
+      </if>
+      <if test="departmentId != null" >
+        DEPARTMENT_ID,
+      </if>
+      <if test="isNewUser != null" >
+        IS_NEW_USER,
+      </if>
+      <if test="bidlinkId != null" >
+        bidlink_id,
+      </if>
+      <if test="erpCode != null" >
+        erp_code,
+      </if>
+      <if test="erpId != null" >
+        erp_id,
+      </if>
+      <if test="novice != null" >
+        NOVICE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null" >
+        #{companyId,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=DECIMAL},
+      </if>
+      <if test="loginName != null" >
+        #{loginName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="dept != null" >
+        #{dept,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="fax != null" >
+        #{fax,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="chief != null" >
+        #{chief,jdbcType=VARCHAR},
+      </if>
+      <if test="grade != null" >
+        #{grade,jdbcType=DECIMAL},
+      </if>
+      <if test="origin != null" >
+        #{origin,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="webType != null" >
+        #{webType,jdbcType=VARCHAR},
+      </if>
+      <if test="chiefId != null" >
+        #{chiefId,jdbcType=DECIMAL},
+      </if>
+      <if test="filluser != null" >
+        #{filluser,jdbcType=VARCHAR},
+      </if>
+      <if test="fillusertel != null" >
+        #{fillusertel,jdbcType=VARCHAR},
+      </if>
+      <if test="fillcommender != null" >
+        #{fillcommender,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=DECIMAL},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="marking != null" >
+        #{marking,jdbcType=VARCHAR},
+      </if>
+      <if test="companyidOrigin != null" >
+        #{companyidOrigin,jdbcType=DECIMAL},
+      </if>
+      <if test="updateOrigin != null" >
+        #{updateOrigin,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastloginTime != null" >
+        #{lastloginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isEnUser != null" >
+        #{isEnUser,jdbcType=DECIMAL},
+      </if>
+      <if test="closereason != null" >
+        #{closereason,jdbcType=VARCHAR},
+      </if>
+      <if test="isSubuser != null" >
+        #{isSubuser,jdbcType=DECIMAL},
+      </if>
+      <if test="registerSource != null" >
+        #{registerSource,jdbcType=VARCHAR},
+      </if>
+      <if test="nameEn != null" >
+        #{nameEn,jdbcType=VARCHAR},
+      </if>
+      <if test="commuAddr != null" >
+        #{commuAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="commuAddrEnglis != null" >
+        #{commuAddrEnglis,jdbcType=VARCHAR},
+      </if>
+      <if test="zipCode != null" >
+        #{zipCode,jdbcType=VARCHAR},
+      </if>
+      <if test="mainProduct != null" >
+        #{mainProduct,jdbcType=VARCHAR},
+      </if>
+      <if test="bidChannel != null" >
+        #{bidChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="saleId != null" >
+        #{saleId,jdbcType=DECIMAL},
+      </if>
+      <if test="maxBrowseTimes != null" >
+        #{maxBrowseTimes,jdbcType=DECIMAL},
+      </if>
+      <if test="lastVisitIp != null" >
+        #{lastVisitIp,jdbcType=VARCHAR},
+      </if>
+      <if test="intent != null" >
+        #{intent,jdbcType=VARCHAR},
+      </if>
+      <if test="userOrigin != null" >
+        #{userOrigin,jdbcType=VARCHAR},
+      </if>
+      <if test="lastLoginIp != null" >
+        #{lastLoginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="saleName != null" >
+        #{saleName,jdbcType=VARCHAR},
+      </if>
+      <if test="saleTime != null" >
+        #{saleTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="partmentid != null" >
+        #{partmentid,jdbcType=DECIMAL},
+      </if>
+      <if test="distributionUser != null" >
+        #{distributionUser,jdbcType=VARCHAR},
+      </if>
+      <if test="loginEmail != null" >
+        #{loginEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="isSpaceUser != null" >
+        #{isSpaceUser,jdbcType=DECIMAL},
+      </if>
+      <if test="departmentId != null" >
+        #{departmentId,jdbcType=DECIMAL},
+      </if>
+      <if test="isNewUser != null" >
+        #{isNewUser,jdbcType=DECIMAL},
+      </if>
+      <if test="bidlinkId != null" >
+        #{bidlinkId,jdbcType=BIGINT},
+      </if>
+      <if test="erpCode != null" >
+        #{erpCode,jdbcType=VARCHAR},
+      </if>
+      <if test="erpId != null" >
+        #{erpId,jdbcType=VARCHAR},
+      </if>
+      <if test="novice != null" >
+        #{novice,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.demo.entity.RegUser" >
+    update reg_user
+    <set >
+      <if test="code != null" >
+        CODE = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null" >
+        COMPANY_ID = #{companyId,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=DECIMAL},
+      </if>
+      <if test="loginName != null" >
+        LOGIN_NAME = #{loginName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        PASSWORD = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="dept != null" >
+        DEPT = #{dept,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        POSITION = #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        SEX = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        MOBILE = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        TEL = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="fax != null" >
+        FAX = #{fax,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        EMAIL = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="chief != null" >
+        CHIEF = #{chief,jdbcType=VARCHAR},
+      </if>
+      <if test="grade != null" >
+        GRADE = #{grade,jdbcType=DECIMAL},
+      </if>
+      <if test="origin != null" >
+        ORIGIN = #{origin,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="webType != null" >
+        WEB_TYPE = #{webType,jdbcType=VARCHAR},
+      </if>
+      <if test="chiefId != null" >
+        CHIEF_ID = #{chiefId,jdbcType=DECIMAL},
+      </if>
+      <if test="filluser != null" >
+        FILLUSER = #{filluser,jdbcType=VARCHAR},
+      </if>
+      <if test="fillusertel != null" >
+        FILLUSERTEL = #{fillusertel,jdbcType=VARCHAR},
+      </if>
+      <if test="fillcommender != null" >
+        FILLCOMMENDER = #{fillcommender,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=DECIMAL},
+      </if>
+      <if test="content != null" >
+        CONTENT = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="marking != null" >
+        MARKING = #{marking,jdbcType=VARCHAR},
+      </if>
+      <if test="companyidOrigin != null" >
+        COMPANYID_ORIGIN = #{companyidOrigin,jdbcType=DECIMAL},
+      </if>
+      <if test="updateOrigin != null" >
+        UPDATE_ORIGIN = #{updateOrigin,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastloginTime != null" >
+        LASTLOGIN_TIME = #{lastloginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isEnUser != null" >
+        IS_EN_USER = #{isEnUser,jdbcType=DECIMAL},
+      </if>
+      <if test="closereason != null" >
+        CLOSEREASON = #{closereason,jdbcType=VARCHAR},
+      </if>
+      <if test="isSubuser != null" >
+        IS_SUBUSER = #{isSubuser,jdbcType=DECIMAL},
+      </if>
+      <if test="registerSource != null" >
+        REGISTER_SOURCE = #{registerSource,jdbcType=VARCHAR},
+      </if>
+      <if test="nameEn != null" >
+        NAME_EN = #{nameEn,jdbcType=VARCHAR},
+      </if>
+      <if test="commuAddr != null" >
+        COMMU_ADDR = #{commuAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="commuAddrEnglis != null" >
+        COMMU_ADDR_ENGLIS = #{commuAddrEnglis,jdbcType=VARCHAR},
+      </if>
+      <if test="zipCode != null" >
+        ZIP_CODE = #{zipCode,jdbcType=VARCHAR},
+      </if>
+      <if test="mainProduct != null" >
+        MAIN_PRODUCT = #{mainProduct,jdbcType=VARCHAR},
+      </if>
+      <if test="bidChannel != null" >
+        BID_CHANNEL = #{bidChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="saleId != null" >
+        SALE_ID = #{saleId,jdbcType=DECIMAL},
+      </if>
+      <if test="maxBrowseTimes != null" >
+        MAX_BROWSE_TIMES = #{maxBrowseTimes,jdbcType=DECIMAL},
+      </if>
+      <if test="lastVisitIp != null" >
+        LAST_VISIT_IP = #{lastVisitIp,jdbcType=VARCHAR},
+      </if>
+      <if test="intent != null" >
+        INTENT = #{intent,jdbcType=VARCHAR},
+      </if>
+      <if test="userOrigin != null" >
+        USER_ORIGIN = #{userOrigin,jdbcType=VARCHAR},
+      </if>
+      <if test="lastLoginIp != null" >
+        LAST_LOGIN_IP = #{lastLoginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="saleName != null" >
+        SALE_NAME = #{saleName,jdbcType=VARCHAR},
+      </if>
+      <if test="saleTime != null" >
+        SALE_TIME = #{saleTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="partmentid != null" >
+        PARTMENTID = #{partmentid,jdbcType=DECIMAL},
+      </if>
+      <if test="distributionUser != null" >
+        DISTRIBUTION_USER = #{distributionUser,jdbcType=VARCHAR},
+      </if>
+      <if test="loginEmail != null" >
+        LOGIN_EMAIL = #{loginEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="isSpaceUser != null" >
+        IS_SPACE_USER = #{isSpaceUser,jdbcType=DECIMAL},
+      </if>
+      <if test="departmentId != null" >
+        DEPARTMENT_ID = #{departmentId,jdbcType=DECIMAL},
+      </if>
+      <if test="isNewUser != null" >
+        IS_NEW_USER = #{isNewUser,jdbcType=DECIMAL},
+      </if>
+      <if test="bidlinkId != null" >
+        bidlink_id = #{bidlinkId,jdbcType=BIGINT},
+      </if>
+      <if test="erpCode != null" >
+        erp_code = #{erpCode,jdbcType=VARCHAR},
+      </if>
+      <if test="erpId != null" >
+        erp_id = #{erpId,jdbcType=VARCHAR},
+      </if>
+      <if test="novice != null" >
+        NOVICE = #{novice,jdbcType=BIT},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.demo.entity.RegUser" >
+    update reg_user
+    set CODE = #{code,jdbcType=VARCHAR},
+      COMPANY_ID = #{companyId,jdbcType=DECIMAL},
+      TYPE = #{type,jdbcType=DECIMAL},
+      LOGIN_NAME = #{loginName,jdbcType=VARCHAR},
+      PASSWORD = #{password,jdbcType=VARCHAR},
+      NAME = #{name,jdbcType=VARCHAR},
+      DEPT = #{dept,jdbcType=VARCHAR},
+      POSITION = #{position,jdbcType=VARCHAR},
+      SEX = #{sex,jdbcType=VARCHAR},
+      MOBILE = #{mobile,jdbcType=VARCHAR},
+      TEL = #{tel,jdbcType=VARCHAR},
+      FAX = #{fax,jdbcType=VARCHAR},
+      EMAIL = #{email,jdbcType=VARCHAR},
+      CHIEF = #{chief,jdbcType=VARCHAR},
+      GRADE = #{grade,jdbcType=DECIMAL},
+      ORIGIN = #{origin,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      WEB_TYPE = #{webType,jdbcType=VARCHAR},
+      CHIEF_ID = #{chiefId,jdbcType=DECIMAL},
+      FILLUSER = #{filluser,jdbcType=VARCHAR},
+      FILLUSERTEL = #{fillusertel,jdbcType=VARCHAR},
+      FILLCOMMENDER = #{fillcommender,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=DECIMAL},
+      CONTENT = #{content,jdbcType=VARCHAR},
+      MARKING = #{marking,jdbcType=VARCHAR},
+      COMPANYID_ORIGIN = #{companyidOrigin,jdbcType=DECIMAL},
+      UPDATE_ORIGIN = #{updateOrigin,jdbcType=VARCHAR},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      LASTLOGIN_TIME = #{lastloginTime,jdbcType=TIMESTAMP},
+      IS_EN_USER = #{isEnUser,jdbcType=DECIMAL},
+      CLOSEREASON = #{closereason,jdbcType=VARCHAR},
+      IS_SUBUSER = #{isSubuser,jdbcType=DECIMAL},
+      REGISTER_SOURCE = #{registerSource,jdbcType=VARCHAR},
+      NAME_EN = #{nameEn,jdbcType=VARCHAR},
+      COMMU_ADDR = #{commuAddr,jdbcType=VARCHAR},
+      COMMU_ADDR_ENGLIS = #{commuAddrEnglis,jdbcType=VARCHAR},
+      ZIP_CODE = #{zipCode,jdbcType=VARCHAR},
+      MAIN_PRODUCT = #{mainProduct,jdbcType=VARCHAR},
+      BID_CHANNEL = #{bidChannel,jdbcType=VARCHAR},
+      SALE_ID = #{saleId,jdbcType=DECIMAL},
+      MAX_BROWSE_TIMES = #{maxBrowseTimes,jdbcType=DECIMAL},
+      LAST_VISIT_IP = #{lastVisitIp,jdbcType=VARCHAR},
+      INTENT = #{intent,jdbcType=VARCHAR},
+      USER_ORIGIN = #{userOrigin,jdbcType=VARCHAR},
+      LAST_LOGIN_IP = #{lastLoginIp,jdbcType=VARCHAR},
+      SALE_NAME = #{saleName,jdbcType=VARCHAR},
+      SALE_TIME = #{saleTime,jdbcType=TIMESTAMP},
+      PARTMENTID = #{partmentid,jdbcType=DECIMAL},
+      DISTRIBUTION_USER = #{distributionUser,jdbcType=VARCHAR},
+      LOGIN_EMAIL = #{loginEmail,jdbcType=VARCHAR},
+      IS_SPACE_USER = #{isSpaceUser,jdbcType=DECIMAL},
+      DEPARTMENT_ID = #{departmentId,jdbcType=DECIMAL},
+      IS_NEW_USER = #{isNewUser,jdbcType=DECIMAL},
+      bidlink_id = #{bidlinkId,jdbcType=BIGINT},
+      erp_code = #{erpCode,jdbcType=VARCHAR},
+      erp_id = #{erpId,jdbcType=VARCHAR},
+      NOVICE = #{novice,jdbcType=BIT}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

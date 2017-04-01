@@ -1,6 +1,6 @@
 package com.demo.controller;
 
-import com.demo.entity.Company;
+import com.demo.model.Company;
 import com.demo.service.DemoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

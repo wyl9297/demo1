@@ -1,8 +1,6 @@
 package com.demo.service.impl;
 
-//import com.demo.entity.Company;
-
-import com.demo.entity.Company;
+import com.demo.model.Company;
 import com.demo.service.DemoService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.stereotype.Service;

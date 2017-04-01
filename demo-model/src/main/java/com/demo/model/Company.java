@@ -1,4 +1,4 @@
-package com.demo.entity;
+package com.demo.model;
 
 /**
  * Created by Administrator on 2017/3/28.

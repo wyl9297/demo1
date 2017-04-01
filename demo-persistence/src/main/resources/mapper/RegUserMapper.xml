@@ -77,6 +77,11 @@
     from reg_user
     where ID = #{id,jdbcType=BIGINT}
   </select>
+  <select id="getRegUsers" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from reg_user
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from reg_user
     where ID = #{id,jdbcType=BIGINT}

@@ -100,12 +100,12 @@
             <version>${mybatis.spring.version}</version>
         </dependency>
 
-        <!--通用MAPPER-->
-        <dependency>
+        <!--通用MAPPER 与 devtools冲突。。。-->
+        <!--<dependency>
             <groupId>tk.mybatis</groupId>
             <artifactId>mapper</artifactId>
             <version>3.3.7</version>
-        </dependency>
+        </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper -->
         <dependency>

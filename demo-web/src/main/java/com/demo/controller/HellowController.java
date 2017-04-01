@@ -1,6 +1,7 @@
 package com.demo.controller;
 
 import com.demo.model.Company;
+import com.demo.model.RegUser;
 import com.demo.service.DemoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -41,10 +42,16 @@ public class HellowController {
         return company;
     }
 
-    @RequestMapping( value = "returnJsp")
-    public ModelAndView returnJsp(HttpServletRequest request , HttpServletResponse response){
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("hellow");
-        return modelAndView;
+    @RequestMapping( value = "getRegUser")
+    public RegUser getRegUser(HttpServletRequest request , HttpServletResponse response){
+        //List<RegUser> regUsers = demoService.getRegUsers();
+        RegUser regUser = demoService.getRegUser(1L);
+        return regUser;
+    }
+
+    @RequestMapping( value = "getRegUserList")
+    public List<RegUser> getRegUserList(HttpServletRequest request , HttpServletResponse response){
+        List<RegUser> regUsers = demoService.getRegUsers();
+        return regUsers;
     }
 }

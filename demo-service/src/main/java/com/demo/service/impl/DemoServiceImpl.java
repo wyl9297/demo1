@@ -1,7 +1,10 @@
 package com.demo.service.impl;
 
 import com.demo.model.Company;
+import com.demo.model.RegUser;
+import com.demo.persistence.dao.RegUserMapper;
 import com.demo.service.DemoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +16,9 @@ import java.util.List;
  */
 @Service("DemoService")
 public class DemoServiceImpl implements DemoService {
+
+    @Autowired
+    private RegUserMapper regUserMapper;
 
     @Override
     public List<Company> getCompanys(Long companyId) {
@@ -26,6 +32,18 @@ public class DemoServiceImpl implements DemoService {
         }
         return list;
     }
+
+    @Override
+    public List<RegUser> getRegUsers() {
+        List<RegUser> regUsers = regUserMapper.getRegUsers();
+        return regUsers;
+    }
+
+    @Override
+    public RegUser getRegUser(Long UserId) {
+        return regUserMapper.selectByPrimaryKey(UserId);
+    }
+
 
     public static void main(String[] args) {
         SpringApplication.run(DemoServiceImpl.class,args);

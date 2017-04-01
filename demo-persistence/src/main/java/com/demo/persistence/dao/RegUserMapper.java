@@ -2,6 +2,8 @@ package com.demo.persistence.dao;
 
 import com.demo.model.RegUser;
 
+import java.util.List;
+
 public interface RegUserMapper {
     int deleteByPrimaryKey(Long id);
 
@@ -14,4 +16,6 @@ public interface RegUserMapper {
     int updateByPrimaryKeySelective(RegUser record);
 
     int updateByPrimaryKey(RegUser record);
+
+    List<RegUser> getRegUsers();
 }

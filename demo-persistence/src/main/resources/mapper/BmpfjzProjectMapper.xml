@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.demo.persistence.dao.BmpfjzProjectMapper" >
+  <resultMap id="BaseResultMap" type="com.demo.model.BmpfjzProject" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="comp_id" property="compId" jdbcType="BIGINT" />
+    <result column="comp_name" property="compName" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="project_type" property="projectType" jdbcType="VARCHAR" />
+    <result column="instance_id" property="instanceId" jdbcType="VARCHAR" />
+    <result column="instance_status" property="instanceStatus" jdbcType="TINYINT" />
+    <result column="sub_instance_id" property="subInstanceId" jdbcType="VARCHAR" />
+    <result column="sub_instance_finished" property="subInstanceFinished" jdbcType="TINYINT" />
+    <result column="project_status" property="projectStatus" jdbcType="TINYINT" />
+    <result column="approve_status" property="approveStatus" jdbcType="TINYINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="erp_code" property="erpCode" jdbcType="VARCHAR" />
+    <result column="project_source" property="projectSource" jdbcType="BIT" />
+    <result column="source_type" property="sourceType" jdbcType="TINYINT" />
+    <result column="source_name" property="sourceName" jdbcType="VARCHAR" />
+    <result column="open_bid_flag" property="openBidFlag" jdbcType="TINYINT" />
+    <result column="bid_sheet_template_id" property="bidSheetTemplateId" jdbcType="BIGINT" />
+    <result column="total_sheet_template_id" property="totalSheetTemplateId" jdbcType="BIGINT" />
+    <result column="total_sheet_template_data" property="totalSheetTemplateData" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="open_bid_time" property="openBidTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="operator" property="operator" jdbcType="BIGINT" />
+    <result column="reserve" property="reserve" jdbcType="VARCHAR" />
+    <result column="department_code" property="departmentCode" jdbcType="VARCHAR" />
+    <result column="stop_status" property="stopStatus" jdbcType="TINYINT" />
+    <result column="order_status" property="orderStatus" jdbcType="TINYINT" />
+    <result column="is_upload_file" property="isUploadFile" jdbcType="TINYINT" />
+    <result column="custom_def_id" property="customDefId" jdbcType="VARCHAR" />
+    <result column="IS_IMPORTANT" property="isImportant" jdbcType="TINYINT" />
+    <result column="HAS_CONTRACT" property="hasContract" jdbcType="TINYINT" />
+    <result column="is_core" property="isCore" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, comp_id, comp_name, user_id, user_name, type, project_type, instance_id, instance_status, 
+    sub_instance_id, sub_instance_finished, project_status, approve_status, name, code, 
+    erp_code, project_source, source_type, source_name, open_bid_flag, bid_sheet_template_id, 
+    total_sheet_template_id, total_sheet_template_data, create_time, open_bid_time, update_time, 
+    operator, reserve, department_code, stop_status, order_status, is_upload_file, custom_def_id, 
+    IS_IMPORTANT, HAS_CONTRACT, is_core
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from bmpfjz_project
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from bmpfjz_project
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.demo.model.BmpfjzProject" >
+    insert into bmpfjz_project (id, comp_id, comp_name, 
+      user_id, user_name, type, 
+      project_type, instance_id, instance_status, 
+      sub_instance_id, sub_instance_finished, project_status, 
+      approve_status, name, code, 
+      erp_code, project_source, source_type, 
+      source_name, open_bid_flag, bid_sheet_template_id, 
+      total_sheet_template_id, total_sheet_template_data, 
+      create_time, open_bid_time, update_time, 
+      operator, reserve, department_code, 
+      stop_status, order_status, is_upload_file, 
+      custom_def_id, IS_IMPORTANT, HAS_CONTRACT, 
+      is_core)
+    values (#{id,jdbcType=BIGINT}, #{compId,jdbcType=BIGINT}, #{compName,jdbcType=VARCHAR}, 
+      #{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
+      #{projectType,jdbcType=VARCHAR}, #{instanceId,jdbcType=VARCHAR}, #{instanceStatus,jdbcType=TINYINT}, 
+      #{subInstanceId,jdbcType=VARCHAR}, #{subInstanceFinished,jdbcType=TINYINT}, #{projectStatus,jdbcType=TINYINT}, 
+      #{approveStatus,jdbcType=TINYINT}, #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
+      #{erpCode,jdbcType=VARCHAR}, #{projectSource,jdbcType=BIT}, #{sourceType,jdbcType=TINYINT}, 
+      #{sourceName,jdbcType=VARCHAR}, #{openBidFlag,jdbcType=TINYINT}, #{bidSheetTemplateId,jdbcType=BIGINT}, 
+      #{totalSheetTemplateId,jdbcType=BIGINT}, #{totalSheetTemplateData,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{openBidTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{operator,jdbcType=BIGINT}, #{reserve,jdbcType=VARCHAR}, #{departmentCode,jdbcType=VARCHAR}, 
+      #{stopStatus,jdbcType=TINYINT}, #{orderStatus,jdbcType=TINYINT}, #{isUploadFile,jdbcType=TINYINT}, 
+      #{customDefId,jdbcType=VARCHAR}, #{isImportant,jdbcType=TINYINT}, #{hasContract,jdbcType=TINYINT}, 
+      #{isCore,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.demo.model.BmpfjzProject" >
+    insert into bmpfjz_project
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="compId != null" >
+        comp_id,
+      </if>
+      <if test="compName != null" >
+        comp_name,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="projectType != null" >
+        project_type,
+      </if>
+      <if test="instanceId != null" >
+        instance_id,
+      </if>
+      <if test="instanceStatus != null" >
+        instance_status,
+      </if>
+      <if test="subInstanceId != null" >
+        sub_instance_id,
+      </if>
+      <if test="subInstanceFinished != null" >
+        sub_instance_finished,
+      </if>
+      <if test="projectStatus != null" >
+        project_status,
+      </if>
+      <if test="approveStatus != null" >
+        approve_status,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="erpCode != null" >
+        erp_code,
+      </if>
+      <if test="projectSource != null" >
+        project_source,
+      </if>
+      <if test="sourceType != null" >
+        source_type,
+      </if>
+      <if test="sourceName != null" >
+        source_name,
+      </if>
+      <if test="openBidFlag != null" >
+        open_bid_flag,
+      </if>
+      <if test="bidSheetTemplateId != null" >
+        bid_sheet_template_id,
+      </if>
+      <if test="totalSheetTemplateId != null" >
+        total_sheet_template_id,
+      </if>
+      <if test="totalSheetTemplateData != null" >
+        total_sheet_template_data,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="openBidTime != null" >
+        open_bid_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="operator != null" >
+        operator,
+      </if>
+      <if test="reserve != null" >
+        reserve,
+      </if>
+      <if test="departmentCode != null" >
+        department_code,
+      </if>
+      <if test="stopStatus != null" >
+        stop_status,
+      </if>
+      <if test="orderStatus != null" >
+        order_status,
+      </if>
+      <if test="isUploadFile != null" >
+        is_upload_file,
+      </if>
+      <if test="customDefId != null" >
+        custom_def_id,
+      </if>
+      <if test="isImportant != null" >
+        IS_IMPORTANT,
+      </if>
+      <if test="hasContract != null" >
+        HAS_CONTRACT,
+      </if>
+      <if test="isCore != null" >
+        is_core,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="compId != null" >
+        #{compId,jdbcType=BIGINT},
+      </if>
+      <if test="compName != null" >
+        #{compName,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="projectType != null" >
+        #{projectType,jdbcType=VARCHAR},
+      </if>
+      <if test="instanceId != null" >
+        #{instanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="instanceStatus != null" >
+        #{instanceStatus,jdbcType=TINYINT},
+      </if>
+      <if test="subInstanceId != null" >
+        #{subInstanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="subInstanceFinished != null" >
+        #{subInstanceFinished,jdbcType=TINYINT},
+      </if>
+      <if test="projectStatus != null" >
+        #{projectStatus,jdbcType=TINYINT},
+      </if>
+      <if test="approveStatus != null" >
+        #{approveStatus,jdbcType=TINYINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="erpCode != null" >
+        #{erpCode,jdbcType=VARCHAR},
+      </if>
+      <if test="projectSource != null" >
+        #{projectSource,jdbcType=BIT},
+      </if>
+      <if test="sourceType != null" >
+        #{sourceType,jdbcType=TINYINT},
+      </if>
+      <if test="sourceName != null" >
+        #{sourceName,jdbcType=VARCHAR},
+      </if>
+      <if test="openBidFlag != null" >
+        #{openBidFlag,jdbcType=TINYINT},
+      </if>
+      <if test="bidSheetTemplateId != null" >
+        #{bidSheetTemplateId,jdbcType=BIGINT},
+      </if>
+      <if test="totalSheetTemplateId != null" >
+        #{totalSheetTemplateId,jdbcType=BIGINT},
+      </if>
+      <if test="totalSheetTemplateData != null" >
+        #{totalSheetTemplateData,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="openBidTime != null" >
+        #{openBidTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operator != null" >
+        #{operator,jdbcType=BIGINT},
+      </if>
+      <if test="reserve != null" >
+        #{reserve,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentCode != null" >
+        #{departmentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="stopStatus != null" >
+        #{stopStatus,jdbcType=TINYINT},
+      </if>
+      <if test="orderStatus != null" >
+        #{orderStatus,jdbcType=TINYINT},
+      </if>
+      <if test="isUploadFile != null" >
+        #{isUploadFile,jdbcType=TINYINT},
+      </if>
+      <if test="customDefId != null" >
+        #{customDefId,jdbcType=VARCHAR},
+      </if>
+      <if test="isImportant != null" >
+        #{isImportant,jdbcType=TINYINT},
+      </if>
+      <if test="hasContract != null" >
+        #{hasContract,jdbcType=TINYINT},
+      </if>
+      <if test="isCore != null" >
+        #{isCore,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.demo.model.BmpfjzProject" >
+    update bmpfjz_project
+    <set >
+      <if test="compId != null" >
+        comp_id = #{compId,jdbcType=BIGINT},
+      </if>
+      <if test="compName != null" >
+        comp_name = #{compName,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="projectType != null" >
+        project_type = #{projectType,jdbcType=VARCHAR},
+      </if>
+      <if test="instanceId != null" >
+        instance_id = #{instanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="instanceStatus != null" >
+        instance_status = #{instanceStatus,jdbcType=TINYINT},
+      </if>
+      <if test="subInstanceId != null" >
+        sub_instance_id = #{subInstanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="subInstanceFinished != null" >
+        sub_instance_finished = #{subInstanceFinished,jdbcType=TINYINT},
+      </if>
+      <if test="projectStatus != null" >
+        project_status = #{projectStatus,jdbcType=TINYINT},
+      </if>
+      <if test="approveStatus != null" >
+        approve_status = #{approveStatus,jdbcType=TINYINT},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="erpCode != null" >
+        erp_code = #{erpCode,jdbcType=VARCHAR},
+      </if>
+      <if test="projectSource != null" >
+        project_source = #{projectSource,jdbcType=BIT},
+      </if>
+      <if test="sourceType != null" >
+        source_type = #{sourceType,jdbcType=TINYINT},
+      </if>
+      <if test="sourceName != null" >
+        source_name = #{sourceName,jdbcType=VARCHAR},
+      </if>
+      <if test="openBidFlag != null" >
+        open_bid_flag = #{openBidFlag,jdbcType=TINYINT},
+      </if>
+      <if test="bidSheetTemplateId != null" >
+        bid_sheet_template_id = #{bidSheetTemplateId,jdbcType=BIGINT},
+      </if>
+      <if test="totalSheetTemplateId != null" >
+        total_sheet_template_id = #{totalSheetTemplateId,jdbcType=BIGINT},
+      </if>
+      <if test="totalSheetTemplateData != null" >
+        total_sheet_template_data = #{totalSheetTemplateData,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="openBidTime != null" >
+        open_bid_time = #{openBidTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operator != null" >
+        operator = #{operator,jdbcType=BIGINT},
+      </if>
+      <if test="reserve != null" >
+        reserve = #{reserve,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentCode != null" >
+        department_code = #{departmentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="stopStatus != null" >
+        stop_status = #{stopStatus,jdbcType=TINYINT},
+      </if>
+      <if test="orderStatus != null" >
+        order_status = #{orderStatus,jdbcType=TINYINT},
+      </if>
+      <if test="isUploadFile != null" >
+        is_upload_file = #{isUploadFile,jdbcType=TINYINT},
+      </if>
+      <if test="customDefId != null" >
+        custom_def_id = #{customDefId,jdbcType=VARCHAR},
+      </if>
+      <if test="isImportant != null" >
+        IS_IMPORTANT = #{isImportant,jdbcType=TINYINT},
+      </if>
+      <if test="hasContract != null" >
+        HAS_CONTRACT = #{hasContract,jdbcType=TINYINT},
+      </if>
+      <if test="isCore != null" >
+        is_core = #{isCore,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.demo.model.BmpfjzProject" >
+    update bmpfjz_project
+    set comp_id = #{compId,jdbcType=BIGINT},
+      comp_name = #{compName,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=BIGINT},
+      user_name = #{userName,jdbcType=VARCHAR},
+      type = #{type,jdbcType=TINYINT},
+      project_type = #{projectType,jdbcType=VARCHAR},
+      instance_id = #{instanceId,jdbcType=VARCHAR},
+      instance_status = #{instanceStatus,jdbcType=TINYINT},
+      sub_instance_id = #{subInstanceId,jdbcType=VARCHAR},
+      sub_instance_finished = #{subInstanceFinished,jdbcType=TINYINT},
+      project_status = #{projectStatus,jdbcType=TINYINT},
+      approve_status = #{approveStatus,jdbcType=TINYINT},
+      name = #{name,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      erp_code = #{erpCode,jdbcType=VARCHAR},
+      project_source = #{projectSource,jdbcType=BIT},
+      source_type = #{sourceType,jdbcType=TINYINT},
+      source_name = #{sourceName,jdbcType=VARCHAR},
+      open_bid_flag = #{openBidFlag,jdbcType=TINYINT},
+      bid_sheet_template_id = #{bidSheetTemplateId,jdbcType=BIGINT},
+      total_sheet_template_id = #{totalSheetTemplateId,jdbcType=BIGINT},
+      total_sheet_template_data = #{totalSheetTemplateData,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      open_bid_time = #{openBidTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      operator = #{operator,jdbcType=BIGINT},
+      reserve = #{reserve,jdbcType=VARCHAR},
+      department_code = #{departmentCode,jdbcType=VARCHAR},
+      stop_status = #{stopStatus,jdbcType=TINYINT},
+      order_status = #{orderStatus,jdbcType=TINYINT},
+      is_upload_file = #{isUploadFile,jdbcType=TINYINT},
+      custom_def_id = #{customDefId,jdbcType=VARCHAR},
+      IS_IMPORTANT = #{isImportant,jdbcType=TINYINT},
+      HAS_CONTRACT = #{hasContract,jdbcType=TINYINT},
+      is_core = #{isCore,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

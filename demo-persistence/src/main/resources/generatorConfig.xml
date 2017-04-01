@@ -30,8 +30,8 @@
             <property name="trimStrings" value="true" />
         </javaModelGenerator>
 
-        <sqlMapGenerator targetPackage="com.demo.persistence.mapper"
-                         targetProject="src/main/java">
+        <sqlMapGenerator targetPackage="mapper"
+                         targetProject="src/main/resources">
             <property name="enableSubPackages" value="true" />
         </sqlMapGenerator>
 
@@ -42,7 +42,7 @@
 
         <!--===============-->
         <!-- 生成的业务表配置 -->
-        <table tableName="reg_user" domainObjectName="RegUser"
+        <table tableName="bmpfjz_project" domainObjectName="BmpfjzProject"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">

@@ -86,7 +86,8 @@
     delete from reg_user
     where ID = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.demo.model.RegUser" >
+  <insert id="insert" parameterType="com.demo.model.RegUser" useGeneratedKeys="true" keyProperty="id"
+          keyColumn="ID">
     insert into reg_user (ID, CODE, COMPANY_ID, 
       TYPE, LOGIN_NAME, PASSWORD, 
       NAME, DEPT, POSITION, 

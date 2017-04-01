@@ -3,7 +3,7 @@ package com.demo.persistence.configs;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tk.mybatis.spring.mapper.MapperScannerConfigurer;
+import org.mybatis.spring.mapper.MapperScannerConfigurer; //如果不使用通用Mapper 需要将tk改为org
 
 /**
  * MyBatis扫描接口

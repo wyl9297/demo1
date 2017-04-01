@@ -12,4 +12,5 @@ public interface DemoService {
 
     RegUser getRegUser(Long userId);
 
+    Long saveUser(RegUser regUser);
 }

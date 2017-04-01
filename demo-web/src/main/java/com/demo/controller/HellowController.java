@@ -54,4 +54,22 @@ public class HellowController {
         List<RegUser> regUsers = demoService.getRegUsers();
         return regUsers;
     }
+
+    @RequestMapping( value = "saveRegUser")
+    public String saveRegUser(HttpServletRequest request , HttpServletResponse response){
+        RegUser regUser = new RegUser();
+        regUser.setName("炎林王");
+        regUser.setSex("男");
+        regUser.setLoginName("yanlinwang");
+        regUser.setPassword("66666666666666666666666666666");
+        regUser.setCompanyId(12345678L);
+        regUser.setType(1);
+        regUser.setGrade((short) 6);
+        regUser.setStatus((short) 3);
+        regUser.setWebType("CSPCS");
+        regUser.setIsSubuser((short) 1);
+        Long userId = demoService.saveUser(regUser);
+        return userId.toString();
+    }
+
 }

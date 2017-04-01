@@ -7,6 +7,7 @@ import com.demo.service.DemoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ public class DemoServiceImpl implements DemoService {
 
     @Override
     public List<RegUser> getRegUsers() {
-        List<RegUser> regUsers = regUserMapper.getRegUsers();
+         List<RegUser> regUsers = regUserMapper.getRegUsers();
         return regUsers;
     }
 
@@ -44,6 +45,12 @@ public class DemoServiceImpl implements DemoService {
         return regUserMapper.selectByPrimaryKey(UserId);
     }
 
+    @Override
+    @Transactional
+    public Long saveUser(RegUser regUser) {
+        regUserMapper.insert(regUser);
+        return regUser.getId();
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(DemoServiceImpl.class,args);

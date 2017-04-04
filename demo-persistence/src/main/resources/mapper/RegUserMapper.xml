@@ -82,6 +82,13 @@
     <include refid="Base_Column_List" />
     from reg_user
   </select>
+  <select id="checkLogin" resultMap="BaseResultMap" parameterType="com.demo.model.RegUser">
+    select
+    <include refid="Base_Column_List" />
+    from reg_user
+    WHERE  LOGIN_NAME = #{loginName} AND
+    PASSWORD = #{password}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from reg_user
     where ID = #{id,jdbcType=BIGINT}

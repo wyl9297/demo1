@@ -25,7 +25,7 @@ public class HellowController {
     @Qualifier("DemoService")
     private DemoService demoService;
 
-    @RequestMapping( value = "success")
+    @RequestMapping( { "/success" , "/index" } )
     public ModelAndView success(HttpServletRequest request , HttpServletResponse response){
         List<Company> list = demoService.getCompanys(0L);
         ModelAndView modelAndView = new ModelAndView("success");

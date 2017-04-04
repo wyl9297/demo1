@@ -18,4 +18,6 @@ public interface RegUserMapper {
     int updateByPrimaryKey(RegUser record);
 
     List<RegUser> getRegUsers();
+
+    RegUser checkLogin(RegUser regUser);
 }

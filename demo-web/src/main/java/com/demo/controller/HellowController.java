@@ -1,5 +1,8 @@
 package com.demo.controller;
 
+import cn.bidlink.base.ServiceResult;
+import cn.bidlink.procurement.materials.dal.server.entity.CorpCatalogs;
+import cn.bidlink.procurement.materials.dal.server.service.DubboCorpCatalogsService;
 import com.demo.model.Company;
 import com.demo.service.DemoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  * Created by Administrator on 2017/3/28.
@@ -24,13 +26,22 @@ public class HellowController {
     @Qualifier("DemoService")
     private DemoService demoService;
 
+    @Autowired
+    private DubboCorpCatalogsService dubboCorpCatalogsService;
+
     @RequestMapping( value = "success")
     public ModelAndView success(HttpServletRequest request , HttpServletResponse response){
-        List<Company> list = demoService.getCompanys(0L);
-        ModelAndView modelAndView = new ModelAndView("success");
-        modelAndView.addObject("names","yanlinwang");
-        modelAndView.addObject("list",list);
-        return modelAndView;
+        int i = 0;
+        CorpCatalogs corpCatalogs = new CorpCatalogs();
+        corpCatalogs.setId(283248124493824000L);
+        corpCatalogs.setCompanyId(1113172744L);
+        ServiceResult<Integer> delete = dubboCorpCatalogsService.delete(corpCatalogs);
+        /*System.out.println(delete.getResult());
+        while ( i < 100 ){
+            System.out.println(IdWork.nextId());
+            i ++;
+        }*/
+        return null;
     }
 
     @RequestMapping( value = "returnJson")

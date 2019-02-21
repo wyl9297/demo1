@@ -25,7 +25,7 @@
                         userId="${jdbc.userId}" password="${jdbc.password}" />
 
         <javaModelGenerator targetPackage="com.demo.model"
-                            targetProject="D:/devCode/demo1/demo-model/src/main/java" >
+                            targetProject="E:/数据/IDEA/demo1/demo-model/src/main/java" >
             <property name="enableSubPackages" value="true" />
             <property name="trimStrings" value="true" />
         </javaModelGenerator>
@@ -42,10 +42,11 @@
 
         <!--===============-->
         <!-- 生成的业务表配置 -->
-        <table tableName="reg_user" domainObjectName="RegUser"
+        <table tableName="corp_directorys" domainObjectName="CorpDirectorys"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">
+            <generatedKey column="ID" sqlStatement="MySql" identity="true"/>
         </table>
     </context>
 </generatorConfiguration>

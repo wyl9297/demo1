@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.demo.persistence.dao.CorpCatalogsMapper" >
+  <resultMap id="resultMap1" type="com.demo.model.CorpCatalog" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="OLD_ID" property="oldId" jdbcType="BIGINT" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="DEMO" property="demo" jdbcType="VARCHAR" />
+    <result column="PARENT_ID" property="parentId" jdbcType="BIGINT" />
+    <result column="COMP_ID" property="compId" jdbcType="BIGINT" />
+    <result column="IS_ROOT" property="isRoot" jdbcType="TINYINT" />
+    <result column="TREEPATH" property="treepath" jdbcType="VARCHAR" />
+    <result column="ERP_ID" property="erpId" jdbcType="VARCHAR" />
+    <result column="ERPCODE" property="erpcode" jdbcType="VARCHAR" />
+    <result column="FLAG_ASSOCIATE_USER" property="flagAssociateUser" jdbcType="TINYINT" />
+    <result column="FLAG_ASSOCIATE_SUPPLIER" property="flagAssociateSupplier" jdbcType="TINYINT" />
+    <result column="CATALOG_NAME_PATH" property="catalogNamePath" jdbcType="VARCHAR" />
+    <result column="COMPANY_ID" property="companyId" jdbcType="BIGINT" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="CREATOR" property="creator" jdbcType="BIGINT" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="MODIFIER" property="modifier" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, OLD_ID,name,code,DEMO,parent_id,COMP_ID,is_root,TREEPATH,CATALOG_NAME_PATH,company_id,create_time,creator,update_time,modifier
+  </sql>
+  <select id="selAll" resultMap="resultMap1" parameterType="long">
+    select
+      <include refid="Base_Column_List" />
+    from corp_catalogs where company_id=#{companyId}
+  </select>
+
+</mapper>

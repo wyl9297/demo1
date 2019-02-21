@@ -23,12 +23,13 @@
     <result column="MODIFIER" property="modifier" jdbcType="BIGINT" />
   </resultMap>
   <sql id="Base_Column_List" >
-    ID, OLD_ID,name,code,DEMO,parent_id,COMP_ID,is_root,TREEPATH,CATALOG_NAME_PATH,company_id,create_time,creator,update_time,modifier
+    cc.ID, cc.OLD_ID,cc.name,cc.code,cc.DEMO,cc.parent_id,cc.COMP_ID,cc.is_root,cc.TREEPATH,cc.CATALOG_NAME_PATH,cc.company_id,cc.create_time,cc.creator,cc.update_time,cc.modifier
   </sql>
   <select id="selAll" resultMap="resultMap1" parameterType="long">
     select
       <include refid="Base_Column_List" />
-    from corp_catalogs where company_id=#{companyId}
+    from corp_catalogs cc inner join corp_directorys cd on cc.id=cd.CATALOG_ID and cc.company_id=cd.company_id
+    where cc.company_id =#{companyId}
   </select>
 
 </mapper>

@@ -1,7 +1,7 @@
 package com.demo.persistence.dao;
 
 import com.demo.model.CorpCatalog;
-import com.demo.model.CorpCatalogNew;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -11,5 +11,5 @@ import java.util.List;
  * @Description :
  */
 public interface CorpCatalogsMapper {
-    public List<CorpCatalog> selAll(Long companyId);
+    public List<CorpCatalog> selAll(@Param("companyId") Long companyId);
 }

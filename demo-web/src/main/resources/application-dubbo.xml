@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:d="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+       http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+
+    <!-- Dubbo 基础属性配置-->
+    <d:application name="data-platform" owner="data-platform"/>
+    <d:consumer proxy="javassist" loadbalance="roundrobin" timeout="60000"
+                check="true"/>
+    <d:registry id="defaultRegistry" address="zookeeper://testzookeeper:2181" protocol="zookeeper" timeout="100000"/>
+
+    <d:reference id="dubboCorpCatalogsService" registry="defaultRegistry"
+                 interface="cn.bidlink.procurement.materials.dal.server.service.DubboCorpCatalogsService"/>
+    <d:reference id="dubboCorpDirectorysService" registry="defaultRegistry"
+                 interface="cn.bidlink.procurement.materials.dal.server.service.DubboCorpDirectorysService"/>
+
+    <!-- 注册ID生成器 -->
+    <bean class="cn.bidlink.framework.util.gen.IdWork">
+        <constructor-arg value="data-platform"></constructor-arg>
+    </bean>
+</beans>

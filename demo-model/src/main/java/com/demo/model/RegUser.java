@@ -120,6 +120,15 @@ public class RegUser {
 
     private Boolean novice;
 
+    public RegUser() {
+    }
+
+    public RegUser(Long id, Long companyId, Long bidlinkId) {
+        this.id = id;
+        this.companyId = companyId;
+        this.bidlinkId = bidlinkId;
+    }
+
     public Long getId() {
         return id;
     }

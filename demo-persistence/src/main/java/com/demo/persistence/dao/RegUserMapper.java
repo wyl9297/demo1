@@ -14,4 +14,6 @@ public interface RegUserMapper {
     int updateByPrimaryKeySelective(RegUser record);
 
     int updateByPrimaryKey(RegUser record);
+
+    RegUser findByCondition(RegUser regUser);
 }

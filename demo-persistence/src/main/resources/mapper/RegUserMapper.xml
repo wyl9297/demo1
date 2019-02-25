@@ -714,4 +714,22 @@
       NOVICE = #{novice,jdbcType=BIT}
     where ID = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="findByCondition" parameterType="com.demo.model.RegUser" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List" />
+      from reg_user
+      <where>
+        <if test="id != null">
+          id=#{id}
+        </if>
+        <if test="companyId != null">
+          company_id = #{companyId}
+        </if>
+        <if test="bidlinkId != null">
+          and bidlink_id = #{bidlinkId}
+        </if>
+        and is_subuser=0
+      </where>
+  </select>
 </mapper>

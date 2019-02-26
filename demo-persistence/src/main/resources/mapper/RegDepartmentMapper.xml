@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.demo.persistence.dao.RegDepartmentMapper" >
+  <resultMap id="BaseResultMap" type="com.demo.model.RegDepartment" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <id column="COMPANY_ID" property="companyId" jdbcType="BIGINT" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="PARENT_ID" property="parentId" jdbcType="DECIMAL" />
+    <result column="STATUS" property="status" jdbcType="DECIMAL" />
+    <result column="TYPE" property="type" jdbcType="DECIMAL" />
+    <result column="bidlink_id" property="bidlinkId" jdbcType="BIGINT" />
+    <result column="department_code" property="departmentCode" jdbcType="VARCHAR" />
+    <result column="is_company" property="isCompany" jdbcType="VARCHAR" />
+    <result column="company_code" property="companyCode" jdbcType="VARCHAR" />
+    <result column="erp_code" property="erpCode" jdbcType="VARCHAR" />
+    <result column="erp_company_code" property="erpCompanyCode" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="creator" property="creator" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="modifier" property="modifier" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, COMPANY_ID, NAME, PARENT_ID, STATUS, TYPE, bidlink_id, department_code, is_company, 
+    company_code, erp_code, erp_company_code, create_time, creator, update_time, modifier
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.demo.model.RegDepartmentKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from reg_department
+    where ID = #{id,jdbcType=BIGINT}
+      and COMPANY_ID = #{companyId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.demo.model.RegDepartmentKey" >
+    delete from reg_department
+    where ID = #{id,jdbcType=BIGINT}
+      and COMPANY_ID = #{companyId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.demo.model.RegDepartment" >
+    insert into reg_department (ID, COMPANY_ID, NAME, 
+      PARENT_ID, STATUS, TYPE, 
+      bidlink_id, department_code, is_company, 
+      company_code, erp_code, erp_company_code, 
+      create_time, creator, update_time, 
+      modifier)
+    values (#{id,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
+      #{parentId,jdbcType=DECIMAL}, #{status,jdbcType=DECIMAL}, #{type,jdbcType=DECIMAL}, 
+      #{bidlinkId,jdbcType=BIGINT}, #{departmentCode,jdbcType=VARCHAR}, #{isCompany,jdbcType=VARCHAR}, 
+      #{companyCode,jdbcType=VARCHAR}, #{erpCode,jdbcType=VARCHAR}, #{erpCompanyCode,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{modifier,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.demo.model.RegDepartment" >
+    insert into reg_department
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="companyId != null" >
+        COMPANY_ID,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="parentId != null" >
+        PARENT_ID,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="bidlinkId != null" >
+        bidlink_id,
+      </if>
+      <if test="departmentCode != null" >
+        department_code,
+      </if>
+      <if test="isCompany != null" >
+        is_company,
+      </if>
+      <if test="companyCode != null" >
+        company_code,
+      </if>
+      <if test="erpCode != null" >
+        erp_code,
+      </if>
+      <if test="erpCompanyCode != null" >
+        erp_company_code,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="companyId != null" >
+        #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=DECIMAL},
+      </if>
+      <if test="bidlinkId != null" >
+        #{bidlinkId,jdbcType=BIGINT},
+      </if>
+      <if test="departmentCode != null" >
+        #{departmentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isCompany != null" >
+        #{isCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="companyCode != null" >
+        #{companyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="erpCode != null" >
+        #{erpCode,jdbcType=VARCHAR},
+      </if>
+      <if test="erpCompanyCode != null" >
+        #{erpCompanyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.demo.model.RegDepartment" >
+    update reg_department
+    <set >
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        PARENT_ID = #{parentId,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=DECIMAL},
+      </if>
+      <if test="bidlinkId != null" >
+        bidlink_id = #{bidlinkId,jdbcType=BIGINT},
+      </if>
+      <if test="departmentCode != null" >
+        department_code = #{departmentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isCompany != null" >
+        is_company = #{isCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="companyCode != null" >
+        company_code = #{companyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="erpCode != null" >
+        erp_code = #{erpCode,jdbcType=VARCHAR},
+      </if>
+      <if test="erpCompanyCode != null" >
+        erp_company_code = #{erpCompanyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=BIGINT},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+      and COMPANY_ID = #{companyId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.demo.model.RegDepartment" >
+    update reg_department
+    set NAME = #{name,jdbcType=VARCHAR},
+      PARENT_ID = #{parentId,jdbcType=DECIMAL},
+      STATUS = #{status,jdbcType=DECIMAL},
+      TYPE = #{type,jdbcType=DECIMAL},
+      bidlink_id = #{bidlinkId,jdbcType=BIGINT},
+      department_code = #{departmentCode,jdbcType=VARCHAR},
+      is_company = #{isCompany,jdbcType=VARCHAR},
+      company_code = #{companyCode,jdbcType=VARCHAR},
+      erp_code = #{erpCode,jdbcType=VARCHAR},
+      erp_company_code = #{erpCompanyCode,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=BIGINT}
+    where ID = #{id,jdbcType=BIGINT}
+      and COMPANY_ID = #{companyId,jdbcType=BIGINT}
+  </update>
+  <select id="getDepUserRelation" parameterType="long" resultType="java.util.Map">
+    SELECT
+      ru.bidlink_id AS userId,
+      ru.`NAME` 用户,
+      rd.`NAME` 部门,
+      rd.ID AS depId
+    FROM
+      `reg_user` ru
+        INNER JOIN reg_group_user rgu ON ru.ID = rgu.USER_ID
+        AND ru.COMPANY_ID = rgu.COMPANY_ID
+        INNER JOIN reg_group rg ON rg.ID = rgu.GROUP_ID
+        AND rg.COMPANY_ID = rgu.COMPANY_ID
+        AND rg.GROUP_TYPE = 1
+        INNER JOIN reg_department rd ON rg.ORG_ID = rd.ID
+        AND rd.COMPANY_ID = rg.COMPANY_ID
+    WHERE
+      ru.COMPANY_ID = #{companyId};
+  </select>
+  <select id="getRegDepartmentByCompanyId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from reg_department
+    where COMPANY_ID = #{companyId,jdbcType=BIGINT}
+  </select>
+</mapper>

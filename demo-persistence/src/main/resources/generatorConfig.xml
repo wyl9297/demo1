@@ -25,13 +25,13 @@
                         userId="${jdbc.userId}" password="${jdbc.password}" />
 
         <javaModelGenerator targetPackage="com.demo.model"
-                            targetProject="E:/数据/IDEA/demo1/demo-model/src/main/java" >
+                            targetProject="D:/devCode/demo2/demo-model/src/main/java" >
             <property name="enableSubPackages" value="true" />
             <property name="trimStrings" value="true" />
         </javaModelGenerator>
 
-        <sqlMapGenerator targetPackage="com.demo.persistence.mapper"
-                         targetProject="src/main/java">
+        <sqlMapGenerator targetPackage="mapper"
+                         targetProject="src/main/resources">
             <property name="enableSubPackages" value="true" />
         </sqlMapGenerator>
 
@@ -42,11 +42,11 @@
 
         <!--===============-->
         <!-- 生成的业务表配置 -->
-        <table tableName="corp_directorys" domainObjectName="CorpDirectorys"
+        <table tableName="reg_department" domainObjectName="RegDepartment"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">
-            <generatedKey column="ID" sqlStatement="MySql" identity="true"/>
+            <!--<generatedKey column="ID" sqlStatement="MySql" identity="true"/>-->
         </table>
     </context>
 </generatorConfiguration>

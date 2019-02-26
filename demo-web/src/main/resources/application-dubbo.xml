@@ -17,6 +17,19 @@
     <d:reference id="dubboCorpDirectorysService" registry="defaultRegistry"
                  interface="cn.bidlink.procurement.materials.dal.server.service.DubboCorpDirectorysService"/>
 
+    <d:reference id="dubboAclService"  registry="defaultRegistry"
+                 interface="cn.bidlink.resacl.service.AclService" />
+    <d:reference id="dubboOrgcService"  registry="defaultRegistry"
+                 interface="cn.bidlink.resacl.service.OrgcService" />
+    <d:reference id="dubboResService"  registry="defaultRegistry"
+                 interface="cn.bidlink.resacl.service.ResService" />
+
+    <!-- 中心库 Dubbo 接口 Start-->
+    <d:reference id="userService" registry="defaultRegistry"
+                 interface="cn.bidlink.usercenter.server.service.DubboTRegUserService"/>
+    <d:reference id="dubboTRegCompanyService" registry="defaultRegistry"
+                 interface="cn.bidlink.usercenter.server.service.DubboTRegCompanyService"/>
+
     <!-- 注册ID生成器 -->
     <bean class="cn.bidlink.framework.util.gen.IdWork">
         <constructor-arg value="data-platform"></constructor-arg>

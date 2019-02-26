@@ -15,6 +15,7 @@ public class GlobalDefaultExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     public ModelAndView defaultErrorHandler(HttpServletRequest req, Exception e)  {
         System.out.println("全局异常处理！" + e.getMessage());
+        e.printStackTrace();
         ModelAndView error = new ModelAndView("error");
         return error;
     }

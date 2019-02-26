@@ -4,10 +4,12 @@ import cn.bidlink.base.ServiceResult;
 import cn.bidlink.procurement.materials.dal.server.entity.CorpCatalogs;
 import cn.bidlink.procurement.materials.dal.server.service.DubboCorpCatalogsService;
 import com.demo.model.Company;
+import com.demo.persistence.dao.RegDepartmentMapper;
 import com.demo.service.DemoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -28,6 +30,17 @@ public class HellowController {
 
     @Autowired
     private DubboCorpCatalogsService dubboCorpCatalogsService;
+
+    @Autowired
+    @Qualifier("aclJdbcTemplate")
+    protected JdbcTemplate aclJdbcTemplate;
+
+    @Autowired
+    @Qualifier("uniregJdbcTemplate")
+    protected JdbcTemplate uniregJdbcTemplate;
+
+    @Autowired
+    private RegDepartmentMapper regDepartmentMapper;
 
     @RequestMapping( value = "success")
     public ModelAndView success(HttpServletRequest request , HttpServletResponse response){
@@ -58,4 +71,13 @@ public class HellowController {
         modelAndView.setViewName("hellow");
         return modelAndView;
     }
+
+    @RequestMapping( value = "testMutilDataSource")
+    public String testMutilDataSource( HttpServletRequest request , HttpServletResponse response ){
+        aclJdbcTemplate.queryForMap("select ORGNAME FROM SYS_ORG WHERE ORGID = 100");
+        uniregJdbcTemplate.queryForMap("select create_user_name FROM supplier WHERE ID = 174957304234377216");
+        regDepartmentMapper.getDepUserRelation(1113172701L);
+        return "success";
+    }
+
 }

@@ -1,7 +1,13 @@
 package com.demo.controller;
 
-import com.demo.model.CorpCatalog;
-import com.demo.service.CorpCatalogsService;
+import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.entity.ExportParams;
+import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
+import com.demo.model.CorpCatalogNew;
+import com.demo.model.CorpDirectorysNew;
+import com.demo.model.MiddleTable;
+import com.demo.service.DataMigrationService;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +15,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author : <a href="mailto:congyaozhu@ebnew.com">congyaozhu</a>
@@ -20,13 +30,55 @@ import java.util.List;
 public class CorpExportController {
 
     private static Logger log = LoggerFactory.getLogger(CorpExportController.class);
-    @Autowired
-    @Qualifier("CorpCatalogsService")
-    private CorpCatalogsService corpCatalogsService;
 
-    @RequestMapping("/test")
-    public void test(){
-        List<CorpCatalog> corpCatalogs = corpCatalogsService.selAll();
-        log.info("console:{}",corpCatalogs);
+    @Autowired
+    @Qualifier("DataMigrationService")
+    private DataMigrationService corpCatalogsService;
+
+    @RequestMapping("/testExport")
+    public void export(HttpServletResponse response,Long companyId) {
+        log.info("进入Controller {}",CorpExportController.class.getName());
+        Map<String, Object> maps = corpCatalogsService.exportCorpCatalogs(1113172702l);
+        Map<String, Object> directorysMaps = corpCatalogsService.exportDirectorys(1113172702l);
+        if (maps != null && directorysMaps != null) {
+            try {
+                log.info("数据导出准备----------");
+                // =========easypoi部分
+                ExportParams exportParams = new ExportParams();
+                exportParams.setSheetName("middleTable");
+                Map<String,Object> middleMap = new HashMap<>();
+                middleMap.put("title",exportParams);
+                middleMap.put("entity", MiddleTable.class);
+                middleMap.put("data",maps.get("middleTable"));
+
+                ExportParams exportParams2 = new ExportParams();
+                Map<String,Object> catalogMap = new HashMap<>();
+                exportParams2.setSheetName("corp_catalogs");
+                catalogMap.put("title",exportParams2);
+                catalogMap.put("entity", CorpCatalogNew.class);
+                catalogMap.put("data",maps.get("success"));
+
+                ExportParams exportParams3 = new ExportParams();
+                Map<String,Object> directorysMap = new HashMap<>();
+                exportParams3.setSheetName("corp_directorys");
+                directorysMap.put("title",exportParams3);
+                directorysMap.put("entity", CorpDirectorysNew.class);
+                directorysMap.put("data",directorysMaps.get("directorys"));
+
+                List<Map<String,Object>> list = new ArrayList<>();
+                list.add(middleMap);
+                list.add(catalogMap);
+                list.add(directorysMap);
+                Workbook workbook = ExcelExportUtil.exportExcel(list, ExcelType.HSSF);
+                // 设置响应输出的头类型
+                response.setHeader("content-Type", "application/vnd.ms-excel");
+                // 下载文件的默认名称
+                response.setHeader("Content-Disposition", "attachment;filename=CorpInfoExport.xls");
+                workbook.write(response.getOutputStream());
+            } catch (Exception e) {
+                System.out.println("有个异常");
+            }
+        }
     }
+
 }

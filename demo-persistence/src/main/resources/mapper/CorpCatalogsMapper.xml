@@ -25,11 +25,19 @@
   <sql id="Base_Column_List" >
     cc.ID, cc.OLD_ID,cc.name,cc.code,cc.DEMO,cc.parent_id,cc.COMP_ID,cc.is_root,cc.TREEPATH,cc.CATALOG_NAME_PATH,cc.company_id,cc.create_time,cc.creator,cc.update_time,cc.modifier
   </sql>
+  <sql id="base_catalogs">
+    id, name,code,PARENT_ID,IS_ROOT,TREEPATH,CATALOG_NAME_PATH,company_id,creator,create_time,modifier,update_time
+  </sql>
   <select id="selAll" resultMap="resultMap1" parameterType="long">
     select
       <include refid="Base_Column_List" />
     from corp_catalogs cc inner join corp_directorys cd on cc.id=cd.CATALOG_ID and cc.company_id=cd.company_id
-    where cc.company_id =#{companyId}
+    where cc.company_id = #{companyId}
+  </select>
+
+  <select id="selCataLogs" resultMap="resultMap1" parameterType="long">
+    select <include refid="base_catalogs"/>
+    from corp_catalogs where company_id=#{companyId};
   </select>
 
 </mapper>

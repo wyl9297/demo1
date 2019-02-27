@@ -1,6 +1,6 @@
 package com.demo.service;
 
-import com.demo.model.CorpCatalog;
+import com.demo.model.CorpDirectorys;
 
 import java.util.List;
 
@@ -9,6 +9,6 @@ import java.util.List;
  * @Date : Created in  16:06 2019-02-20
  * @Description :
  */
-public interface CorpCatalogsService {
-    public List<CorpCatalog> selAll();
+public interface CorpDirectorysService {
+    List<CorpDirectorys> findByCondition(CorpDirectorys corpDirectorys);
 }

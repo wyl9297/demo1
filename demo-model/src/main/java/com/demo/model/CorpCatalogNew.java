@@ -155,5 +155,4 @@ public class CorpCatalogNew {
     public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
-
 }

@@ -1,11 +1,8 @@
 package com.demo.model;
 
-import cn.afterturn.easypoi.excel.annotation.Excel;
-
-public class CorpDirectorysKey {
-    @Excel(name = "id")
+public class CorpCatalogsKey {
     private Long id;
-    @Excel(name = "companyId")
+
     private Long companyId;
 
     public Long getId() {

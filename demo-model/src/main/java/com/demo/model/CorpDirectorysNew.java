@@ -4,9 +4,8 @@ import cn.afterturn.easypoi.excel.annotation.Excel;
 
 import javax.validation.constraints.Max;
 import java.io.Serializable;
-import java.util.Date;
 
-public class CorpDirectorys implements Serializable {
+public class CorpDirectorysNew implements Serializable {
 
     @Excel(name = "id")
     private Long id;
@@ -18,7 +17,7 @@ public class CorpDirectorys implements Serializable {
     @Excel(name = "catalogId")
     private Long catalogId;
 
-    @Excel(name = "catalogName")
+    @Excel(name = "catalogName") // 数据库字段：catalogNamePath
     private String catalogName;
 
     @Excel(name = "demo")
@@ -47,8 +46,8 @@ public class CorpDirectorys implements Serializable {
     private String treepath;
 
     // 对应LDY的Update_time
-    @Excel(name = "lastmodifytime")
-    private Date lastmodifytime;
+    @Excel(name = "updateTime")
+    private String updateTime;
 
     @Excel(name = "unitname")
     private String unitname;
@@ -72,22 +71,51 @@ public class CorpDirectorys implements Serializable {
     private String techParameters;
 
     // 不为空，直接存储，否则，查询主账号
-    @Excel(name = "creator")
-    private Long creator;
+    @Excel(name = "createUserId")
+    private Long createUserId;
 
-    // 不为空，直接存储，否则，查询主账号
-    @Excel(name = "modifier")
-    private Long modifier;
+    @Excel(name = "createUserName")
+    private String createUserName;
 
-    @Excel(name = "producingAddress")
-    private String producingAddress;
+    @Excel(name = "unitPrecision") // value = 2
+    private Long unitPrecision;
+
+    @Excel(name = "pricePrecision") // value = 2
+    private Long pricePrecision;
+
+    @Excel(name = "updateUserId")
+    private Integer updateUserId;
+
+    @Excel(name = "updateUserName")
+    private String updateUserName;
+
+    @Excel(name = "source")
+    private Long source;
 
     @Excel(name = "companyId")
     private Long companyId;
 
+    public CorpDirectorysNew() {
+    }
 
     public Long getId() {
         return id;
+    }
+
+    public String getCatalogName() {
+        return catalogName;
+    }
+
+    public void setCatalogName(String catalogName) {
+        this.catalogName = catalogName;
+    }
+
+    public String getTreepath() {
+        return treepath;
+    }
+
+    public void setTreepath(String treepath) {
+        this.treepath = treepath;
     }
 
     public void setId(Long id) {
@@ -100,14 +128,6 @@ public class CorpDirectorys implements Serializable {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
-    }
-
-    public String getProducingAddress() {
-        return producingAddress;
-    }
-
-    public void setProducingAddress(String producingAddress) {
-        this.producingAddress = producingAddress;
     }
 
     public String getCode() {
@@ -124,14 +144,6 @@ public class CorpDirectorys implements Serializable {
 
     public void setCatalogId(Long catalogId) {
         this.catalogId = catalogId;
-    }
-
-    public String getCatalogName() {
-        return catalogName;
-    }
-
-    public void setCatalogName(String catalogName) {
-        this.catalogName = catalogName == null ? null : catalogName.trim();
     }
 
     public String getDemo() {
@@ -181,22 +193,6 @@ public class CorpDirectorys implements Serializable {
 
     public void setProductor(String productor) {
         this.productor = productor == null ? null : productor.trim();
-    }
-
-    public String getTreepath() {
-        return treepath;
-    }
-
-    public void setTreepath(String treepath) {
-        this.treepath = treepath == null ? null : treepath.trim();
-    }
-
-    public Date getLastmodifytime() {
-        return lastmodifytime;
-    }
-
-    public void setLastmodifytime(Date lastmodifytime) {
-        this.lastmodifytime = lastmodifytime;
     }
 
     public String getUnitname() {
@@ -256,19 +252,69 @@ public class CorpDirectorys implements Serializable {
         this.techParameters = techParameters == null ? null : techParameters.trim();
     }
 
-    public Long getCreator() {
-        return creator;
+
+    public String getUpdateTime() {
+        return updateTime;
     }
 
-    public void setCreator(Long creator) {
-        this.creator = creator;
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
     }
 
-    public Long getModifier() {
-        return modifier;
+    public Long getCreateUserId() {
+        return createUserId;
     }
 
-    public void setModifier(Long modifier) {
-        this.modifier = modifier;
+    public void setCreateUserId(Long createUserId) {
+        this.createUserId = createUserId;
     }
+
+    public String getCreateUserName() {
+        return createUserName;
+    }
+
+    public void setCreateUserName(String createUserName) {
+        this.createUserName = createUserName;
+    }
+
+    public Long getUnitPrecision() {
+        return unitPrecision;
+    }
+
+    public void setUnitPrecision(Long unitPrecision) {
+        this.unitPrecision = unitPrecision;
+    }
+
+    public Long getPricePrecision() {
+        return pricePrecision;
+    }
+
+    public void setPricePrecision(Long pricePrecision) {
+        this.pricePrecision = pricePrecision;
+    }
+
+    public Integer getUpdateUserId() {
+        return updateUserId;
+    }
+
+    public void setUpdateUserId(Integer updateUserId) {
+        this.updateUserId = updateUserId;
+    }
+
+    public String getUpdateUserName() {
+        return updateUserName;
+    }
+
+    public void setUpdateUserName(String updateUserName) {
+        this.updateUserName = updateUserName;
+    }
+
+    public Long getSource() {
+        return source;
+    }
+
+    public void setSource(Long source) {
+        this.source = source;
+    }
+
 }

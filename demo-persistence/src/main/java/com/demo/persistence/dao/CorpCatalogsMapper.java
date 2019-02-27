@@ -11,5 +11,10 @@ import java.util.List;
  * @Description :
  */
 public interface CorpCatalogsMapper {
+    // 根据companyID查询corp_catalogs和corp_directorys信息
     public List<CorpCatalog> selAll(@Param("companyId") Long companyId);
+
+    // 查询corp_catalogs表信息
+    public List<CorpCatalog> selCataLogs(Long companyId);
+
 }

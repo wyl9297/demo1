@@ -1,9 +1,5 @@
 package com.demo.model;
 
-import cn.afterturn.easypoi.excel.annotation.Excel;
-
-import javax.validation.constraints.Max;
-
 /**
  * @author : <a href="mailto:congyaozhu@ebnew.com">congyaozhu</a>
  * @Date : Created in  21:09 2019-02-19
@@ -92,12 +88,12 @@ public class CorpCatalogNew {
         this.idPath = idPath;
     }
 
-    public String getCatalogNamePath() {
-        return catalogNamePath;
+    public String getNamePath() {
+        return namePath;
     }
 
-    public void setCatalogNamePath(String catalogNamePath) {
-        this.catalogNamePath = catalogNamePath;
+    public void setNamePath(String namePath) {
+        this.namePath = namePath;
     }
 
     public Long getCompanyId() {

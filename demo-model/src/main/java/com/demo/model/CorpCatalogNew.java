@@ -3,6 +3,7 @@ package com.demo.model;
 import cn.afterturn.easypoi.excel.annotation.Excel;
 
 import javax.validation.constraints.Max;
+import java.util.Date;
 
 /**
  * @author : <a href="mailto:congyaozhu@ebnew.com">congyaozhu</a>
@@ -39,7 +40,7 @@ public class CorpCatalogNew {
     @Excel(name = "updateUserName")
     private String updateUserName; // `update_user_name` varchar(30) DEFAULT NULL COMMENT '更新人',		无
     @Excel(name = "updateTime")
-    private String updateTime; // `update_time` datetime DEFAULT NULL COMMENT '更新时间',			当前时间
+    private Date updateTime; // `update_time` datetime DEFAULT NULL COMMENT '更新时间',			当前时间
 
     public CorpCatalogNew() {
     }
@@ -148,11 +149,11 @@ public class CorpCatalogNew {
         this.updateUserName = updateUserName;
     }
 
-    public String getUpdateTime() {
+    public Date getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(String updateTime) {
+    public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
 }

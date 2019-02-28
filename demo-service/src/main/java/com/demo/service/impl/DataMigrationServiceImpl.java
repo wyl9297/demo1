@@ -51,7 +51,7 @@ public class DataMigrationServiceImpl implements DataMigrationService {
      * @param corpCatalogs
      * @return
      */
-    public Map<Long, Long> idMap(List<CorpCatalog> corpCatalogs) {
+    public Map<Long, Long> idMap(List<CorpCatalogs> corpCatalogs) {
         Map<Long, Long> map = Maps.newHashMap();
         log.info("即将进入循环 ------------");
         log.info("参数值：{}",corpCatalogs.size());
@@ -82,17 +82,17 @@ public class DataMigrationServiceImpl implements DataMigrationService {
         log.info("进入方法：{}", "exportCorpCatalogs()");
 
         // 根据companyID查询悦采 采购品目录信息
-        List<CorpCatalog> corpCatalogs = corpCatalogsMapper.selCataLogs(companyId);
+        List<CorpCatalogs> corpCatalogs = corpCatalogsMapper.selCataLogsByCompanyId(companyId);
 
         List<CorpCatalogNew> listCatalog = new ArrayList<>(); // 新采购品目录集合
         // 不符合条件的 采购品目录信息集合
-        List<CorpCatalog> failList = new ArrayList<>();
+        List<CorpCatalogs> failList = new ArrayList<>();
         // 存储 中间表信息    包含：oldId  newId   companyId
         List<MiddleTable> middleTables = new ArrayList<>();
         // 获取新旧Id对照Map
         Map<Long, Long> idsMap = idMap(corpCatalogs);
 
-        for (CorpCatalog catalog : corpCatalogs){
+        for (CorpCatalogs catalog : corpCatalogs){
 
             CorpCatalogNew catalogNew = new CorpCatalogNew();
 
@@ -122,7 +122,7 @@ public class DataMigrationServiceImpl implements DataMigrationService {
                 }
 
                 // 设置最新时间
-                catalogNew.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                catalogNew.setUpdateTime(new Date());
 
                 // 获取oldId
                 Long oldId = catalog.getId();

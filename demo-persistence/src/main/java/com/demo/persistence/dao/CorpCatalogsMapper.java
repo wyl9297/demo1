@@ -1,7 +1,6 @@
 package com.demo.persistence.dao;
 
-import com.demo.model.CorpCatalog;
-import org.apache.ibatis.annotations.Param;
+import com.demo.model.CorpCatalogs;
 
 import java.util.List;
 
@@ -11,10 +10,8 @@ import java.util.List;
  * @Description :
  */
 public interface CorpCatalogsMapper {
-    // 根据companyID查询corp_catalogs和corp_directorys信息
-    public List<CorpCatalog> selAll(@Param("companyId") Long companyId);
 
     // 查询corp_catalogs表信息
-    public List<CorpCatalog> selCataLogs(Long companyId);
+    public List<CorpCatalogs> selCataLogsByCompanyId(Long companyId);
 
 }

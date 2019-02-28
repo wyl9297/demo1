@@ -724,12 +724,14 @@
           id=#{id}
         </if>
         <if test="companyId != null">
-          company_id = #{companyId}
+         and company_id = #{companyId}
         </if>
         <if test="bidlinkId != null">
           and bidlink_id = #{bidlinkId}
         </if>
-        and is_subuser=0
+         <if test="isSubuser != null">
+           and is_subuser= #{isSubuser}
+         </if>
       </where>
   </select>
 </mapper>

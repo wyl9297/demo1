@@ -97,13 +97,8 @@ public class DataMigrationServiceImpl implements DataMigrationService {
             CorpCatalogNew catalogNew = new CorpCatalogNew();
 
             try {
-                if(catalog.getName().length()>50){
-                    log.error("name 字段过长，存储失败 --> id:{},name:{},companyId:{}",catalog.getId(),catalog.getName(),catalog.getCompanyId());
-                    failList.add(catalog);
-                    break;
-                }
-                if(catalog.getCode().length()>20){
-                    log.error("code 字段过长，存储失败 --> id:{},name:{},companyId:{}",catalog.getId(),catalog.getName(),catalog.getCompanyId());
+                if(catalog.getName().length()>50 || catalog.getCode().length()>20 ){
+                    log.error("请检查name code 字段，存储失败。原因：长度过长 --> id:{},name:{},companyId:{}",catalog.getId(),catalog.getName(),catalog.getCompanyId());
                     failList.add(catalog);
                     break;
                 }

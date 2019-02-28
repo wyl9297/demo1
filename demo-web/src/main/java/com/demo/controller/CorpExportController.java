@@ -36,6 +36,7 @@ public class CorpExportController {
     private DataMigrationService corpCatalogsService;
 
 
+    // 根据companyId进行数据导出
     @RequestMapping("/export")
     public void export(HttpServletResponse response,Long companyId) {
         if(companyId ==null){
@@ -48,6 +49,7 @@ public class CorpExportController {
                 try {
                     log.info("数据导出准备----------");
                     // =========easypoi部分
+                    // 导出中间表数据(oldId,newId,companyId)
                     ExportParams exportParams = new ExportParams();
                     exportParams.setSheetName("middleTable");
                     Map<String,Object> middleMap = new HashMap<>();
@@ -55,6 +57,7 @@ public class CorpExportController {
                     middleMap.put("entity", MiddleTable.class);
                     middleMap.put("data",maps.get("middleTable"));
 
+                    // 导出采购品目录信息
                     ExportParams exportParams2 = new ExportParams();
                     Map<String,Object> catalogMap = new HashMap<>();
                     exportParams2.setSheetName("corp_catalogs");
@@ -62,12 +65,17 @@ public class CorpExportController {
                     catalogMap.put("entity", CorpCatalogNew.class);
                     catalogMap.put("data",maps.get("success"));
 
+                    // 导出采购品信息
                     ExportParams exportParams3 = new ExportParams();
                     Map<String,Object> directorysMap = new HashMap<>();
                     exportParams3.setSheetName("corp_directorys");
                     directorysMap.put("title",exportParams3);
                     directorysMap.put("entity", CorpDirectorysNew.class);
                     directorysMap.put("data",directorysMaps.get("directorys"));
+
+                    /***
+                     * 导出失败的采购品信息.....
+                     */
 
                     List<Map<String,Object>> list = new ArrayList<>();
                     list.add(middleMap);

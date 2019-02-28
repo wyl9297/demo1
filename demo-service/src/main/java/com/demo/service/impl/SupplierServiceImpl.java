@@ -6,6 +6,10 @@ import cn.bidlink.usercenter.server.entity.TRegUser;
 import cn.bidlink.usercenter.server.service.DubboTRegUserService;
 import com.demo.model.BsmSupplierCatalogRelation;
 import com.demo.persistence.dao.BsmSupplierCatalogRelationMapper;
+import com.demo.model.BsmCompanySupplierApply;
+import com.demo.model.RegUser;
+import com.demo.persistence.dao.BsmCompanySupplierApplyMapper;
+import com.demo.persistence.dao.RegUserMapper;
 import com.demo.service.SupplierService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +20,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 @Service("SupplierService")
 public class SupplierServiceImpl implements SupplierService {
@@ -31,6 +38,12 @@ public class SupplierServiceImpl implements SupplierService {
     @Autowired
     @Qualifier("uniregJdbcTemplate")
     protected JdbcTemplate uniregJdbcTemplate;
+
+    @Autowired
+    BsmCompanySupplierApplyMapper bsmCompanySupplierApplyMapper;
+
+    @Autowired
+    RegUserMapper regUserMapper;
 
     /**
      * 查询新中心库信息
@@ -111,5 +124,59 @@ public class SupplierServiceImpl implements SupplierService {
             log.error("查询用户中心失败，companyId为：{}", companyId);
         }
         return "success";
+    }
+
+
+    @Override
+    public String bsmToSupplier(Long originCompanyId, Long destCompanyId) {
+       String sql = "INSERT INTO supplier ( id , company_id , supplier_id , supplier_code , symbiosis_status , supplier_source , approve_status , create_time " +
+               ", create_user_name , create_user_id , update_time , update_user_name , update_user_id  ) " +
+               " values ( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? ) ";
+        List<BsmCompanySupplierApply> supplierApplyList
+                = bsmCompanySupplierApplyMapper.selectByCompanyId(originCompanyId);
+
+        Map<String, Object> map = uniregJdbcTemplate.queryForMap(" select id,name from t_reg_user where company_id = ? and is_subuser = 0" , destCompanyId);
+        long main_user_id = (long)map.get("id");
+        String name = (String) map.get("name");
+        List<Object[]> parms = new ArrayList<>();
+        for( BsmCompanySupplierApply  bsmCompanySupplierApply : supplierApplyList ){
+            Integer newSupplierStatus = getNewSupplierStatus(bsmCompanySupplierApply);
+            if( null != newSupplierStatus ){
+                Long createUserId = main_user_id;
+                String createUserName = name;
+                if( bsmCompanySupplierApply.getCreateUserId() != null ){
+                    RegUser regUser = new RegUser();
+                    regUser.setId(bsmCompanySupplierApply.getCreateUserId());
+                    regUser.setCompanyId(originCompanyId);
+                    RegUser user = regUserMapper.findByCondition(regUser);
+                    createUserId = ( null == user || null == user.getBidlinkId() ) ? main_user_id : user.getBidlinkId();
+                    createUserName = user.getName();
+                }
+                parms.add(new Object[]{IdWork.nextId(), destCompanyId, bsmCompanySupplierApply.getSupplierId(), bsmCompanySupplierApply.getSupplierCode(), newSupplierStatus, 0, 1, bsmCompanySupplierApply.getCreateTime()
+                        , createUserName, createUserId, new Date(), createUserName, createUserId});
+            }
+        }
+        int[] batchUpdate = uniregJdbcTemplate.batchUpdate(sql, parms);
+        for( int i = 0 ; i < batchUpdate.length ; i ++ ){
+            System.out.println(batchUpdate[i]);
+        }
+        return "success";
+    }
+
+    private Integer getNewSupplierStatus( BsmCompanySupplierApply  bsmCompanySupplierApply ){
+        Byte supplierStatus = bsmCompanySupplierApply.getSupplierStatus();
+        if( supplierStatus == null ){
+            return null;
+        }
+        Integer status = Integer.valueOf(supplierStatus);
+        // bsm 2是待准入 4是合作 6是黑名单 其他均属盘外或审批中
+        if( status == 2 ){
+            return 1;
+        } else if ( status == 4 ){
+            return 2;
+        } else if ( status == 6 ) {
+            return 3;
+        }
+        return null;
     }
 }

@@ -102,11 +102,19 @@
     where id = #{id,jdbcType=BIGINT}
       and company_id = #{companyId,jdbcType=BIGINT}
   </select>
+
+  <select id="selectByCompanyId" resultMap="BaseResultMap">
+      select
+        <include refid="Base_Column_List" />
+      from bsm_company_supplier_apply where company_id = #{companyId}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="com.demo.model.BsmCompanySupplierApplyKey" >
     delete from bsm_company_supplier_apply
     where id = #{id,jdbcType=BIGINT}
       and company_id = #{companyId,jdbcType=BIGINT}
   </delete>
+
   <insert id="insert" parameterType="com.demo.model.BsmCompanySupplierApply" >
     insert into bsm_company_supplier_apply (id, company_id, company_name, 
       company_region_code, company_region, company_industry, 

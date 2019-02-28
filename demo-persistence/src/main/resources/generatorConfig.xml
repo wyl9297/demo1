@@ -42,7 +42,7 @@
 
         <!--===============-->
         <!-- 生成的业务表配置 -->
-        <table tableName="reg_department" domainObjectName="RegDepartment"
+        <table tableName="bsm_supplier_catalog_relation" domainObjectName="BsmSupplierCatalogRelation"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">

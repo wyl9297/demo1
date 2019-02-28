@@ -3,6 +3,8 @@ package com.demo.persistence.dao;
 import com.demo.model.CorpDirectorys;
 import com.demo.model.CorpDirectorysKey;
 
+import java.util.List;
+
 public interface CorpDirectorysMapper {
     int deleteByPrimaryKey(CorpDirectorysKey key);
 
@@ -15,4 +17,6 @@ public interface CorpDirectorysMapper {
     int updateByPrimaryKeySelective(CorpDirectorys record);
 
     int updateByPrimaryKey(CorpDirectorys record);
+
+    List<CorpDirectorys> findByCondition(CorpDirectorys corpDirectorys);
 }

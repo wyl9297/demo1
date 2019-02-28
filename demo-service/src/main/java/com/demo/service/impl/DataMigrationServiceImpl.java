@@ -100,42 +100,42 @@ public class DataMigrationServiceImpl implements DataMigrationService {
                 if(catalog.getName().length()>50 || catalog.getCode().length()>20 ){
                     log.error("请检查name code 字段，存储失败。原因：长度过长 --> id:{},name:{},companyId:{}",catalog.getId(),catalog.getName(),catalog.getCompanyId());
                     failList.add(catalog);
-                    break;
+                }else{
+                    // 给CorpCatalogNew对象赋值
+                    BeanUtils.copyProperties(catalogNew,catalog);
+
+                    // 根据companyID查询用户中心信息
+                    List<TRegUser> tRegUser = findByCondition(catalog.getCompanyId());
+
+                    if (catalog.getCreator() == null || catalog.getModifier() == null) { // 如果creator为null或者modifier为null，使用主账号的信息
+                        log.warn("creator 为null:{}", catalog.getCreator());
+                        catalogNew.setCreateUserId(tRegUser.get(0).getId());
+                        catalogNew.setCreateUserName(tRegUser.get(0).getName());
+                        catalogNew.setUpdateUserId(tRegUser.get(0).getId());
+                        catalogNew.setUpdateUserName(tRegUser.get(0).getName());
+                    } else {
+                        catalogNew.setCreateUserId(catalog.getCreator());
+                        catalogNew.setCreateUserName(tRegUser.get(0).getName());
+                        catalogNew.setUpdateUserId(catalog.getModifier());
+                        catalogNew.setUpdateUserName(tRegUser.get(0).getName());
+                    }
+
+                    // 设置最新时间
+                    catalogNew.setUpdateTime(new Date());
+
+                    // 获取oldId
+                    Long oldId = catalog.getId();
+                    // 获取新Id
+                    Long newId = idsMap.get(oldId);
+
+                    catalogNew.setId(newId);
+
+                    // 将新采购品目录信息添加进集合
+                    listCatalog.add(catalogNew);
+
+                    // 将采购品目录信息添加进集合
+                    middleTables.add(new MiddleTable(oldId,newId,catalog.getCompanyId()));
                 }
-                // 给CorpCatalogNew对象赋值
-                BeanUtils.copyProperties(catalogNew,catalog);
-
-                // 根据companyID查询用户中心信息
-                List<TRegUser> tRegUser = findByCondition(catalog.getCompanyId());
-
-                if (catalog.getCreator() == null || catalog.getModifier() == null) { // 如果creator为null或者modifier为null，使用主账号的信息
-                    log.warn("creator 为null:{}", catalog.getCreator());
-                    catalogNew.setCreateUserId(tRegUser.get(0).getId());
-                    catalogNew.setCreateUserName(tRegUser.get(0).getName());
-                    catalogNew.setUpdateUserId(tRegUser.get(0).getId());
-                    catalogNew.setUpdateUserName(tRegUser.get(0).getName());
-                } else {
-                    catalogNew.setCreateUserId(catalog.getCreator());
-                    catalogNew.setCreateUserName(tRegUser.get(0).getName());
-                    catalogNew.setUpdateUserId(catalog.getModifier());
-                    catalogNew.setUpdateUserName(tRegUser.get(0).getName());
-                }
-
-                // 设置最新时间
-                catalogNew.setUpdateTime(new Date());
-
-                // 获取oldId
-                Long oldId = catalog.getId();
-                // 获取新Id
-                Long newId = idsMap.get(oldId);
-
-                catalogNew.setId(newId);
-
-                // 将新采购品目录信息添加进集合
-                listCatalog.add(catalogNew);
-
-                // 将采购品目录信息添加进集合
-                middleTables.add(new MiddleTable(oldId,newId,catalog.getCompanyId()));
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (InvocationTargetException e) {
@@ -255,6 +255,7 @@ public class DataMigrationServiceImpl implements DataMigrationService {
      * @return
      */
     public List<TRegUser> findByCondition(Long companyId){
+
         TRegUser tRegUser = new TRegUser();
         tRegUser.setCompanyId(companyId);
         tRegUser.setIsSubuser(0);

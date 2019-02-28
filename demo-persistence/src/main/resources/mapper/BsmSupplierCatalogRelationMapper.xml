@@ -24,6 +24,12 @@
     where id = #{id,jdbcType=BIGINT}
       and comp_id = #{compId,jdbcType=BIGINT}
   </select>
+  <select id="selectByCompanyId" resultMap="BaseResultMap" parameterType="list" >
+    select
+    <include refid="Base_Column_List" />
+    from bsm_supplier_catalog_relation
+    where comp_id = #{companyId,jdbcType=BIGINT}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="com.demo.model.BsmSupplierCatalogRelationKey" >
     delete from bsm_supplier_catalog_relation
     where id = #{id,jdbcType=BIGINT}

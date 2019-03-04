@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface SupplierService {
 
-    public String handleSupplierCatalogRelation(Long company, List<Long> list);
+    public String handleSupplierAdmittanceRecode(Long company, List<Long> list);
 
     String bsmToSupplier( Long originCompanyId , Long destCompanyId );
 

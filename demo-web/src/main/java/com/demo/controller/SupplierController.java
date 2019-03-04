@@ -30,13 +30,13 @@ public class SupplierController {
         return result;
     }
 
-    @RequestMapping("/catalogRealtion")
-    public String testSupplierCatalogRealtion(){
+    @RequestMapping("/handleSupplierAdmittanceRecode")
+    public String testHandleSupplierAdmittanceRecode(){
         List<Long> list = new ArrayList<>();
         list.add(1113172722l);
         list.add(1113172735l);
         list.add(1112960457l);
-        String result = supplierService.handleSupplierCatalogRelation(1113172701L,list);
+        String result = supplierService.handleSupplierAdmittanceRecode(1113172701L,list);
         return null;
     }
 

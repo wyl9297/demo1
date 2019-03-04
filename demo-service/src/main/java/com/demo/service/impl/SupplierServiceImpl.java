@@ -72,7 +72,7 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public String handleSupplierCatalogRelation(Long companyId,List<Long> list) {
+    public String handleSupplierAdmittanceRecode(Long companyId, List<Long> list) {
         String sql = "INSERT INTO supplier_admittance_record ( id, company_id, supplier_id, starting_time, admittance_time, admittance_user_name, join_time, reason, is_past_due, create_time, " +
                 "create_user_name, create_user_id, update_time, update_user_name, update_user_id )  " +
                 "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";

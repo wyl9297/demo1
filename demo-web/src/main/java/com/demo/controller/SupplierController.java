@@ -30,14 +30,20 @@ public class SupplierController {
         return result;
     }
 
-    @RequestMapping("/handleSupplierAdmittanceRecode")
-    public String testHandleSupplierAdmittanceRecode(){
-        List<Long> list = new ArrayList<>();
-        list.add(1113172722l);
-        list.add(1113172735l);
-        list.add(1112960457l);
-        String result = supplierService.handleSupplierAdmittanceRecode(1113172701L,list);
-        return null;
+    @RequestMapping("/supplierAdmittanceRecord")
+    public String testHandleSupplierAdmittanceRecord(){
+        String result = supplierService.handleSupplierAdmittanceRecode(1113172701L,new ArrayList<Long>());
+        return result;
+    }
+
+    @RequestMapping("/catalogRelationMigrate")
+    @ResponseBody
+    public String catalogRelationMigrate( HttpServletRequest request ,
+                                               HttpServletResponse response ,
+                                               @RequestParam("originCompanyId") Long originCompanyId ,
+                                               @RequestParam("destCompanyId") Long destCompanyId ){
+        String result = supplierService.catalogRelationMigrate( originCompanyId , destCompanyId );
+        return result;
     }
 
     @RequestMapping("/handleApproveTaskRecode")

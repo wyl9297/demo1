@@ -42,7 +42,7 @@
 
         <!--===============-->
         <!-- 生成的业务表配置 -->
-        <table tableName="bsm_supplier_catalog_relation" domainObjectName="BsmSupplierCatalogRelation"
+        <table tableName="bsm_company_supplier" domainObjectName="bsmCompanySupplier"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">

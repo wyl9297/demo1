@@ -9,4 +9,6 @@ public interface SupplierService {
     String bsmToSupplier( Long originCompanyId , Long destCompanyId );
 
     public String handleApproveTaskRecode(Long companyId);
+    String catalogRelationMigrate( Long originCompanyId , Long destCompanyId );
+
 }

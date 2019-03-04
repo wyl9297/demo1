@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class SupplierController {
@@ -30,9 +32,17 @@ public class SupplierController {
 
     @RequestMapping("/catalogRealtion")
     public String testSupplierCatalogRealtion(){
-        String result = supplierService.handleSupplierCatalogRelation(1113172701L);
-        return result;
+        List<Long> list = new ArrayList<>();
+        list.add(1113172722l);
+        list.add(1113172735l);
+        list.add(1112960457l);
+        String result = supplierService.handleSupplierCatalogRelation(1113172701L,list);
+        return null;
     }
 
-
+    @RequestMapping("/handleApproveTaskRecode")
+    public String handleApproveTaskRecode(){
+        String s = supplierService.handleApproveTaskRecode(1113172701l);
+        return s;
+    }
 }

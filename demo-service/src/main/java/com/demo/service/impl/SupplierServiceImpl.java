@@ -4,12 +4,8 @@ import cn.bidlink.base.ServiceResult;
 import cn.bidlink.framework.util.gen.IdWork;
 import cn.bidlink.usercenter.server.entity.TRegUser;
 import cn.bidlink.usercenter.server.service.DubboTRegUserService;
-import com.demo.model.BsmSupplierCatalogRelation;
-import com.demo.persistence.dao.BsmSupplierCatalogRelationMapper;
-import com.demo.model.BsmCompanySupplierApply;
-import com.demo.model.RegUser;
-import com.demo.persistence.dao.BsmCompanySupplierApplyMapper;
-import com.demo.persistence.dao.RegUserMapper;
+import com.demo.model.*;
+import com.demo.persistence.dao.*;
 import com.demo.service.SupplierService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,13 +34,20 @@ public class SupplierServiceImpl implements SupplierService {
     @Autowired
     @Qualifier("uniregJdbcTemplate")
     protected JdbcTemplate uniregJdbcTemplate;
+    @Autowired
+    @Qualifier("approveJdbcTemplate")
+    protected JdbcTemplate approveJdbcTemplate;
 
+    @Autowired
+    private ApprovingMapper approvingMapper;
     @Autowired
     BsmCompanySupplierApplyMapper bsmCompanySupplierApplyMapper;
 
     @Autowired
     RegUserMapper regUserMapper;
 
+    @Autowired
+    private ApproveTaskRecodeMapper approveTaskRecodeMapper;
     /**
      * 查询新中心库信息
      *
@@ -69,59 +72,30 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public String handleSupplierCatalogRelation(Long companyId) {
-
-        // 根据companyId查询记录
-        List<BsmSupplierCatalogRelation> result = supplierCatalogRelationMapper.selectByCompanyId(companyId);
-
+    public String handleSupplierCatalogRelation(Long companyId,List<Long> list) {
+        String sql = "INSERT INTO supplier_admittance_record ( id, company_id, supplier_id, starting_time, admittance_time, admittance_user_name, join_time, reason, is_past_due, create_time, " +
+                "create_user_name, create_user_id, update_time, update_user_name, update_user_id )  " +
+                "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         // 查询中心库信息
         List<TRegUser> tRegUsers = findByCondition(companyId);
+        List<Object[]> parms = new ArrayList<>();
         if (tRegUsers.size() > 0) {
 
             TRegUser tRegUser = tRegUsers.get(0);
-            for (BsmSupplierCatalogRelation relation : result) {
-
-                log.info("-------------进入循环，开始遍历，需要遍历的数量:{}----------",result.size());
+            for(int i = 0;i<list.size();i++){
+                log.info("-------------进入循环，开始遍历，需要遍历的数量:{}----------",list.size());
                 Long id = IdWork.nextId();
-                Long compId = relation.getCompId();
-                Long supplierId = relation.getSupplierId();
-                // 发起时间  准入时间  准入发起人  理由 设置为null  数据是否过期 初始化为0
-                // 加入时间 创建时间  无值，最新时间   创建人用户名
-                Long creator = relation.getCreator();
-                Long createUserId = null;
-                String createUserName = null;
-
-                // creator字段为null，查询主账号的id，name进行赋值
-                if (creator == null) {
-                    log.warn("----------creator 为null，即将使用用户中心主账号信息进行填充-----------");
-                    createUserId = tRegUser.getId();
-                    createUserName = tRegUser.getName();
-                }
-
-                Long modifier = relation.getModifier();
-                String updateUserName = null;
-                Long updateUserId = null;
-                if (modifier == null) {
-                    log.warn("----------modifier 为null，即将使用用户中心主账号信息进行填充-----------");
-                    updateUserId = tRegUser.getId();
-                    updateUserName = tRegUser.getName();
-                }
-
+                Long supplierId = list.get(i);
                 Date nowTime = new Date();
-                Date createTime = relation.getCreateTime();
-                if (createTime == null) {
-                    createTime = new Date();
-                }
-                int res = uniregJdbcTemplate.update(
-                        "INSERT INTO supplier_admittance_record ( id, company_id, supplier_id, starting_time, admittance_time, admittance_user_name, join_time, reason, is_past_due, create_time, " +
-                                "create_user_name, create_user_id, update_time, update_user_name, update_user_id )  " +
-                                "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);\n",
-                        id, compId, supplierId, null, null, null, nowTime, null, 0, createTime, createUserName, createUserId, nowTime, updateUserName, updateUserId);
+                parms.add(new Object[]{id, companyId, supplierId, null, null, null, nowTime, null, 0, nowTime, tRegUser.getName(), tRegUser.getId(), nowTime, tRegUser.getName(), tRegUser.getId()});
                 log.info("newId:{}", id);
-                System.out.println("插入数据的返回值：\t" + res);
             }
         } else {
             log.error("查询用户中心失败，companyId为：{}", companyId);
+        }
+        int[] batchUpdate = uniregJdbcTemplate.batchUpdate(sql, parms);
+        for( int i = 0 ; i < batchUpdate.length ; i ++ ){
+            System.out.println(batchUpdate[i]);
         }
         return "success";
     }
@@ -179,4 +153,21 @@ public class SupplierServiceImpl implements SupplierService {
         }
         return null;
     }
+
+    @Override
+    public String handleApproveTaskRecode(Long companyId){
+        String sql = "";
+        // 根据companyid查询所属公司下的所有供应商信息(supplierId)   bsm_company_supplier_apply
+//        List<BsmCompanySupplierApply> bsmCompanySupplierApplies = bsmCompanySupplierApplyMapper.selectByCompanyId(companyId);
+        // 将查询出的所有supplierId作为条件  project_id in(supplier_ids)  查询处所有的流程实例id(proc_inst_id)  approving
+//        List<Approving> approvings = approvingMapper.selApproveBySupplierIds(bsmCompanySupplierApplies);
+        // 以流程实例id(proc_inst_id) 作为条件查询 proc_instance_id in( )  approve_task_record
+        List<ApproveTaskRecode> approveTaskRecodes = approveTaskRecodeMapper.selApproveRecodeByCompanyId(companyId);
+//        approveJdbcTemplate.update("insert into approve_task_recode(id,proc_inst_id,task_id,project_id,custom_id,task_def_key,\n" +
+//                "current_node_index,type,status,mult_instance,approve_suggest,approve_type,approve_time,\n" +
+//                "assign,description,company_id,create_user_id,create_time,update_user_id,update_time,platform)\n" +
+//                "values()");
+        return null;
+    }
+
 }

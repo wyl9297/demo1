@@ -24,7 +24,7 @@
     where id = #{id,jdbcType=BIGINT}
       and comp_id = #{compId,jdbcType=BIGINT}
   </select>
-  <select id="selectByCompanyId" resultMap="BaseResultMap" parameterType="list" >
+  <select id="selectByCompanyId" resultMap="BaseResultMap" parameterType="long" >
     select
     <include refid="Base_Column_List" />
     from bsm_supplier_catalog_relation

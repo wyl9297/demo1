@@ -29,6 +29,26 @@ public class MutiDataSourceConfig  {
         return new JdbcTemplate(dataSource);
     }
 
+    /**
+     * 配置审批数据源 start
+     * @return
+     */
+    @Bean(name = "approveDataSource")
+    @Qualifier("approveDataSource")
+    @ConfigurationProperties(prefix="spring.datasource.approve")
+    public DataSource approveDataSource() {
+        return DataSourceBuilder.create().build();
+    }
+
+    @Bean(name = "approveJdbcTemplate")
+    public JdbcTemplate approveJdbcTemplate(@Qualifier("approveDataSource") DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
+    }
+
+    /**
+     *  配置审批数据源  end
+     */
+
 
      /**
       * 用作配置新数据源参考 start

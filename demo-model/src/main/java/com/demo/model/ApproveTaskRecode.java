@@ -37,12 +37,31 @@ public class ApproveTaskRecode extends ApproveTaskRecodeKey {
 
     private Long customId;
 
+    private String supplierIds;
+
+    private Long supplierId;
     public String getProcInstanceId() {
         return procInstanceId;
     }
 
     public void setProcInstanceId(String procInstanceId) {
         this.procInstanceId = procInstanceId == null ? null : procInstanceId.trim();
+    }
+
+    public Long getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(Long supplierId) {
+        this.supplierId = supplierId;
+    }
+
+    public String getSupplierIds() {
+        return supplierIds;
+    }
+
+    public void setSupplierIds(String supplierIds) {
+        this.supplierIds = supplierIds;
     }
 
     public String getTaskId() {

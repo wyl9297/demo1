@@ -21,6 +21,8 @@
     <result column="update_user_id" jdbcType="BIGINT" property="updateUserId" />
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="custom_id" jdbcType="BIGINT" property="customId" />
+    <result column="supplier_ids" jdbcType="VARCHAR" property="supplierIds" />
+    <result column="supplier_id" jdbcType="BIGINT" property="supplierId" />
   </resultMap>
   <sql id="Base_Column_List">
     id, company_id, proc_instance_id, task_id, task_def_key, assign, current_node_index, 
@@ -256,10 +258,19 @@
     where id = #{id,jdbcType=BIGINT}
       and company_id = #{companyId,jdbcType=BIGINT}
   </update>
-  <select id="selApproveRecodeByCompanyId" parameterType="long" resultMap="BaseResultMap">
+  <select id="concatSupplierId" parameterType="long" resultType="string">
+    SELECT
+      GROUP_CONCAT(supplier_id)
+    FROM
+      `supplier`
+    WHERE
+      company_id = #{companyId}
+    GROUP BY company_id;
+  </select>
+  <select id="selTaskRecodeBySupplierIds" resultMap="BaseResultMap" parameterType="map">
     select DISTINCT atr.*,bcsa.supplier_id from approve_task_recode atr
-                                                  inner join approving  a on a.proc_inst_id = atr.proc_instance_id
-                                                  inner join bsm_company_supplier_apply bcsa on bcsa.supplier_id=a.project_id
-    where bcsa.supplier_id in(select supplier_id from bsm_company_supplier_apply where company_id = #{companyId,jdbcType=BIGINT})
+                                                  inner join approving  a on a.proc_inst_id = atr.proc_instance_id and a.company_id=atr.company_id
+                                                  inner join bsm_company_supplier_apply bcsa on bcsa.supplier_id=a.project_id and bcsa.company_id = a.company_id
+    where bcsa.supplier_id in(${supplierIds}) and bcsa.company_id = #{companyId,jdbcType=BIGINT}
   </select>
 </mapper>

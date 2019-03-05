@@ -6,7 +6,7 @@ import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
 import com.demo.model.CorpCatalogNew;
 import com.demo.model.CorpDirectorysNew;
 import com.demo.model.MiddleTable;
-import com.demo.service.DataMigrationService;
+import com.demo.service.CorpExportService;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -32,19 +33,21 @@ public class CorpExportController {
     private static Logger log = LoggerFactory.getLogger(CorpExportController.class);
 
     @Autowired
-    @Qualifier("DataMigrationService")
-    private DataMigrationService corpCatalogsService;
+    @Qualifier("CorpExportService")
+    private CorpExportService corpExportService;
 
 
     // 根据companyId进行数据导出
     @RequestMapping("/export")
-    public void export(HttpServletResponse response,Long companyId) {
-        if(companyId ==null){
+    public void export(HttpServletResponse response,
+                       @RequestParam("originCompanyId") Long originCompanyId,
+                       @RequestParam("destCompanyId") Long destCompanyId) {
+        if(originCompanyId ==null || destCompanyId==null){
             log.error("companyId为必填字段");
         }else{
             log.info("进入Controller {}",CorpExportController.class.getName());
-            Map<String, Object> maps = corpCatalogsService.exportCorpCatalogs(companyId);
-            Map<String, Object> directorysMaps = corpCatalogsService.exportDirectorys(companyId);
+            Map<String, Object> maps = corpExportService.exportCorpCatalogs(originCompanyId,destCompanyId);
+            Map<String, Object> directorysMaps = corpExportService.exportDirectorys(originCompanyId,destCompanyId);
             if (maps != null && directorysMaps != null) {
                 try {
                     log.info("数据导出准备----------");

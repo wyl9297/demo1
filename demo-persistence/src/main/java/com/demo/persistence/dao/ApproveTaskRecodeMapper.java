@@ -2,6 +2,7 @@ package com.demo.persistence.dao;
 
 import com.demo.model.ApproveTaskRecode;
 import com.demo.model.ApproveTaskRecodeKey;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,5 +19,7 @@ public interface ApproveTaskRecodeMapper {
 
     int updateByPrimaryKey(ApproveTaskRecode record);
 
-    List<ApproveTaskRecode> selApproveRecodeByCompanyId(Long companyId);
+    String concatSupplierId(Long companyId);
+
+    List<ApproveTaskRecode> selTaskRecodeBySupplierIds(@Param(value = "supplierIds") String supplierIds,@Param(value = "companyId") Long companyId);
 }

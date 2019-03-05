@@ -10,7 +10,7 @@ import cn.bidlink.usercenter.server.service.DubboTRegUserService;
 import com.demo.model.*;
 import com.demo.persistence.dao.CorpCatalogsMapper;
 import com.demo.persistence.dao.CorpDirectorysMapper;
-import com.demo.service.DataMigrationService;
+import com.demo.service.CorpExportService;
 import com.google.common.collect.Maps;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
@@ -31,10 +31,10 @@ import java.util.Map;
  * @Date : Created in  16:07 2019-02-20
  * @Description :
  */
-@Service("DataMigrationService")
-public class DataMigrationServiceImpl implements DataMigrationService {
+@Service("CorpExportService")
+public class CorpExportServiceImpl implements CorpExportService {
 
-    private static Logger log = LoggerFactory.getLogger(DataMigrationServiceImpl.class);
+    private static Logger log = LoggerFactory.getLogger(CorpExportServiceImpl.class);
     @Autowired
     private CorpCatalogsMapper corpCatalogsMapper;
 
@@ -74,15 +74,15 @@ public class DataMigrationServiceImpl implements DataMigrationService {
 
     /**
      * 采购品目录信息  及  对照关系表数据导出
-     * @param companyId
+     * @param originCompanyId   destCompanyId
      * @return
      */
     @Override
-    public Map<String, Object> exportCorpCatalogs(Long companyId) {
+    public Map<String, Object> exportCorpCatalogs(Long originCompanyId , Long destCompanyId) {
         log.info("进入方法：{}", "exportCorpCatalogs()");
 
         // 根据companyID查询悦采 采购品目录信息
-        List<CorpCatalogs> corpCatalogs = corpCatalogsMapper.selCataLogsByCompanyId(companyId);
+        List<CorpCatalogs> corpCatalogs = corpCatalogsMapper.selCataLogsByCompanyId(originCompanyId);
 
         List<CorpCatalogNew> listCatalog = new ArrayList<>(); // 新采购品目录集合
         // 不符合条件的 采购品目录信息集合
@@ -130,6 +130,13 @@ public class DataMigrationServiceImpl implements DataMigrationService {
 
                     catalogNew.setId(newId);
 
+                    // 设置隆道云新 companyId
+                    catalogNew.setCompanyId(destCompanyId);
+
+                    // todo  start 将corp_catalogs中 idPath 和catalogNamePath字段设置为null
+                    catalogNew.setIdPath(null);
+                    catalogNew.setCatalogNamePath(null);
+                    // todo end
                     // 将新采购品目录信息添加进集合
                     listCatalog.add(catalogNew);
 
@@ -152,12 +159,12 @@ public class DataMigrationServiceImpl implements DataMigrationService {
 
     /**
      * 导出采购品信息
-     * @param companyId 公司ID
+     * @param originCompanyId 悦采companyId  隆道云companyId
      * @return
      */
-    public Map<String,Object> exportDirectorys(Long companyId) {
+    public Map<String,Object> exportDirectorys(Long originCompanyId , Long destCompanyId) {
         CorpDirectorys corpDirectorys = new CorpDirectorys();
-        corpDirectorys.setCompanyId(companyId);
+        corpDirectorys.setCompanyId(originCompanyId);
 
         List<CorpDirectorys> directorysList = corpDirectorysMapper.findByCondition(corpDirectorys);
 
@@ -170,7 +177,7 @@ public class DataMigrationServiceImpl implements DataMigrationService {
             try {
                 BeanUtils.copyProperties(corpDirectorysNew, directorys);
                 // 根据companyID查询用户中心信息
-                List<TRegUser> tRegUser = findByCondition(companyId);
+                List<TRegUser> tRegUser = findByCondition(originCompanyId);
 
                 // 赋值规则：判断悦采的creator 和 modifier 字段中是否有空值，如果有，使用中心库中的id,name为 createUserId、createUserName、updateUserId、updateUserName
                 if (directorys.getCreator() == null || directorys.getModifier() == null) {
@@ -187,6 +194,12 @@ public class DataMigrationServiceImpl implements DataMigrationService {
 
                 corpDirectorysNew.setPricePrecision(2l);
                 corpDirectorysNew.setUnitPrecision(2l);
+                corpDirectorysNew.setCompanyId(destCompanyId);
+
+                // todo start 将catalogid 和 treepath 字段设置为null
+                corpDirectorysNew.setCatalogId(null);
+                corpDirectorysNew.setTreepath(null);
+                // todo end
                 corpDirectorysNew.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 
                 copyList.add(corpDirectorysNew);

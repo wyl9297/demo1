@@ -8,7 +8,8 @@ public interface SupplierService {
 
     String bsmToSupplier( Long originCompanyId , Long destCompanyId );
 
-    public String handleApproveTaskRecode(Long companyId);
+
+    public String handleApproveTaskRecode(Long originCompanyId,Long destCompanyId);
     String catalogRelationMigrate( Long originCompanyId , Long destCompanyId );
 
 }

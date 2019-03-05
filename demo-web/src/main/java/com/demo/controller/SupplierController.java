@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class SupplierController {
@@ -33,7 +32,7 @@ public class SupplierController {
 
     //迁移供应商准入记录
     @RequestMapping("/supplierAdmittanceRecord")
-    public String testHandleSupplierAdmittanceRecord(){
+    public String SupplierAdmittanceRecord(){
         String result = supplierService.handleSupplierAdmittanceRecode(1113172701L,new ArrayList<Long>());
         return result;
     }
@@ -50,8 +49,9 @@ public class SupplierController {
     }
 
     @RequestMapping("/handleApproveTaskRecode")
-    public String handleApproveTaskRecode(){
-        String s = supplierService.handleApproveTaskRecode(1113172701l);
-        return s;
+    public String handleApproveTaskRecode(@RequestParam("originCompanyId") Long originCompanyId ,
+                                          @RequestParam("destCompanyId") Long destCompanyId){
+        String result = supplierService.handleApproveTaskRecode(originCompanyId,destCompanyId);
+        return result;
     }
 }

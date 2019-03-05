@@ -20,6 +20,7 @@ public class SupplierController {
     @Qualifier("SupplierService")
     private SupplierService supplierService;
 
+    //迁移供应商主数据信息
     @RequestMapping("bsmToSupplier")
     @ResponseBody
     public String bsmToSupplier( HttpServletRequest request ,
@@ -30,12 +31,14 @@ public class SupplierController {
         return result;
     }
 
+    //迁移供应商准入记录
     @RequestMapping("/supplierAdmittanceRecord")
     public String testHandleSupplierAdmittanceRecord(){
         String result = supplierService.handleSupplierAdmittanceRecode(1113172701L,new ArrayList<Long>());
         return result;
     }
 
+    //迁移供应商采购目录关联关系
     @RequestMapping("/catalogRelationMigrate")
     @ResponseBody
     public String catalogRelationMigrate( HttpServletRequest request ,

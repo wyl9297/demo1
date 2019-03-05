@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>隆道云迁移</title>
+</head>
+<body>
+
+    <div style="text-align: center">
+
+    <h3>导出采购品excel</h3>
+    <br/>
+    <form action="#" th:action="@{/export}" method="post">
+        悦采公司ID：<input type="text" th:name="companyId" />
+        隆道云公司ID：<input type="text" th:name="destCompanyId" />
+        <input type="submit" th:name="开始迁移" />
+    </form>
+    <br/><br/><br/>
+    <hr/>
+    <br/><br/>
+    <h3>迁移部门及人员和部门关联关系(人员必须已在隆道云中心库)</h3>
+    <br/>
+    <form action="#" th:action="@{/handleRegDepartment}" method="post">
+        悦采公司ID：<input type="text" th:name="originCompanyId" />
+        隆道云公司ID：<input type="text" th:name="destCompanyId" />
+        <input type="submit" th:name="开始迁移" />
+    </form>
+    <br/><br/><br/>
+    <hr/>
+    <br/><br/>
+    <h3>供应商主体信息迁移(包括准入记录)</h3>
+    <br/>
+    <form action="#" th:action="@{/bsmToSupplier}" method="post">
+        悦采公司ID：<input type="text" th:name="originCompanyId" />
+        隆道云公司ID：<input type="text" th:name="destCompanyId" />
+        <input type="submit" th:name="开始迁移" />
+    </form>
+    <br/>
+    <h3>供应商采购品关联关系迁移</h3>
+    <br/>
+    <form action="#" th:action="@{/catalogRelationMigrate}" method="post">
+        悦采公司ID：<input type="text" th:name="originCompanyId" />
+        隆道云公司ID：<input type="text" th:name="destCompanyId" />
+        <input type="submit" th:name="开始迁移" />
+    </form>
+    <br/>
+    <h3>供应商准入审批记录迁移</h3>
+    <br/>
+    <form action="#" th:action="@{/handleApproveTaskRecode}" method="post">
+        悦采公司ID：<input type="text" th:name="originCompanyId" />
+        隆道云公司ID：<input type="text" th:name="destCompanyId" />
+        <input type="submit" th:name="开始迁移" />
+    </form>
+    </div>
+</body>
+</html>

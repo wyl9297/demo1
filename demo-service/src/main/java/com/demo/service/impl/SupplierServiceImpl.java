@@ -248,7 +248,6 @@ public class SupplierServiceImpl implements SupplierService {
         List<ApproveTaskRecode> approveTaskRecodes = approveTaskRecodeMapper.selTaskRecodeBySupplierIds(supplierIds, originCompanyId);
 
         List<Object[]> parms = new ArrayList<>();
-        List<Long> supplierIdList = new ArrayList<>();
         List<TRegUser> tRegUser = this.findByCondition(originCompanyId);
         if (tRegUser.size() <= 0) {
             log.error("用户信息查询失败");
@@ -297,12 +296,15 @@ public class SupplierServiceImpl implements SupplierService {
 
             Long customId = approveTaskRecode.getCustomId();
             Long supplierId = approveTaskRecode.getSupplierId();
-            supplierIdList.add(supplierId);
 
             // 若供应商无审批记录，project_id 设置为-1
             // 创建人名称 + 更新人名称  --> 使用新companyId查询中心库获取name
-            parms.add(new Object[]{IdWork.nextId(), procInstanceId, taskId, converMap.get(supplierId) == null ? -1L : converMap.get(supplierId), customId, taskDefKey, currentNodeIndex, type, status, multInstance, approveSuggestion, approveType,
-                    approveTime, assign, description, destCompanyId, createUserId, createUserName, createTime, updateUserId, updateUserName, new Date()});
+            if(converMap.get(supplierId) == null){
+                log.info("supplierId 对应的id为null");
+            }else{
+                parms.add(new Object[]{IdWork.nextId(), procInstanceId, taskId, converMap.get(supplierId), customId, taskDefKey, currentNodeIndex, type, status, multInstance, approveSuggestion, approveType,
+                approveTime, assign, description, destCompanyId, createUserId, createUserName, createTime, updateUserId, updateUserName, new Date()});
+            }
         }
 
         int[] batchUpdate = approveJdbcTemplate.batchUpdate(insertSql, parms);

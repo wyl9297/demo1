@@ -45,7 +45,13 @@
       #{supplierIds.supplierId}
     </foreach>
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="com.demo.model.ApprovingKey" >
+    <select id="selApprovingByProcInstanceIds" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List" />
+      from approving
+      where proc_inst_id in(${procInstanceIds}) and company_id = #{companyId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="com.demo.model.ApprovingKey" >
     delete from approving
     where id = #{id,jdbcType=BIGINT}
       and company_id = #{companyId,jdbcType=BIGINT}

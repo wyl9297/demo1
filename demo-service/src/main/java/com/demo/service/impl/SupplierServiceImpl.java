@@ -229,6 +229,8 @@ public class SupplierServiceImpl implements SupplierService {
                 "approve_type,\n" +
                 "approve_time,\n" +
                 "assign,\n" +
+                "assign_id,\n" +
+                "assign_name,\n" +
                 "description,\n" +
                 "company_id,\n" +
                 "create_user_id,\n" +
@@ -239,7 +241,7 @@ public class SupplierServiceImpl implements SupplierService {
                 "update_time \n" +
                 ")\n" +
                 "VALUES\n" +
-                "\t( ?, ?, ?, ?, ?,?,?,?, ?, ?, ?, ?,?, ?, ?, ?, ?,?,?,? ,? ,?)";
+                "\t( ?, ?, ?, ?, ?,?,?,?, ?, ?, ?, ?,?, ?, ?, ?, ?,?,?,? ,? ,? , ? , ?)";
 
         // 根据悦采companyId生成 供应商supplierId拼接字段
         String supplierIds = approveTaskRecodeMapper.concatSupplierId(originCompanyId);
@@ -259,6 +261,13 @@ public class SupplierServiceImpl implements SupplierService {
             converMap.put(Long.valueOf(String.valueOf(map.get("supplier_id"))), Long.valueOf(String.valueOf(map.get("id"))));
         }
 
+        Set<String> hashSet = new HashSet<>();
+        StringBuilder stringBuilder = new StringBuilder();
+
+        Map<String, Object> map = uniregJdbcTemplate.queryForMap(" select id,name from t_reg_user where company_id = ? and is_subuser = 0", destCompanyId);
+        long main_user_id = (long) map.get("id");
+        String main_user_name = (String) map.get("name");
+
         // 遍历查询结果  批量插入
         for (int i = 0; i < approveTaskRecodes.size(); i++) {
             String procInstanceId = approveTaskRecodes.get(i).getProcInstanceId();
@@ -271,7 +280,7 @@ public class SupplierServiceImpl implements SupplierService {
 
             Byte currentNodeIndex = approveTaskRecode.getCurrentNodeIndex();
 
-            Byte type = approveTaskRecode.getType();
+            Byte type = 3; //4是历史项目 还没改造暂时设成自由流
 
             Byte status = approveTaskRecode.getStatus();
 
@@ -302,18 +311,46 @@ public class SupplierServiceImpl implements SupplierService {
             if(converMap.get(supplierId) == null){
                 log.info("supplierId 对应的id为null");
             }else{
+                Long assignId = main_user_id;
+                String assignName = main_user_name;
+                RegUser regUser = new RegUser();
+                regUser.setLoginName(assign);
+                regUser.setCompanyId(originCompanyId);
+                RegUser user = regUserMapper.findByCondition(regUser);
+                if( null != user ){
+                    assignId = user.getBidlinkId();
+                    assignName = user.getName();
+                }
                 parms.add(new Object[]{IdWork.nextId(), procInstanceId, taskId, converMap.get(supplierId), customId, taskDefKey, currentNodeIndex, type, status, multInstance, approveSuggestion, approveType,
-                approveTime, assign, description, destCompanyId, createUserId, createUserName, createTime, updateUserId, updateUserName, new Date()});
+                approveTime, assign , assignId , assignName ,  description, destCompanyId, createUserId, createUserName, createTime, updateUserId, updateUserName, new Date()});
+            }
+            if( !hashSet.contains(procInstanceId) ){
+                stringBuilder.append(procInstanceId);
+                stringBuilder.append(",");
+                hashSet.add(procInstanceId);
             }
         }
 
-        int[] batchUpdate = approveJdbcTemplate.batchUpdate(insertSql, parms);
+        String insertApproveSql = " INSERT INTO  approve  ( id ,  project_id ,  project_no ,  project_name ,  project_status ,  project_create_user_id ,  project_create_user_name ,  project_create_time ,  `module` ,  module_node_type ,  proc_inst_id " +
+                " ,  custom_id ,  apply_reason ,  custom_version ,  approve_status ,  approve_result ,  company_id ,  create_user_id ,  create_user_name ,  create_time ,  update_user_id ,  update_user_name ,  update_time ,  platform )" +
+                " VALUES ( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ?, ?) ";
+        String procInsanceIds = stringBuilder.toString().substring(0, stringBuilder.length() - 1);
+        // 查询悦采审批信息 条件：流程实例  + 悦采 companyId
+        List<Approving> approvingList = approvingMapper.selApprovingByProcInstanceIds(procInsanceIds, originCompanyId);
+        List<Object[]> approvingParms = new ArrayList<>();
+        for( Approving approving : approvingList ){
 
-        for (int i = 0; i < batchUpdate.length; i++) {
-            log.info("------------数据插入中：------------");
-            System.out.println(batchUpdate[i]);
+            if(converMap.get(approving.getProjectId()) == null){
+                log.info("projectId 对应的id为null");
+            }else {
+                approvingParms.add(new Object[]{IdWork.nextId(), converMap.get(approving.getProjectId()), approving.getProjectNo(), approving.getProjectName() , approving.getProjectStatus() , approving.getProjectCreateUserId() , approving.getProjectCreateUserName() , approving.getCreateTime() , 6 , 61 , approving.getProcInstId()
+                                                , -1 , null , approving.getCustomVersion() , approving.getApproveStatus() , approving.getApproveResult() , destCompanyId , tRegUser.get(0).getId() , tRegUser.get(0).getName() , new Date() , tRegUser.get(0).getId() , tRegUser.get(0).getName() , new Date() , 20 });
+            }
         }
-        return "success";
+
+       int[] batchUpdate = approveJdbcTemplate.batchUpdate(insertSql, parms);
+       int[] update = approveJdbcTemplate.batchUpdate(insertApproveSql, approvingParms);
+       return "success";
     }
 
 }

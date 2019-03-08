@@ -41,7 +41,7 @@ public class MutiDataSourceConfig  {
     }
 
     @Bean(name = "approveJdbcTemplate")
-    public JdbcTemplate approveJdbcTemplate(@Qualifier("approveDataSource") DataSource dataSource) {
+    public JdbcTemplate approveJdbcTemplate(@Autowired @Qualifier("approveDataSource") DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
 
@@ -62,6 +62,24 @@ public class MutiDataSourceConfig  {
 
     @Bean(name = "uniregJdbcTemplate")
     public JdbcTemplate uniregJdbcTemplate(@Autowired @Qualifier("uniregDataSource") DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
+    }
+    /**
+     * 用作配置新数据源参考 end
+     */
+
+    /**
+     * 用作配置新数据源参考 start
+     */
+    @Bean(name = "purchaseDataSource")
+    @Qualifier("purchaseDataSource")
+    @ConfigurationProperties(prefix="spring.datasource.purchase")
+    public DataSource purchaseDataSource() {
+        return DataSourceBuilder.create().build();
+    }
+
+    @Bean(name = "purchaseJdbcTemplate")
+    public JdbcTemplate testJdbcTemplate(@Autowired @Qualifier("purchaseDataSource") DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
     /**

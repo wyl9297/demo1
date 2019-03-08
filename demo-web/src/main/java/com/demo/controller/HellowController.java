@@ -40,6 +40,10 @@ public class HellowController {
     protected JdbcTemplate uniregJdbcTemplate;
 
     @Autowired
+    @Qualifier("purchaseJdbcTemplate")
+    protected JdbcTemplate purchaseJdbcTemplate;
+
+    @Autowired
     private RegDepartmentMapper regDepartmentMapper;
 
     @RequestMapping( value = "success")
@@ -77,7 +81,7 @@ public class HellowController {
         aclJdbcTemplate.queryForMap("select ORGNAME FROM SYS_ORG WHERE ORGID = 100");
         uniregJdbcTemplate.queryForMap("select create_user_name FROM supplier WHERE ID = 174957304234377216");
         regDepartmentMapper.getDepUserRelation(1113172701L);
+        purchaseJdbcTemplate.queryForList("select * from transaction_record");
         return "success";
     }
-
 }

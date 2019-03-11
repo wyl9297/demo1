@@ -3,7 +3,7 @@
 <mapper namespace="com.demo.persistence.dao.CorpDirectorysMapper" >
   <resultMap id="BaseResultMap" type="com.demo.model.CorpDirectorys" >
     <id column="ID" property="id" jdbcType="BIGINT" />
-    <id column="company_id" property="companyId" jdbcType="BIGINT" />
+    <id column="COMPANY_ID" property="companyId" jdbcType="BIGINT" />
     <result column="CODE" property="code" jdbcType="VARCHAR" />
     <result column="CATALOG_ID" property="catalogId" jdbcType="BIGINT" />
     <result column="CATALOG_NAME" property="catalogName" jdbcType="VARCHAR" />
@@ -15,23 +15,24 @@
     <result column="PRODUCTOR" property="productor" jdbcType="VARCHAR" />
     <result column="TREEPATH" property="treepath" jdbcType="VARCHAR" />
     <result column="LASTMODIFYTIME" property="lastmodifytime" jdbcType="TIMESTAMP" />
-    <result column="CREATE_TIME" property="createTime" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="PRODUCING_ADDRESS" property="producingAddress" jdbcType="VARCHAR" />
     <result column="BRAND" property="brand" jdbcType="VARCHAR" />
     <result column="PURPOSE" property="purpose" jdbcType="VARCHAR" />
     <result column="MARKET_PRICE" property="marketPrice" jdbcType="VARCHAR" />
     <result column="SPECIALITY" property="speciality" jdbcType="VARCHAR" />
-    <result column="tech_parameters" property="techParameters" jdbcType="VARCHAR" />
-    <result column="creator" property="creator" jdbcType="BIGINT" />
-    <result column="modifier" property="modifier" jdbcType="BIGINT" />
+    <result column="TECH_PARAMETERS" property="techParameters" jdbcType="VARCHAR" />
+    <result column="CREATOR" property="creator" jdbcType="BIGINT" />
+    <result column="MODIFIER" property="modifier" jdbcType="BIGINT" />
   </resultMap>
   <sql id="Base_Column_List" >
     ID, company_id, OLD_ID, CODE, CATALOG_ID, CATALOG_NAME, DEMO, NAME, SPEC,
      ABANDON, PCODE, PRODUCTOR, TREEPATH, LASTMODIFYTIME,
-    CREATE_TIME, BRAND, PURPOSE, MARKET_PRICE, SPECIALITY, tech_parameters,
+    CREATE_TIME, PRODUCING_ADDRESS , BRAND, PURPOSE, MARKET_PRICE, SPECIALITY, tech_parameters,
    creator, modifier
   </sql>
 
-  <select id="findByCondition" parameterType="com.demo.model.CorpDirectorys" resultMap="BaseResultMap">
+  <select id="findByCompanyId" parameterType="long" resultMap="BaseResultMap">
     select <include refid="Base_Column_List"/>
     from corp_directorys
     <where>
@@ -71,7 +72,7 @@
       tech_parameters, erp_id, creator, 
       modifier, md5)
     values (#{companyId,jdbcType=BIGINT}, #{oldId,jdbcType=BIGINT}, #{code,jdbcType=VARCHAR}, 
-      #{catalogId,jdbcType=BIGINT}, #{catalogName,jdbcType=VARCHAR}, #{demo,jdbcType=VARCHAR}, 
+      #{catalogId,jdbcType=BIGINT}, #{catalogName,jdbcType=VARCHAR}, #{demo,jdbcType=VARCHAR},
       #{name,jdbcType=VARCHAR}, #{orgid,jdbcType=BIGINT}, #{spec,jdbcType=VARCHAR}, #{unittype,jdbcType=VARCHAR}, 
       #{abandon,jdbcType=BIGINT}, #{pcode,jdbcType=VARCHAR}, #{productor,jdbcType=VARCHAR}, 
       #{treepath,jdbcType=VARCHAR}, #{lastmodifytime,jdbcType=TIMESTAMP}, #{modifymode,jdbcType=TINYINT}, 

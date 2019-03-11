@@ -11,11 +11,9 @@ import java.util.Map;
  * @Description :
  */
 public interface CorpExportService {
+
     // 采购品目录信息  及  中间表信息  导出
     public Map<String, Object> exportCorpCatalogs(Long originCompanyId , Long destCompanyId);
-
-    // 导入Excel(暂未用)
-    public Map<String, Object> importExcel();
 
     //
     public Map<String,Object> exportDirectorys(Long originCompanyId , Long destCompanyId);

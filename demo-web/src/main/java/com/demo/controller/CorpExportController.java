@@ -3,9 +3,7 @@ package com.demo.controller;
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
-import com.demo.model.CorpCatalogNew;
-import com.demo.model.CorpDirectorysNew;
-import com.demo.model.MiddleTable;
+import com.demo.model.*;
 import com.demo.service.CorpExportService;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
@@ -15,12 +13,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * @author : <a href="mailto:congyaozhu@ebnew.com">congyaozhu</a>
@@ -36,65 +33,54 @@ public class CorpExportController {
     @Qualifier("CorpExportService")
     private CorpExportService corpExportService;
 
-
     // 根据companyId进行数据导出
     @RequestMapping("/export")
-    public void export(HttpServletResponse response,
+    @ResponseBody
+    public String testExport(HttpServletResponse response,
                        @RequestParam("originCompanyId") Long originCompanyId,
-                       @RequestParam("destCompanyId") Long destCompanyId) {
-        if(originCompanyId ==null || destCompanyId==null){
-            log.error("companyId为必填字段");
+                       @RequestParam("destCompanyId") Long destCompanyId){
+        Map<String, Object> catalogsMap = corpExportService.exportCorpCatalogs(originCompanyId, destCompanyId);
+        Map<String, Object> directorysMap = corpExportService.exportDirectorys(originCompanyId, destCompanyId);
+
+        if(catalogsMap == null ||catalogsMap.size() == 0 || directorysMap == null || directorysMap.size()==0){
+            log.info("----------导出采购品信息和采购品目录信息正常，无不符合条件的数据-----------");
+            return "success";
         }else{
-            log.info("进入Controller {}",CorpExportController.class.getName());
-            Map<String, Object> maps = corpExportService.exportCorpCatalogs(originCompanyId,destCompanyId);
-            Map<String, Object> directorysMaps = corpExportService.exportDirectorys(originCompanyId,destCompanyId);
-            if (maps != null && directorysMaps != null) {
-                try {
-                    log.info("数据导出准备----------");
-                    // =========easypoi部分
-                    // 导出中间表数据(oldId,newId,companyId)
-                    ExportParams exportParams = new ExportParams();
-                    exportParams.setSheetName("middleTable");
-                    Map<String,Object> middleMap = new HashMap<>();
-                    middleMap.put("title",exportParams);
-                    middleMap.put("entity", MiddleTable.class);
-                    middleMap.put("data",maps.get("middleTable"));
+            log.info("----------准备导出不符合条件的数据-----------");
 
-                    // 导出采购品目录信息
-                    ExportParams exportParams2 = new ExportParams();
-                    Map<String,Object> catalogMap = new HashMap<>();
-                    exportParams2.setSheetName("corp_catalogs");
-                    catalogMap.put("title",exportParams2);
-                    catalogMap.put("entity", CorpCatalogNew.class);
-                    catalogMap.put("data",maps.get("success"));
+            // 导出不符合条件的采购品信息
+            ExportParams exportParams = new ExportParams();
+            Map<String,Object> failCorpCatalog = new HashMap<>();
+            exportParams.setSheetName("eroor_catalog");
+            failCorpCatalog.put("title",exportParams);
+            failCorpCatalog.put("entity", CorpCatalogs.class);
+            failCorpCatalog.put("data",catalogsMap.get("failCatalog"));
 
-                    // 导出采购品信息
-                    ExportParams exportParams3 = new ExportParams();
-                    Map<String,Object> directorysMap = new HashMap<>();
-                    exportParams3.setSheetName("corp_directorys");
-                    directorysMap.put("title",exportParams3);
-                    directorysMap.put("entity", CorpDirectorysNew.class);
-                    directorysMap.put("data",directorysMaps.get("directorys"));
+            // 导出不符合条件的采购品信息
+            ExportParams exportParams3 = new ExportParams();
+            Map<String,Object> failDirectory = new HashMap<>();
+            exportParams3.setSheetName("eroor_directorys");
+            failDirectory.put("title",exportParams3);
+            failDirectory.put("entity", CorpDirectorys.class);
+            failDirectory.put("data",directorysMap.get("failDirectory"));
 
-                    /***
-                     * 导出失败的采购品信息.....
-                     */
+            List<Map<String,Object>> list = new ArrayList<>();
+            list.add(failCorpCatalog);
+            list.add(failDirectory);
 
-                    List<Map<String,Object>> list = new ArrayList<>();
-                    list.add(middleMap);
-                    list.add(catalogMap);
-                    list.add(directorysMap);
-                    Workbook workbook = ExcelExportUtil.exportExcel(list, ExcelType.HSSF);
+            Workbook workbook = ExcelExportUtil.exportExcel(list, ExcelType.HSSF);
 
-                    // 设置响应输出的头类型
-                    response.setHeader("content-Type", "application/vnd.ms-excel");
-                    // 下载文件的默认名称
-                    response.setHeader("Content-Disposition", "attachment;filename=CorpInfoExport.xls");
-                    workbook.write(response.getOutputStream());
-                } catch (Exception e) {
-                    System.out.println("有个异常");
-                }
+            // 设置响应输出的头类型
+            response.setHeader("content-Type", "application/vnd.ms-excel");
+            // 下载文件的默认名称
+            response.setHeader("Content-Disposition", "attachment;filename=Error_Info.xls");
+            try {
+                workbook.write(response.getOutputStream());
+            } catch (IOException e) {
+                System.out.println("导出Excel出错啦！！！");
+                e.printStackTrace();
             }
         }
+        return "success";
     }
 }

@@ -2,6 +2,7 @@ package com.demo.persistence.dao;
 
 import com.demo.model.CorpDirectorys;
 import com.demo.model.CorpDirectorysKey;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,5 +19,5 @@ public interface CorpDirectorysMapper {
 
     int updateByPrimaryKey(CorpDirectorys record);
 
-    List<CorpDirectorys> findByCondition(CorpDirectorys corpDirectorys);
+    List<CorpDirectorys> findByCompanyId(@Param("companyId") Long companyId);
 }

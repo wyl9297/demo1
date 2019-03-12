@@ -24,9 +24,6 @@ public class SupplierServiceImpl implements SupplierService {
     private static final Logger log = LoggerFactory.getLogger(SupplierServiceImpl.class);
 
     @Autowired
-    private BsmSupplierCatalogRelationMapper supplierCatalogRelationMapper;
-
-    @Autowired
     private DubboTRegUserService tRegUserService;
 
     @Autowired
@@ -271,11 +268,8 @@ public class SupplierServiceImpl implements SupplierService {
 
         // 遍历查询结果  批量插入
         for (int i = 0; i < approveTaskRecodes.size(); i++) {
-            String procInstanceId = approveTaskRecodes.get(i).getProcInstanceId();
             ApproveTaskRecode approveTaskRecode = approveTaskRecodes.get(i);
-            String taskId = approveTaskRecode.getTaskId();
-
-            String taskDefKey = approveTaskRecode.getTaskDefKey();
+            String procInstanceId = approveTaskRecode.getProcInstanceId();
 
             String assign = approveTaskRecode.getAssign();
 
@@ -290,28 +284,6 @@ public class SupplierServiceImpl implements SupplierService {
                 type = approveTaskRecode.getType();
             }
 
-            Byte status = approveTaskRecode.getStatus();
-
-            Byte multInstance = approveTaskRecode.getMultInstance();
-
-            String approveSuggestion = approveTaskRecode.getApproveSuggestion();
-
-            Boolean approveType = approveTaskRecode.getApproveType();
-
-            Date approveTime = approveTaskRecode.getApproveTime();
-
-            Date createTime = approveTaskRecode.getCreateTime();
-
-            Long createUserId = approveTaskRecode.getCreateUserId();
-
-            String createUserName = tRegUser.get(0).getName();
-
-            Long updateUserId = approveTaskRecode.getUpdateUserId();
-
-            String updateUserName = tRegUser.get(0).getName();
-            String description = approveTaskRecode.getDescription();
-
-            Long customId = approveTaskRecode.getCustomId();
             Long supplierId = approveTaskRecode.getSupplierId();
 
             // 若供应商无审批记录，project_id 设置为-1
@@ -329,8 +301,11 @@ public class SupplierServiceImpl implements SupplierService {
                     assignId = user.getBidlinkId();
                     assignName = user.getName();
                 }
-                parms.add(new Object[]{IdWork.nextId(), "yc_" + procInstanceId, "yc_" + taskId, converMap.get(supplierId), customId, taskDefKey, currentNodeIndex, type, status, multInstance, approveSuggestion, approveType,
-                approveTime, assign , assignId , assignName ,  description, destCompanyId, createUserId, createUserName, createTime, updateUserId, updateUserName, new Date() , 20 });
+                parms.add(new Object[]{IdWork.nextId(), approveTaskRecode.getProcInstanceId(), approveTaskRecode.getTaskId(), converMap.get(supplierId), approveTaskRecode.getCustomId(),
+                        approveTaskRecode.getTaskDefKey(), approveTaskRecode.getCurrentNodeIndex(), type, approveTaskRecode.getStatus(), approveTaskRecode.getMultInstance(),
+                        approveTaskRecode.getApproveSuggestion(), approveTaskRecode.getApproveType(),approveTaskRecode.getApproveTime(), approveTaskRecode.getAssign() , assignId ,
+                        assignName ,  approveTaskRecode.getDescription(), destCompanyId, approveTaskRecode.getCreateUserId(), tRegUser.get(0).getName(), approveTaskRecode.getCreateTime(),
+                        approveTaskRecode.getUpdateUserId(), tRegUser.get(0).getName(), new Date()});
             }
             if( !hashSet.contains(procInstanceId) ){
                 stringBuilder.append(procInstanceId);

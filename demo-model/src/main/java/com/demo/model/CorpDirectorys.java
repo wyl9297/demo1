@@ -1,11 +1,13 @@
 package com.demo.model;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
+import cn.afterturn.easypoi.excel.annotation.ExcelTarget;
 
 import javax.validation.constraints.Max;
 import java.io.Serializable;
 import java.util.Date;
 
+@ExcelTarget("corpDirectorys")
 public class CorpDirectorys implements Serializable {
 
     @Excel(name = "id")
@@ -54,7 +56,7 @@ public class CorpDirectorys implements Serializable {
     private String unitname;
 
     @Excel(name = "createTime")
-    private String createTime;
+    private Date createTime;
 
     @Excel(name = "brand")
     private String brand;
@@ -207,14 +209,13 @@ public class CorpDirectorys implements Serializable {
         this.unitname = unitname == null ? null : unitname.trim();
     }
 
-    public String getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
-
 
     public String getBrand() {
         return brand;

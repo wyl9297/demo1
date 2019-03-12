@@ -238,10 +238,11 @@ public class SupplierServiceImpl implements SupplierService {
                 "create_time,\n" +
                 "update_user_id,\n" +
                 "update_user_name,\n" +
-                "update_time \n" +
+                "update_time ,\n" +
+                "platform \n" +
                 ")\n" +
                 "VALUES\n" +
-                "\t( ?, ?, ?, ?, ?,?,?,?, ?, ?, ?, ?,?, ?, ?, ?, ?,?,?,? ,? ,? , ? , ?)";
+                "\t( ?, ?, ?, ?, ?,?,?,?, ?, ?, ?, ?,?, ?, ?, ?, ?,?,?,? ,? ,? , ? ,?, ?)";
 
         // 根据悦采companyId生成 供应商supplierId拼接字段
         String supplierIds = approveTaskRecodeMapper.concatSupplierId(originCompanyId);
@@ -280,7 +281,14 @@ public class SupplierServiceImpl implements SupplierService {
 
             Byte currentNodeIndex = approveTaskRecode.getCurrentNodeIndex();
 
-            Byte type = 3; //4是历史项目 还没改造暂时设成自由流
+            Byte type ;
+            if( approveTaskRecode.getType() == 1 ){
+                type = 2;
+            } else if ( approveTaskRecode.getType() == 2 || approveTaskRecode.getType() == 4  ) {
+                type = 1;
+            } else {
+                type = approveTaskRecode.getType();
+            }
 
             Byte status = approveTaskRecode.getStatus();
 
@@ -321,8 +329,8 @@ public class SupplierServiceImpl implements SupplierService {
                     assignId = user.getBidlinkId();
                     assignName = user.getName();
                 }
-                parms.add(new Object[]{IdWork.nextId(), procInstanceId, taskId, converMap.get(supplierId), customId, taskDefKey, currentNodeIndex, type, status, multInstance, approveSuggestion, approveType,
-                approveTime, assign , assignId , assignName ,  description, destCompanyId, createUserId, createUserName, createTime, updateUserId, updateUserName, new Date()});
+                parms.add(new Object[]{IdWork.nextId(), "yc_" + procInstanceId, "yc_" + taskId, converMap.get(supplierId), customId, taskDefKey, currentNodeIndex, type, status, multInstance, approveSuggestion, approveType,
+                approveTime, assign , assignId , assignName ,  description, destCompanyId, createUserId, createUserName, createTime, updateUserId, updateUserName, new Date() , 20 });
             }
             if( !hashSet.contains(procInstanceId) ){
                 stringBuilder.append(procInstanceId);
@@ -343,7 +351,7 @@ public class SupplierServiceImpl implements SupplierService {
             if(converMap.get(approving.getProjectId()) == null){
                 log.info("projectId 对应的id为null");
             }else {
-                approvingParms.add(new Object[]{IdWork.nextId(), converMap.get(approving.getProjectId()), approving.getProjectNo(), approving.getProjectName() , approving.getProjectStatus() , approving.getProjectCreateUserId() , approving.getProjectCreateUserName() , approving.getCreateTime() , 6 , 61 , approving.getProcInstId()
+                approvingParms.add(new Object[]{IdWork.nextId(), converMap.get(approving.getProjectId()), approving.getProjectNo(), approving.getProjectName() , approving.getProjectStatus() , approving.getProjectCreateUserId() , approving.getProjectCreateUserName() , approving.getCreateTime() , 6 , 61 , "yc_" + approving.getProcInstId()
                                                 , -1 , null , approving.getCustomVersion() , approving.getApproveStatus() , approving.getApproveResult() , destCompanyId , tRegUser.get(0).getId() , tRegUser.get(0).getName() , new Date() , tRegUser.get(0).getId() , tRegUser.get(0).getName() , new Date() , 20 });
             }
         }

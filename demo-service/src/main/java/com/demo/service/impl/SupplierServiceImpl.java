@@ -301,11 +301,11 @@ public class SupplierServiceImpl implements SupplierService {
                     assignId = user.getBidlinkId();
                     assignName = user.getName();
                 }
-                parms.add(new Object[]{IdWork.nextId(), approveTaskRecode.getProcInstanceId(), approveTaskRecode.getTaskId(), converMap.get(supplierId), approveTaskRecode.getCustomId(),
+                parms.add(new Object[]{IdWork.nextId(), "yc_" + approveTaskRecode.getProcInstanceId(), "yc_" + approveTaskRecode.getTaskId(), converMap.get(supplierId), approveTaskRecode.getCustomId(),
                         approveTaskRecode.getTaskDefKey(), approveTaskRecode.getCurrentNodeIndex(), type, approveTaskRecode.getStatus(), approveTaskRecode.getMultInstance(),
                         approveTaskRecode.getApproveSuggestion(), approveTaskRecode.getApproveType(),approveTaskRecode.getApproveTime(), approveTaskRecode.getAssign() , assignId ,
                         assignName ,  approveTaskRecode.getDescription(), destCompanyId, approveTaskRecode.getCreateUserId(), tRegUser.get(0).getName(), approveTaskRecode.getCreateTime(),
-                        approveTaskRecode.getUpdateUserId(), tRegUser.get(0).getName(), new Date()});
+                        approveTaskRecode.getUpdateUserId(), tRegUser.get(0).getName(), new Date() , 20});
             }
             if( !hashSet.contains(procInstanceId) ){
                 stringBuilder.append(procInstanceId);

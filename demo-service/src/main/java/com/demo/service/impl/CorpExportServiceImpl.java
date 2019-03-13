@@ -42,10 +42,14 @@ public class CorpExportServiceImpl implements CorpExportService {
 
     @Autowired
     private DubboTRegUserService dubboTRegUserService;
-
+/*
     @Autowired
     @Qualifier("purchaseJdbcTemplate")
-    private JdbcTemplate corpJdbcTemplate;
+    private JdbcTemplate corpJdbcTemplate;*/
+
+    @Autowired
+    @Qualifier("uniregJdbcTemplate")
+    protected JdbcTemplate uniregJdbcTemplate;
 
     // 定义批处理的数值
     private static final double NUM = 500.0;
@@ -147,14 +151,14 @@ public class CorpExportServiceImpl implements CorpExportService {
      */
     private void updateCatalogTreePath() {
 
-        String updateCatalogSql = "UPDATE corp_catalog_ldy c1 JOIN\n" +
-                "  corp_catalog_ldy c2\n" +
+        String updateCatalogSql = "UPDATE corp_catalog c1 JOIN\n" +
+                "  corp_catalog c2\n" +
                 "  ON c1.PARENT_ID=c2.ID\n" +
                 "  SET c1.ID_PATH=concat(c2.ID_PATH,concat('',c1.id,''),'');";
 
         // 通过遍历的方式更新 id_path
         for (int j = 0; j < 10; j++) {
-            int update = corpJdbcTemplate.update(updateCatalogSql);
+            int update = uniregJdbcTemplate.update(updateCatalogSql);
             // 当update条数为0时，即id_path更新完成，结束循环
             if (update == 0) {
                 break;
@@ -167,10 +171,10 @@ public class CorpExportServiceImpl implements CorpExportService {
         // 获取新旧Id对照Map
         Map<Long, Long> idsMap = idMap(corpCatalogs);
 
-        String insertCatalogsSQL = "INSERT INTO `db_boot`.`corp_catalog_ldy`(`ID`, `NAME`, `CODE`, `PARENT_ID`, `IS_ROOT`, `ID_PATH`, `NAME_PATH`, `company_id`, `create_user_id`, `create_user_name`, `create_time`, `update_user_id`, `update_user_name`, `update_time`) " +
+        String insertCatalogsSQL = "INSERT INTO `corp_catalog`(`ID`, `NAME`, `CODE`, `PARENT_ID`, `IS_ROOT`, `ID_PATH`, `NAME_PATH`, `company_id`, `create_user_id`, `create_user_name`, `create_time`, `update_user_id`, `update_user_name`, `update_time`) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
-        String insertMiddleSQL = "INSERT INTO `db_boot`.`middle_corp_catalog`(`catalog_id`, `old_id`, `company_id`) VALUES (?, ?, ?);";
+        String insertMiddleSQL = "INSERT INTO `middle_corp_catalog`(`catalog_id`, `old_id`, `company_id`) VALUES (?, ?, ?);";
 
         for (int j = 0; j < corpCatalogs.size(); j++) {
             CorpCatalogs catalog = corpCatalogs.get(j);
@@ -240,8 +244,8 @@ public class CorpExportServiceImpl implements CorpExportService {
                 e.printStackTrace();
             }
         }
-        int[] corp_catalogs = corpJdbcTemplate.batchUpdate(insertCatalogsSQL, newCatalogs);
-        int[] middles = corpJdbcTemplate.batchUpdate(insertMiddleSQL, middle);
+        int[] corp_catalogs = uniregJdbcTemplate.batchUpdate(insertCatalogsSQL, newCatalogs);
+        int[] middles = uniregJdbcTemplate.batchUpdate(insertMiddleSQL, middle);
     }
 
     /**
@@ -298,14 +302,14 @@ public class CorpExportServiceImpl implements CorpExportService {
         TRegUser tRegUser = findByCondition(originCompanyId);
 
         // 插入采购品信息 SQL
-        String insertSql = "INSERT INTO `db_boot`.`corp_directory_ldy`\n" +
+        String insertSql = "INSERT INTO `corp_directory`\n" +
                 "(`ID`, `CATALOG_ID`, `CATALOG_NAME_PATH`, `CATALOG_ID_PATH`, `CODE`, `NAME`, `SPEC`, `ABANDON`, `PCODE`, `PRODUCTOR`, `UNITNAME`, `PRODUCING_ADDRESS`, `BRAND`, `PURPOSE`," +
                 " `MARKET_PRICE`, `SPECIALITY`, `SOURCE`, `tech_parameters`, `DEMO`, `unit_precision`, `price_precision`, `company_id`, `create_user_id`, `create_user_name`, " +
                 "`create_time`, `update_user_id`, `update_user_name`, `update_time`) \n" +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?);";
         // 更新采购品信息[catalog_id  和   catalog_id_path ] SQL
-        String updateSql = "UPDATE corp_directory_ldy cd \n" +
-                "join corp_catalog_ldy cc on cd.catalog_name_path = cc.name_path and cd.company_id = cc.company_id\n" +
+        String updateSql = "UPDATE corp_directory cd \n" +
+                "join corp_catalog cc on cd.catalog_name_path = cc.name_path and cd.company_id = cc.company_id\n" +
                 "set cd.catalog_id = cc.id , cd.catalog_id_path = cc.id_path";
 
         for (int j = 0; j < byCompanyIdWithPageing.size(); j++) {
@@ -354,9 +358,9 @@ public class CorpExportServiceImpl implements CorpExportService {
                 e.printStackTrace();
             }
         }
-        int[] insertDirectorys = corpJdbcTemplate.batchUpdate(insertSql, params);
+        int[] insertDirectorys = uniregJdbcTemplate.batchUpdate(insertSql, params);
 
-        int[] directoryResult = corpJdbcTemplate.batchUpdate(updateSql);
+        int[] directoryResult = uniregJdbcTemplate.batchUpdate(updateSql);
     }
 
     /**

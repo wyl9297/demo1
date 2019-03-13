@@ -85,5 +85,22 @@ public class MutiDataSourceConfig  {
     /**
      * 用作配置新数据源参考 end
      */
+    /**
+     * 用作配置新数据源参考 start
+     */
+/*    @Bean(name = "yuecaiProDataSource")
+    @Qualifier("yuecaiProDataSource")
+    @ConfigurationProperties(prefix="spring.datasource.yuecai_pro")
+    public DataSource yuecaiProDataSource() {
+        return DataSourceBuilder.create().build();
+    }
+
+    @Bean(name = "yuecaiProJdbcTemplate")
+    public JdbcTemplate yuecaiProJdbcTemplate(@Autowired @Qualifier("yuecaiProDataSource") DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
+    }*/
+    /**
+     * 用作配置新数据源参考 end
+     */
 
 }

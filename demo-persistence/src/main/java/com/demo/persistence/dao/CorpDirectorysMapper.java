@@ -20,4 +20,8 @@ public interface CorpDirectorysMapper {
     int updateByPrimaryKey(CorpDirectorys record);
 
     List<CorpDirectorys> findByCompanyId(@Param("companyId") Long companyId);
+
+    Long selCountByCompanyId(@Param("companyId") Long companyId);
+
+    List<CorpDirectorys> findByCompanyIdWithPageing(@Param("companyId") Long companyId , @Param("startPage") Integer startPage , @Param("pageSize") Integer pageSize);
 }

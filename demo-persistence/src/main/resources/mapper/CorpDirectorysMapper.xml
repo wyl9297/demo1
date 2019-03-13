@@ -41,6 +41,25 @@
       </if>
     </where>
   </select>
+  <select id="selCountByCompanyId" parameterType="long" resultType="long">
+    select count(1)
+    from corp_directorys
+    <where>
+      <if test="companyId != null">
+        company_id = #{companyId}
+      </if>
+    </where>
+  </select>
+  <select id="findByCompanyIdWithPageing"  resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from corp_directorys
+    <where>
+      <if test="companyId != null">
+        company_id = #{companyId}
+      </if>
+    </where>
+    limit #{startPage} , #{pageSize}
+  </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.demo.model.CorpDirectorysKey" >
     select 
     <include refid="Base_Column_List" />

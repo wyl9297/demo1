@@ -2,7 +2,6 @@ package com.demo.service;
 
 import cn.bidlink.usercenter.server.entity.TRegUser;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,12 +11,13 @@ import java.util.Map;
  */
 public interface CorpExportService {
 
-    // 采购品目录信息  及  中间表信息  导出
-    public Map<String, Object> exportCorpCatalogs(Long originCompanyId , Long destCompanyId);
+    // 采购品目录信息  及  中间表信息  处理
+    Map<String, Object> exportCorpCatalogs(Long originCompanyId , Long destCompanyId);
 
-    //
-    public Map<String,Object> exportDirectorys(Long originCompanyId , Long destCompanyId);
+    // 采购品信息 数据处理
+    Map<String,Object> exportDirectorys(Long originCompanyId , Long destCompanyId);
 
     // 根据companyID查询中心库信息
-    public List<TRegUser> findByCondition(Long companyId);
+    TRegUser findByCondition(Long companyId);
+
 }

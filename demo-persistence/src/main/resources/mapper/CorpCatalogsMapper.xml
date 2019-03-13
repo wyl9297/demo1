@@ -33,5 +33,13 @@
     select <include refid="base_catalogs"/>
     from corp_catalogs where company_id=#{companyId};
   </select>
+  <select id="selCataLogsByCompanyIdWtihCount" resultType="long" parameterType="long">
+    select count(1)
+    from corp_catalogs where company_id=#{companyId};
+  </select>
+  <select id="selCataLogsByCompanyIdWithPageing" resultMap="resultMap" >
+    select <include refid="base_catalogs"/>
+    from corp_catalogs where company_id=#{companyId} limit #{startPage} , #{pageSize};
+  </select>
 
 </mapper>

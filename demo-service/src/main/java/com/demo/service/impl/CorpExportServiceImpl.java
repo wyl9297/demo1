@@ -155,7 +155,7 @@ public class CorpExportServiceImpl implements CorpExportService {
 
                     String idPath = null;
 
-                    if (null == catalogNew.getTreePath() && isRoot == 1) {
+                    if (null == catalogNew.getTreepath() && isRoot == 1) {
 
                         idPath = "#" + catalogNew.getId();
                         catalogs.add(new Object[]{newId, catalogNew.getName(), catalogNew.getCode(), idsMap.get(catalog.getParentId()), catalogNew.getIsRoot(), idPath, catalogNew.getCatalogNamePath(),
@@ -163,7 +163,7 @@ public class CorpExportServiceImpl implements CorpExportService {
 
                     } else {
 
-                        catalogs.add(new Object[]{newId, catalogNew.getName(), catalogNew.getCode(), idsMap.get(catalog.getParentId()), catalogNew.getIsRoot(), catalogNew.getTreePath(), catalogNew.getCatalogNamePath(),
+                        catalogs.add(new Object[]{newId, catalogNew.getName(), catalogNew.getCode(), idsMap.get(catalog.getParentId()), catalogNew.getIsRoot(), catalogNew.getTreepath(), catalogNew.getCatalogNamePath(),
                                 catalogNew.getCompanyId(), catalogNew.getCreateUserId(), catalogNew.getCreateUserName(), catalogNew.getCreateTime(), catalogNew.getUpdateUserId(), catalogNew.getUpdateUserName(), catalogNew.getUpdateTime()});
 
                     }

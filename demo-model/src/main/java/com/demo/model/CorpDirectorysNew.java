@@ -4,6 +4,7 @@ import cn.afterturn.easypoi.excel.annotation.Excel;
 
 import javax.validation.constraints.Max;
 import java.io.Serializable;
+import java.util.Date;
 
 public class CorpDirectorysNew implements Serializable {
 
@@ -47,13 +48,13 @@ public class CorpDirectorysNew implements Serializable {
 
     // 对应LDY的Update_time
     @Excel(name = "updateTime")
-    private String updateTime;
+    private Date updateTime;
 
     @Excel(name = "unitname")
     private String unitname;
 
     @Excel(name = "createTime")
-    private String createTime;
+    private Date createTime;
 
     @Excel(name = "brand")
     private String brand;
@@ -95,7 +96,22 @@ public class CorpDirectorysNew implements Serializable {
     @Excel(name = "companyId")
     private Long companyId;
 
+    @Excel(name = "producingAddress")
+    private String producingAddress;
+
     public CorpDirectorysNew() {
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public String getProducingAddress() {
+        return producingAddress;
+    }
+
+    public void setProducingAddress(String producingAddress) {
+        this.producingAddress = producingAddress;
     }
 
     public Long getId() {
@@ -203,14 +219,17 @@ public class CorpDirectorysNew implements Serializable {
         this.unitname = unitname == null ? null : unitname.trim();
     }
 
-    public String getCreateTime() {
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
-
 
     public String getBrand() {
         return brand;
@@ -250,15 +269,6 @@ public class CorpDirectorysNew implements Serializable {
 
     public void setTechParameters(String techParameters) {
         this.techParameters = techParameters == null ? null : techParameters.trim();
-    }
-
-
-    public String getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(String updateTime) {
-        this.updateTime = updateTime;
     }
 
     public Long getCreateUserId() {

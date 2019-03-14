@@ -10,8 +10,8 @@
 
     <h3>导出采购品excel</h3>
     <br/>
-    <form action="#" th:action="@{/export}" method="post">
-        悦采公司ID：<input type="text" th:name="companyId" />
+    <form action="#" th:action="@{/corpExport}" method="post">
+        悦采公司ID：<input type="text" th:name="originCompanyId" />
         隆道云公司ID：<input type="text" th:name="destCompanyId" />
         <input type="submit" th:name="开始迁移" />
     </form>

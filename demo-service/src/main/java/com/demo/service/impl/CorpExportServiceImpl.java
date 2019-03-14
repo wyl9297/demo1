@@ -63,7 +63,8 @@ public class CorpExportServiceImpl implements CorpExportService {
      * @param corpCatalogs
      * @return
      */
-    public Map<Long, Long> idMap(List<CorpCatalogs> corpCatalogs) {
+    public Map<Long, Long> idMap(List<CorpCatalogs> corpCatalogs , Long destCompanyId) {
+        Long newRootId = uniregJdbcTemplate.queryForObject("select  id from corp_catalog where is_root = 1 and parent_id is null and company_id = ?", new Object[]{destCompanyId}, Long.class);
         Map<Long, Long> map = Maps.newHashMap();
         log.info("即将进入循环 ------------");
         log.info("参数值：{}", corpCatalogs.size());
@@ -73,11 +74,14 @@ public class CorpExportServiceImpl implements CorpExportService {
             log.info("生成id对应关系 key-value");
             for (int i = 0; i < corpCatalogs.size(); i++) {
                 Long oldId = corpCatalogs.get(i).getId();
-                // 新生成的ID
-                long newId = IdWork.nextId();
-
-                map.put(oldId, newId);//代表对照关系
-                log.info("oldId:{},newId:{}", oldId, newId);
+                if( null == corpCatalogs.get(i).getParentId() && corpCatalogs.get(i).getIsRoot() == 1){
+                    // 新生成的ID
+                    map.put(oldId, newRootId);//代表对照关系
+                } else {
+                    // 新生成的ID
+                    map.put(oldId, IdWork.nextId());//代表对照关系
+                }
+                //log.info("oldId:{},newId:{}", oldId, newId);
             }
         }
         return map;
@@ -169,7 +173,7 @@ public class CorpExportServiceImpl implements CorpExportService {
     private void dealWithCatalogs(Long destCompanyId, List<CorpCatalogs> failList, List<Object[]> newCatalogs, List<Object[]> middle, List<CorpCatalogs> corpCatalogs , TRegUser tRegUser) {
 
         // 获取新旧Id对照Map
-        Map<Long, Long> idsMap = idMap(corpCatalogs);
+        Map<Long, Long> idsMap = idMap(corpCatalogs,destCompanyId);
 
         String insertCatalogsSQL = "INSERT INTO `corp_catalog`(`ID`, `NAME`, `CODE`, `PARENT_ID`, `IS_ROOT`, `ID_PATH`, `NAME_PATH`, `company_id`, `create_user_id`, `create_user_name`, `create_time`, `update_user_id`, `update_user_name`, `update_time`) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
@@ -225,10 +229,10 @@ public class CorpExportServiceImpl implements CorpExportService {
                     String idPath = null;
 
                     if (null == catalogNew.getParentId() && isRoot == 1) {
-
-                        idPath = "#" + newId + "#";
+                        // do nothing
+                       /* idPath = "#" + newId + "#";
                         newCatalogs.add(new Object[]{newId, catalogNew.getName(), catalogNew.getCode(), idsMap.get(catalog.getParentId()), catalogNew.getIsRoot(), idPath, catalogNew.getCatalogNamePath(),
-                                catalogNew.getCompanyId(), catalogNew.getCreateUserId(), catalogNew.getCreateUserName(), catalogNew.getCreateTime(), catalogNew.getUpdateUserId(), catalogNew.getUpdateUserName(), catalogNew.getUpdateTime()});
+                                catalogNew.getCompanyId(), catalogNew.getCreateUserId(), catalogNew.getCreateUserName(), catalogNew.getCreateTime(), catalogNew.getUpdateUserId(), catalogNew.getUpdateUserName(), catalogNew.getUpdateTime()});*/
                     } else {
 
                         newCatalogs.add(new Object[]{newId, catalogNew.getName(), catalogNew.getCode(), idsMap.get(catalog.getParentId()), catalogNew.getIsRoot(), catalogNew.getTreepath(), catalogNew.getCatalogNamePath(),

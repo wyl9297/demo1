@@ -131,13 +131,13 @@ public class CorpExportServiceImpl implements CorpExportService {
                 }
                 // 批量插入采购品目录信息
                 dealWithCatalogs(destCompanyId, failList, newCatalogs, middle, corpCatalogs , tRegUser);
-                updateCatalogTreePath();
+                updateCatalogTreePath(originCompanyId);
             }
         } else {
             // 批量插入采购品目录信息
             corpCatalogs = corpCatalogsMapper.selCataLogsByCompanyIdWithPageing(originCompanyId, 0, count.intValue());
             dealWithCatalogs(destCompanyId, failList, newCatalogs, middle, corpCatalogs , tRegUser);
-            updateCatalogTreePath();
+            updateCatalogTreePath(originCompanyId);
         }
         // 如果  存在存储失败的数据，放入map集合
         if (failList.size() != 0 && failList != null) {
@@ -153,16 +153,16 @@ public class CorpExportServiceImpl implements CorpExportService {
     /**
      * 更新采购品目录  树状结构
      */
-    private void updateCatalogTreePath() {
+    private void updateCatalogTreePath(Long originCompanyId) {
 
         String updateCatalogSql = "UPDATE corp_catalog c1 JOIN\n" +
                 "  corp_catalog c2\n" +
-                "  ON c1.PARENT_ID=c2.ID\n" +
-                "  SET c1.ID_PATH=concat(c2.ID_PATH,concat('',c1.id,''),'');";
+                "  ON c1.PARENT_ID=c2.ID and c1.company_id = c2.company_id \n" +
+                "  SET c1.ID_PATH=concat(c2.ID_PATH,concat('',c1.id,'#'),'') where c1.company_id = ?;";
 
         // 通过遍历的方式更新 id_path
         for (int j = 0; j < 10; j++) {
-            int update = uniregJdbcTemplate.update(updateCatalogSql);
+            int update = uniregJdbcTemplate.update(updateCatalogSql,originCompanyId);
             // 当update条数为0时，即id_path更新完成，结束循环
             if (update == 0) {
                 break;
@@ -302,6 +302,7 @@ public class CorpExportServiceImpl implements CorpExportService {
 
     private void dealWithDirectory(Long originCompanyId, Long destCompanyId, List<Object[]> params, List<CorpDirectorys> failList, List<CorpDirectorys> byCompanyIdWithPageing) {
 
+        params.clear();
         // 根据companyID查询用户中心信息
         TRegUser tRegUser = findByCondition(originCompanyId);
 
@@ -312,9 +313,12 @@ public class CorpExportServiceImpl implements CorpExportService {
                 "`create_time`, `update_user_id`, `update_user_name`, `update_time`) \n" +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?);";
         // 更新采购品信息[catalog_id  和   catalog_id_path ] SQL
-        String updateSql = "UPDATE corp_directory cd \n" +
-                "join corp_catalog cc on cd.catalog_name_path = cc.name_path and cd.company_id = cc.company_id\n" +
-                "set cd.catalog_id = cc.id , cd.catalog_id_path = cc.id_path";
+        String updateSql = "UPDATE corp_directory cd\n" +
+                "JOIN middle_corp_catalog mcc ON cd.catalog_id = mcc.old_id\n" +
+                "JOIN corp_catalog ccl ON ccl.id = mcc.catalog_id \n" +
+                "SET cd.catalog_id = ccl.id,cd.catalog_id_path = ccl.id_path \n" +
+                "WHERE\n" +
+                "\t cd.company_id = ?";
 
         for (int j = 0; j < byCompanyIdWithPageing.size(); j++) {
             CorpDirectorys directorys = byCompanyIdWithPageing.get(j);
@@ -364,7 +368,7 @@ public class CorpExportServiceImpl implements CorpExportService {
         }
         int[] insertDirectorys = uniregJdbcTemplate.batchUpdate(insertSql, params);
 
-        int[] directoryResult = uniregJdbcTemplate.batchUpdate(updateSql);
+        int result = uniregJdbcTemplate.update(updateSql, originCompanyId);
     }
 
     /**

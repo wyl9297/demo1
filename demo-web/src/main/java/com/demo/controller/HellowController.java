@@ -42,6 +42,10 @@ public class HellowController {
     @Autowired
     @Qualifier("purchaseJdbcTemplate")
     protected JdbcTemplate purchaseJdbcTemplate;
+/*
+    @Autowired
+    @Qualifier("yuecaiProJdbcTemplate")
+    protected  JdbcTemplate yuecaiProJdbcTemplate;*/
 
     @Autowired
     private RegDepartmentMapper regDepartmentMapper;
@@ -82,6 +86,7 @@ public class HellowController {
         uniregJdbcTemplate.queryForMap("select create_user_name FROM supplier WHERE ID = 174957304234377216");
         regDepartmentMapper.getDepUserRelation(1113172701L);
         purchaseJdbcTemplate.queryForList("select * from transaction_record");
+//        List<Map<String, Object>> maps = yuecaiProJdbcTemplate.queryForList("select count(1) from corp_directorys where company_id=270513113");
         return "success";
     }
 }

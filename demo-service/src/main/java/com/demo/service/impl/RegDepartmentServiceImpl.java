@@ -41,6 +41,10 @@ public class RegDepartmentServiceImpl implements RegDepartmentService {
     @Qualifier("aclJdbcTemplate")
     protected JdbcTemplate aclJdbcTemplate;
 
+    @Autowired
+    @Qualifier("uniregJdbcTemplate")
+    protected JdbcTemplate uniregJdbcTemplate;
+
     //迁移部门
     @Override
     public String handleRegDepartment(Long originCompanyId , Long destCompanyId) {
@@ -54,6 +58,9 @@ public class RegDepartmentServiceImpl implements RegDepartmentService {
         List<TRegUser> regUserList = condition.getResult();
         List<Map<String,String>> userRelation = regDepartmentMapper.getDepUserRelation(originCompanyId);
         List<RegDepartment> department = regDepartmentMapper.getRegDepartmentByCompanyId(originCompanyId);
+
+        int count = uniregJdbcTemplate.update("update t_reg_user set create_time = now() where company_id = ? and create_time is null " , destCompanyId);
+        System.out.println("有" + count + "条用户数据没有创建时间 自动设置为当前时间");
 
         //悦采 reg_department 转换为隆道云的 sys_org 数据格式
         Map<Long,Org> orgMap = convertDepartmentToOrg(department, regUserList.get(0), destCompanyId);
@@ -115,7 +122,7 @@ public class RegDepartmentServiceImpl implements RegDepartmentService {
         //新旧id对照的map key旧id value新id
         Map<Long, Long> oldToNewMap = new HashMap();
         //最上级分类
-        Map<String, Object> queryForMap = aclJdbcTemplate.queryForMap("select ORGID FROM sys_org where COMPANYID = ? and ORGSUPID = ? and ORGTYPE = ?",companyId,companyId,1);
+        Map<String, Object> queryForMap = aclJdbcTemplate.queryForMap("select ORGID FROM sys_org where COMPANYID = ? and ORGSUPID = ? ",companyId,companyId);
         //数据清洗
         for ( RegDepartment regDepartment : regDepartmentList) {
             Org org = new Org();

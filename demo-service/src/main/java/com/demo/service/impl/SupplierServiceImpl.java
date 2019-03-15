@@ -74,7 +74,7 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public String handleSupplierAdmittanceRecode(Long companyId, List<Long> list) {
+    public String handleSupplierAdmittanceRecode(Long companyId,Long oriCompanyId, List<Long> list) {
         String sql = "INSERT INTO supplier_admittance_record ( id, company_id, supplier_id, starting_time, admittance_time, admittance_user_name, join_time, reason, is_past_due, create_time, " +
                 "create_user_name, create_user_id, update_time, update_user_name, update_user_id )  " +
                 "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -84,12 +84,19 @@ public class SupplierServiceImpl implements SupplierService {
         if (tRegUsers.size() > 0) {
 
             TRegUser tRegUser = tRegUsers.get(0);
+            Map<Long, bsmCompanySupplier> supplierInfoMap = bsmCompanySupplierMapper.getSupplierInfoList(oriCompanyId, list);
             for (int i = 0; i < list.size(); i++) {
                 log.info("-------------进入循环，开始遍历，需要遍历的数量:{}----------", list.size());
                 Long id = IdWork.nextId();
                 Long supplierId = list.get(i);
                 Date nowTime = new Date();
-                parms.add(new Object[]{id, companyId, supplierId, null, null, null, nowTime, null, 0, nowTime, tRegUser.getName(), tRegUser.getId(), nowTime, tRegUser.getName(), tRegUser.getId()});
+                bsmCompanySupplier info = supplierInfoMap.get(supplierId);
+                if( null != info ){
+                    parms.add(new Object[]{id, companyId, supplierId, info.getCreateTime(), info.getCreateTime(), info.getCreateUserName(), info.getResponseTime(), null, 0, nowTime, tRegUser.getName(), tRegUser.getId(), nowTime, tRegUser.getName(), tRegUser.getId()});
+                } else {
+                    System.out.println("未查到供应商信息：" + supplierId);
+                    parms.add(new Object[]{id, companyId, supplierId, nowTime , nowTime , null , nowTime , null, 0, nowTime, tRegUser.getName(), tRegUser.getId(), nowTime, tRegUser.getName(), tRegUser.getId()});
+                }
                 log.info("newId:{}", id);
             }
         } else {
@@ -156,7 +163,7 @@ public class SupplierServiceImpl implements SupplierService {
         //插入供应商主表
         int[] batchUpdate = uniregJdbcTemplate.batchUpdate(sql, parms);
         //添加准入记录
-        String s = this.handleSupplierAdmittanceRecode(destCompanyId, supplierIdList);
+        String s = this.handleSupplierAdmittanceRecode(destCompanyId,originCompanyId, supplierIdList);
         return "success";
     }
 

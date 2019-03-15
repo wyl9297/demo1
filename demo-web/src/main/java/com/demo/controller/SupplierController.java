@@ -33,7 +33,7 @@ public class SupplierController {
     //迁移供应商准入记录
     @RequestMapping("/supplierAdmittanceRecord")
     public String SupplierAdmittanceRecord(){
-        String result = supplierService.handleSupplierAdmittanceRecode(1113172701L,new ArrayList<Long>());
+        String result = supplierService.handleSupplierAdmittanceRecode(1113172701L,1113172701L,new ArrayList<Long>());
         return result;
     }
 

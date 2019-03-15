@@ -65,6 +65,73 @@
     <result column="update_user_name" property="updateUserName" jdbcType="VARCHAR" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
+
+  <resultMap id="BaseResultMapNew" type="com.demo.model.bsmCompanySupplier" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <id column="company_id" property="companyId" jdbcType="BIGINT" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="supplier_id" property="supplierId" jdbcType="BIGINT" />
+    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+    <result column="supplier_level" property="supplierLevel" jdbcType="VARCHAR" />
+    <result column="supplier_score" property="supplierScore" jdbcType="DOUBLE" />
+    <result column="supplier_evaluate_date" property="supplierEvaluateDate" jdbcType="TIMESTAMP" />
+    <result column="supplier_status" property="supplierStatus" jdbcType="TINYINT" />
+    <result column="supplier_region_code" property="supplierRegionCode" jdbcType="VARCHAR" />
+    <result column="supplier_region" property="supplierRegion" jdbcType="VARCHAR" />
+    <result column="supplier_industry_code" property="supplierIndustryCode" jdbcType="VARCHAR" />
+    <result column="supplier_industry" property="supplierIndustry" jdbcType="VARCHAR" />
+    <result column="linkman" property="linkman" jdbcType="VARCHAR" />
+    <result column="contact_info" property="contactInfo" jdbcType="VARCHAR" />
+    <result column="fax" property="fax" jdbcType="VARCHAR" />
+    <result column="mail" property="mail" jdbcType="VARCHAR" />
+    <result column="space_address_url" property="spaceAddressUrl" jdbcType="VARCHAR" />
+    <result column="blacklist_operator" property="blacklistOperator" jdbcType="VARCHAR" />
+    <result column="blacklist_reason" property="blacklistReason" jdbcType="VARCHAR" />
+    <result column="submit_approve_user_id" property="submitApproveUserId" jdbcType="BIGINT" />
+    <result column="submit_approve_user_name" property="submitApproveUserName" jdbcType="VARCHAR" />
+    <result column="reserve" property="reserve" jdbcType="VARCHAR" />
+    <result column="main_user_name" property="mainUserName" jdbcType="VARCHAR" />
+    <result column="main_user_id" property="mainUserId" jdbcType="BIGINT" />
+    <result column="main_user_mobile" property="mainUserMobile" jdbcType="VARCHAR" />
+    <result column="name_english" property="nameEnglish" jdbcType="VARCHAR" />
+    <result column="com_typestr" property="comTypestr" jdbcType="VARCHAR" />
+    <result column="commu_addr" property="commuAddr" jdbcType="VARCHAR" />
+    <result column="boss_name" property="bossName" jdbcType="VARCHAR" />
+    <result column="fund" property="fund" jdbcType="DOUBLE" />
+    <result column="fundunit_value" property="fundunitValue" jdbcType="VARCHAR" />
+    <result column="www_station" property="wwwStation" jdbcType="VARCHAR" />
+    <result column="supplier_code" property="supplierCode" jdbcType="VARCHAR" />
+    <result column="super_supplier" property="superSupplier" jdbcType="TINYINT" />
+    <result column="classification" property="classification" jdbcType="VARCHAR" />
+    <result column="supplier_remark" property="supplierRemark" jdbcType="VARCHAR" />
+    <result column="remove_instance_id" property="removeInstanceId" jdbcType="BIGINT" />
+    <result column="credit_verification" property="creditVerification" jdbcType="VARCHAR" />
+    <result column="business_model" property="businessModel" jdbcType="VARCHAR" />
+    <result column="is_kernel" property="isKernel" jdbcType="TINYINT" />
+    <result column="probation_end_time" property="probationEndTime" jdbcType="TIMESTAMP" />
+    <result column="catalog_change_instance_id" property="catalogChangeInstanceId" jdbcType="BIGINT" />
+    <result column="catalog_change_status" property="catalogChangeStatus" jdbcType="TINYINT" />
+    <result column="custom_def_id" property="customDefId" jdbcType="BIGINT" />
+    <result column="release_instance_id" property="releaseInstanceId" jdbcType="BIGINT" />
+    <result column="release_reason" property="releaseReason" jdbcType="VARCHAR" />
+    <result column="release_user_id" property="releaseUserId" jdbcType="BIGINT" />
+    <result column="release_user_name" property="releaseUserName" jdbcType="VARCHAR" />
+    <result column="release_time" property="releaseTime" jdbcType="TIMESTAMP" />
+    <result column="supplier_tax_num" property="supplierTaxNum" jdbcType="VARCHAR" />
+    <result column="supplier_trade_evaluation" property="supplierTradeEvaluation" jdbcType="TINYINT" />
+    <result column="report_supplier_level" property="reportSupplierLevel" jdbcType="VARCHAR" />
+    <result column="bsm_evaluation_id" property="bsmEvaluationId" jdbcType="BIGINT" />
+    <result column="last_evaluation_time" property="lastEvaluationTime" jdbcType="TIMESTAMP" />
+    <result column="remove_time" property="removeTime" jdbcType="TIMESTAMP" />
+    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+    <result column="create_user_name" property="createUserName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user_id" property="updateUserId" jdbcType="BIGINT" />
+    <result column="update_user_name" property="updateUserName" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="responseTime" property="responseTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
   <sql id="Base_Column_List" >
     id, company_id, company_name, supplier_id, supplier_name, supplier_level, supplier_score, 
     supplier_evaluate_date, supplier_status, supplier_region_code, supplier_region, supplier_industry_code, 
@@ -79,6 +146,20 @@
     last_evaluation_time, remove_time, create_user_id, create_user_name, create_time, 
     update_user_id, update_user_name, update_time
   </sql>
+  <sql id="Base_Column_List_new" >
+    bcs.id, bcs.company_id, bcs.company_name, bcs.supplier_id, bcs.supplier_name, bcs.supplier_level, bcs.supplier_score,
+    bcs.supplier_evaluate_date, bcs.supplier_status, bcs.supplier_region_code, bcs.supplier_region, bcs.supplier_industry_code,
+    bcs.supplier_industry, bcs.linkman, bcs.contact_info, bcs.fax, bcs.mail, bcs.space_address_url, bcs.blacklist_operator,
+    bcs.blacklist_reason, bcs.submit_approve_user_id, bcs.submit_approve_user_name, bcs.reserve, bcs.main_user_name,
+    bcs.main_user_id, bcs.main_user_mobile, bcs.name_english, bcs.com_typestr, bcs.commu_addr, bcs.boss_name,
+    bcs.fund, bcs.fundunit_value, bcs.www_station, bcs.supplier_code, bcs.super_supplier, bcs.classification,
+    bcs.supplier_remark, bcs.remove_instance_id, bcs.credit_verification, bcs.business_model, bcs.is_kernel,
+    bcs.probation_end_time, bcs.catalog_change_instance_id, bcs.catalog_change_status, bcs.custom_def_id,
+    bcs.release_instance_id, bcs.release_reason, bcs.release_user_id, bcs.release_user_name, bcs.release_time,
+    bcs.supplier_tax_num, bcs.supplier_trade_evaluation, bcs.report_supplier_level, bcs.bsm_evaluation_id,
+    bcs.last_evaluation_time, bcs.remove_time, bcs.create_user_id, bcs.create_user_name, bcs.create_time,
+    bcs.update_user_id, bcs.update_user_name, bcs.update_time , bcsa.responseTime
+  </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.demo.model.bsmCompanySupplierKey" >
     select 
     <include refid="Base_Column_List" />
@@ -92,6 +173,26 @@
     from bsm_company_supplier
     where  company_id = #{companyId,jdbcType=BIGINT}
     and supplier_status IN ( 1, 4, 5, 6, 7, 8, 9 )
+  </select>
+  <select id="getSupplierInfo" resultMap="BaseResultMapNew">
+    select
+    <include refid="Base_Column_List_new" />
+    from bsm_company_supplier bcs
+    left join bsm_company_supplier_apply bcsa on bcs.company_id = bcsa.company_id and bcs.supplier_id = bcsa.supplier_id
+    where  bcs.company_id = #{companyId,jdbcType=BIGINT}
+    and bcs.supplier_id = #{supplierId,jdbcType=BIGINT}
+    limit 1
+  </select>
+  <select id="getSupplierInfoList" resultMap="BaseResultMapNew">
+    select
+    <include refid="Base_Column_List_new" />
+    from bsm_company_supplier bcs
+    left join bsm_company_supplier_apply bcsa on bcs.company_id = bcsa.company_id and bcs.supplier_id = bcsa.supplier_id
+    where  bcs.company_id = #{companyId,jdbcType=BIGINT}
+    and bcs.supplier_id in
+    <foreach collection="supplierIds" index="index" item="supplierId" open="(" separator="," close=")">
+       #{supplierId}
+    </foreach>
   </select>
   <delete id="deleteByPrimaryKey" parameterType="com.demo.model.bsmCompanySupplierKey" >
     delete from bsm_company_supplier

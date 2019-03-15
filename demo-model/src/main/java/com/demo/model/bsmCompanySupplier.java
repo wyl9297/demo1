@@ -123,6 +123,8 @@ public class bsmCompanySupplier extends bsmCompanySupplierKey {
 
     private Date updateTime;
 
+    private Date responseTime;
+
     public String getCompanyName() {
         return companyName;
     }
@@ -601,5 +603,13 @@ public class bsmCompanySupplier extends bsmCompanySupplierKey {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Date getResponseTime() {
+        return responseTime;
+    }
+
+    public void setResponseTime(Date responseTime) {
+        this.responseTime = responseTime;
     }
 }

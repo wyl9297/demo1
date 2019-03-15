@@ -271,6 +271,6 @@
     select DISTINCT atr.*,bcsa.supplier_id from approve_task_recode atr
                                                   inner join approving  a on a.proc_inst_id = atr.proc_instance_id and a.company_id=atr.company_id
                                                   inner join bsm_company_supplier_apply bcsa on bcsa.supplier_id=a.project_id and bcsa.company_id = a.company_id
-    where bcsa.supplier_id in(${supplierIds}) and bcsa.company_id = #{companyId,jdbcType=BIGINT}
+    where bcsa.supplier_id in(${supplierIds}) and bcsa.company_id = #{companyId,jdbcType=BIGINT} and a.module_node_type = 80
   </select>
 </mapper>

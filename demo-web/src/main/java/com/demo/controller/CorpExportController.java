@@ -3,7 +3,7 @@ package com.demo.controller;
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
-import com.demo.model.CorpCatalogs;
+import com.demo.model.CorpCatalogNew;
 import com.demo.model.CorpDirectorys;
 import com.demo.service.CorpExportService;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -65,7 +65,7 @@ public class CorpExportController {
                 ExportParams exportParams = new ExportParams();
                 exportParams.setSheetName("eroor_catalog");
                 failCorpCatalog.put("title", exportParams);
-                failCorpCatalog.put("entity", CorpCatalogs.class);
+                failCorpCatalog.put("entity", CorpCatalogNew.class);
                 failCorpCatalog.put("data", catalogsMap.get("failCatalog"));
                 list.add(failCorpCatalog);
             }
@@ -93,6 +93,8 @@ public class CorpExportController {
                 e.printStackTrace();
             }
         }
+        System.out.println("采购品目录导出失败的条数："+catalogsMap.size());
+        System.out.println("采购品导出失败的条数："+directorysMap.size());
         return "success";
     }
 }

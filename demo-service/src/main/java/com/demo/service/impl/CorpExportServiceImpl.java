@@ -277,11 +277,17 @@ public class CorpExportServiceImpl implements CorpExportService {
             int remainder = (int) (count % NUM);
             // 计算 分页数 向上取整( 10.1 --> 11)
             int ceil = (int) Math.ceil(count / NUM);
+            int pageNum = 0;
             for (int i = 0; i < ceil; i++) {
-                if (i == ceil - 1) {
-                    byCompanyIdWithPageing = corpDirectorysMapper.findByCompanyIdWithPageing(originCompanyId, i, remainder);
+                if (i == ceil-1) {
+                    byCompanyIdWithPageing = corpDirectorysMapper.findByCompanyIdWithPageing(originCompanyId, pageNum, remainder);
                 } else {
-                    byCompanyIdWithPageing = corpDirectorysMapper.findByCompanyIdWithPageing(originCompanyId, i, (int) NUM);
+                    byCompanyIdWithPageing = corpDirectorysMapper.findByCompanyIdWithPageing(originCompanyId, pageNum, (int) NUM);
+                    if(i == 0){
+                        pageNum += (int)NUM + 1;
+                    }else{
+                        pageNum += (int)NUM;
+                    }
                 }
                 dealWithDirectory(originCompanyId, destCompanyId, params, failList, byCompanyIdWithPageing);
             }
@@ -300,7 +306,7 @@ public class CorpExportServiceImpl implements CorpExportService {
         }
     }
 
-    private void dealWithDirectory(Long originCompanyId, Long destCompanyId, List<Object[]> params, List<CorpDirectorys> failList, List<CorpDirectorys> byCompanyIdWithPageing) {
+    private void  dealWithDirectory(Long originCompanyId, Long destCompanyId, List<Object[]> params, List<CorpDirectorys> failList, List<CorpDirectorys> byCompanyIdWithPageing) {
 
         params.clear();
         // 根据companyID查询用户中心信息
@@ -366,9 +372,9 @@ public class CorpExportServiceImpl implements CorpExportService {
                 e.printStackTrace();
             }
         }
-        int[] insertDirectorys = uniregJdbcTemplate.batchUpdate(insertSql, params);
+       int[] insertDirectorys = uniregJdbcTemplate.batchUpdate(insertSql, params);
 
-        int result = uniregJdbcTemplate.update(updateSql, originCompanyId);
+       int result = uniregJdbcTemplate.update(updateSql, originCompanyId);
     }
 
     /**

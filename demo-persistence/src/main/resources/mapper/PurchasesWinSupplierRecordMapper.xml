@@ -6,36 +6,33 @@
     <result column="company_id" property="companyId" jdbcType="BIGINT" />
     <result column="supplier_id" property="supplierId" jdbcType="BIGINT" />
     <result column="directory_id" property="directoryId" jdbcType="BIGINT" />
-    <result column="win_time" property="winTime" jdbcType="TIMESTAMP" />
+    <result column="win_bid_time" property="winBidTime" jdbcType="TIMESTAMP" />
     <result column="sync_time" property="syncTime" jdbcType="TIMESTAMP" />
   </resultMap>
-  <sql id="Base_Column_List" >
-    id, project_id, project_name, company_id, supplier_id, supplier_name, directory_id, 
-    min_price, max_price, win_time, sync_time
-  </sql>
   <select id="selQuotationHistory" resultMap="BaseResultMap2">
     SELECT
-    bspb.comp_id company_id,
-    bspb.supplier_id,
-    bspb.supplier_name,
-    bspib.directory_id,
-    bspib.win_bid_time win_time
+      spb.id,
+      spb.comp_id as company_id,
+      spb.supplier_id,
+      spib.directory_id,
+      spib.win_bid_time
     FROM
-    bmpfjz_supplier_project_bid bspb
-    LEFT JOIN bmpfjz_supplier_project_item_bid bspib ON bspb.supplier_id = bspib.supplier_id
-    AND bspb.project_id = bspib.project_id
-    AND bspb.id = bspib.supplier_project_bid_id
-    left join bmpfjz_project bp on bspb.project_id = bp.id
-    left join corp_directorys cd on bspib.directory_id = cd.ID
+      bmpfjz_supplier_project_bid spb
+        INNER JOIN bmpfjz_supplier_project_item_bid spib ON spib.supplier_project_bid_id = spb.id
+        AND spb.comp_id = spib.comp_id
+        INNER JOIN bsm_company_supplier_apply bcsa ON spb.supplier_id = bcsa.supplier_id
+        AND spb.comp_id = bcsa.company_id
+        INNER JOIN bmpfjz_project bp ON bp.id = spib.project_id
+        AND bp.comp_id = spib.comp_id
     WHERE
-    bspb.supplier_bid_status = 6
-    AND bspib.directory_id = #{directoryId}
-    AND bspb.comp_id = #{companyId}
-    <if test="syncTime != null">
-      AND  bspib.win_bid_time > #{syncTime}
-    </if>
+      spib.bid_status = 3
+      and spb.comp_id = #{companyId}
+      AND spb.supplier_bid_status = 6
+      AND spib.directory_id in (${directoryId})
+    GROUP BY
+      spb.supplier_id
     ORDER BY
-    bspib.win_bid_time DESC
+      spb.update_time DESC
   </select>
 
 </mapper>

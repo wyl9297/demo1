@@ -13,7 +13,7 @@ public class PurchasesWinSupplierRecord {
     private Long companyId;
     private Long supplierId;
     private Long directoryId;
-    private Date winTime;
+    private Date winBidTime;
     private Date syncTime;
 
     public Long getId() {
@@ -56,11 +56,11 @@ public class PurchasesWinSupplierRecord {
         this.syncTime = syncTime;
     }
 
-    public Date getWinTime() {
-        return winTime;
+    public Date getWinBidTime() {
+        return winBidTime;
     }
 
-    public void setWinTime(Date winTime) {
-        this.winTime = winTime;
+    public void setWinBidTime(Date winBidTime) {
+        this.winBidTime = winBidTime;
     }
 }

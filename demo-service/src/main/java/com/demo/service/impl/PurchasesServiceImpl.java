@@ -1,11 +1,12 @@
 package com.demo.service.impl;
 
 import cn.bidlink.framework.util.gen.IdWork;
-import com.demo.model.PurchasesWinSupplierRecord;
 import com.demo.model.PurchasesWinRecord;
+import com.demo.model.PurchasesWinSupplierRecord;
 import com.demo.persistence.dao.PurchasesWinRecordMapper;
 import com.demo.persistence.dao.PurchasesWinSupplierRecordMapper;
 import com.demo.service.PurchasesService;
+import org.apache.shiro.util.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author : <a href="mailto:congyaozhu@ebnew.com">congyaozhu</a>
@@ -40,12 +42,11 @@ public class PurchasesServiceImpl implements PurchasesService {
     /**
      * 采购品 供应商 历史成交价记录迁移
      * @param directoryId 采购品id
-     * @param supplierId
      * @param syncTime 同步时间
      * @return
      */
     @Override
-    public String selWinPrices(Long directoryId , Long companyId , String  syncTime){
+    public String selWinPrices(Long directoryId , Long companyId ,  String  syncTime){
         String insertSQL = "insert into purchases_win_price_record(id,project_id,company_id,supplier_id," +
                 "directory_id  , deal_price ,  win_time ,   sync_time) values( ? , ? , ? ,? ,? ,? , ? , ?)";
         List<PurchasesWinRecord> transactionRecords = transactionRecordMapper.selWinPrices(directoryId, companyId,null);
@@ -91,7 +92,7 @@ public class PurchasesServiceImpl implements PurchasesService {
         }else{
             for (PurchasesWinSupplierRecord thr:transactionHistoryRecords) {
                 params.add(new Object[]{
-                        IdWork.nextId() ,thr.getDirectoryId() , thr.getCompanyId() , thr.getSupplierId() , thr.getWinTime() , new Date()});
+                        IdWork.nextId() ,thr.getDirectoryId() , thr.getCompanyId() , thr.getSupplierId() , thr.getWinBidTime() , new Date()});
             }
         }
         int[] result = purchaseJdbcTemplate.batchUpdate(insertSql, params);
@@ -103,4 +104,22 @@ public class PurchasesServiceImpl implements PurchasesService {
             return "success";
         }
     }
+
+    /**
+     * 查询供应商某个采购品的历史报价最大值和最小值
+     * @param companyId
+     * @param supplierId
+     * @param directoryId
+     * @return
+     */
+    public Map<String , Long> selDirectoryPriceTopAndLow( Long companyId,Long supplierId,Long directoryId){
+        Map<String, Long> directoryPriceTopAndLow = transactionRecordMapper.getDirectoryPriceTopAndLow(companyId, supplierId, directoryId);
+        if(CollectionUtils.isEmpty(directoryPriceTopAndLow)){
+            log.error("查询供应商某个采购品的历史报价最大值和最小值 失败");
+            return null;
+        }else{
+            return directoryPriceTopAndLow;
+        }
+    }
+
 }

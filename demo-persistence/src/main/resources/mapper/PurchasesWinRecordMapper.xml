@@ -1,47 +1,57 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.demo.persistence.dao.PurchasesWinRecordMapper" >
-  <resultMap id="BaseResultMap" type="com.demo.model.PurchasesWinRecord" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="comp_id" property="companyId" jdbcType="BIGINT" />
-    <result column="supplier_id" property="supplierId" jdbcType="BIGINT" />
-    <result column="project_id" property="projectId" jdbcType="BIGINT" />
-    <result column="directory_id" property="directoryId" jdbcType="BIGINT" />
-    <result column="bid_price" property="dealPrice" jdbcType="DECIMAL" />
-    <result column="win_bid_time" property="winTime" jdbcType="TIMESTAMP" />
-    <result column="sync_time" property="syncTime" jdbcType="TIMESTAMP" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    id, project_id, project_name, company_id, supplier_id, supplier_name, directory_id, 
-    min_price, max_price, win_time, sync_time
-  </sql>
-  <select id="selWinPrices" resultMap="BaseResultMap">
-    SELECT
-      bspb.project_id,
-      bp.name project_name,
-      bspb.comp_id,
-      bspb.supplier_id,
-      bspb.supplier_name,
-      bspib.directory_id,
-      cd.name directory_name,
-      bspib.win_bid_time,
-      bspib.bid_price
-    FROM
-      bmpfjz_supplier_project_bid bspb
-        LEFT JOIN bmpfjz_supplier_project_item_bid bspib ON bspb.supplier_id = bspib.supplier_id
-        AND bspb.project_id = bspib.project_id
-        AND bspb.id = bspib.supplier_project_bid_id
-        left join bmpfjz_project bp on bspb.project_id = bp.id
-        left join corp_directorys cd on bspib.directory_id = cd.ID
-    WHERE
-      bspb.supplier_bid_status = 6
-      AND bspib.directory_id = #{directoryId}
-      AND bspb.comp_id = #{companyId}
-      <if test="syncTime != null">
-         AND  bspib.win_bid_time > #{syncTime}
-      </if>
-    ORDER BY
-      bspib.win_bid_time DESC
-  </select>
+<mapper namespace="com.demo.persistence.dao.PurchasesWinRecordMapper">
+    <resultMap id="BaseResultMap" type="com.demo.model.PurchasesWinRecord">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="comp_id" property="companyId" jdbcType="BIGINT"/>
+        <result column="supplier_id" property="supplierId" jdbcType="BIGINT"/>
+        <result column="project_id" property="projectId" jdbcType="BIGINT"/>
+        <result column="directory_id" property="directoryId" jdbcType="BIGINT"/>
+        <result column="bid_price" property="dealPrice" jdbcType="DECIMAL"/>
+        <result column="win_bid_time" property="winTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id
+        ,
+        project_id,
+        project_name,
+        company_id,
+        supplier_id,
+        supplier_name,
+        directory_id,
+        min_price,
+        max_price,
+        win_time,
+        sync_time
+    </sql>
+    <select id="selWinPrices" resultMap="BaseResultMap">
+        SELECT
+        a.id,
+        a.project_id,
+        a.comp_id,
+        a.supplier_id,
+        a.directory_id,
+        a.bid_price,
+        a.win_bid_time
+        FROM
+        bmpfjz_supplier_project_item_bid a
+        JOIN bmpfjz_project b ON a.project_id = b.id AND a.comp_id = b.comp_id
+        WHERE a.bid_status = 3
+        AND a.comp_id = #{companyId}
+        AND a.directory_id = #{directoryId}
+        <if test="syncTime != null">
+            AND bspib.win_bid_time > #{syncTime}
+        </if>
+        ORDER BY win_bid_time DESC
+    </select>
 
+    <select id="getDirectoryPriceTopAndLow" resultType="map">
+        SELECT IFNULL(MAX(deal_price), 0) topprice,IFNULL(MIN(deal_price), 0) lowprice
+        FROM
+            purchases_win_price_record a
+        WHERE a.company_id = #{companyId}
+          AND a.supplier_id = #{supplierId}
+          AND a.directory_id = #{directoryId}
+        ORDER BY win_time
+    </select>
 </mapper>

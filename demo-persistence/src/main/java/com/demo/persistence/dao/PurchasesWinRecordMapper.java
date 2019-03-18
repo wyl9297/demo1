@@ -4,6 +4,7 @@ import com.demo.model.PurchasesWinRecord;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PurchasesWinRecordMapper {
 
@@ -16,5 +17,13 @@ public interface PurchasesWinRecordMapper {
      */
     List<PurchasesWinRecord> selWinPrices(@Param("directoryId") Long directoryId , @Param("companyId") Long companyId , @Param("syncTime") String syncTime);
 
+    /**
+     * 查询供应商某个采购品的历史报价最大值和最小值
+     * @param companyId
+     * @param supplierId
+     * @param directoryId
+     * @return
+     */
+    Map<String,Long>  getDirectoryPriceTopAndLow(@Param("companyId") Long companyId , @Param("supplierId") Long supplierId , @Param("directoryId") Long directoryId);
 
 }

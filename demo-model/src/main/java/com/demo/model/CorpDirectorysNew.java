@@ -2,101 +2,72 @@ package com.demo.model;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
 
-import javax.validation.constraints.Max;
 import java.io.Serializable;
 import java.util.Date;
 
 public class CorpDirectorysNew implements Serializable {
 
-    @Excel(name = "id")
     private Long id;
 
-    @Max(value = 20,message = "code 最大长度为20")
-    @Excel(name = "code")
+
     private String code;
 
-    @Excel(name = "catalogId")
     private Long catalogId;
 
-    @Excel(name = "catalogName") // 数据库字段：catalogNamePath
     private String catalogName;
 
-    @Excel(name = "demo")
     private String demo;
 
-    @Max(value = 200,message = "name 最大长度为200")
-    @Excel(name = "name")
     private String name;
 
-    @Max(value = 500,message = "spec 最大长度为500")
-    @Excel(name = "spec")
     private String spec;
 
-    @Max(value = 4,message = "abandon 最大长度为4")
-    @Excel(name = "abandon")
     private Long abandon;
 
-    @Excel(name = "pcode")
     private String pcode;
 
-    @Excel(name = "productor")
     private String productor;
 
     // 对应LDY Catalog_id_path
-    @Excel(name = "treepath")
     private String treepath;
 
     // 对应LDY的Update_time
-    @Excel(name = "updateTime")
     private Date updateTime;
 
-    @Excel(name = "unitname")
     private String unitname;
 
-    @Excel(name = "createTime")
     private Date createTime;
 
-    @Excel(name = "brand")
     private String brand;
 
-    @Excel(name = "purpose")
     private String purpose;
 
-    @Excel(name = "marketPrice")
     private String marketPrice;
 
-    @Excel(name = "speciality")
     private String speciality;
 
-    @Excel(name = "techParameters")
     private String techParameters;
 
     // 不为空，直接存储，否则，查询主账号
-    @Excel(name = "createUserId")
     private Long createUserId;
 
     @Excel(name = "createUserName")
     private String createUserName;
 
-    @Excel(name = "unitPrecision") // value = 2
+     // value = 2
     private Long unitPrecision;
 
-    @Excel(name = "pricePrecision") // value = 2
+    // value = 2
     private Long pricePrecision;
 
-    @Excel(name = "updateUserId")
     private Integer updateUserId;
 
-    @Excel(name = "updateUserName")
     private String updateUserName;
 
-    @Excel(name = "source")
     private Long source;
 
-    @Excel(name = "companyId")
     private Long companyId;
 
-    @Excel(name = "producingAddress")
     private String producingAddress;
 
     public CorpDirectorysNew() {

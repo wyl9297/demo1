@@ -1,40 +1,62 @@
 package com.demo.model;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
+import cn.afterturn.easypoi.excel.annotation.ExcelTarget;
+
 import java.util.Date;
 
+@ExcelTarget("corpCatalogs")
 public class CorpCatalogs extends CorpCatalogsKey {
+
+    @Excel(name = "oldId")
     private Long oldId;
 
+    @Excel(name = "name")
     private String name;
 
+    @Excel(name = "code")
     private String code;
 
+    @Excel(name = "demo")
     private String demo;
 
+    @Excel(name = "parentId")
     private Long parentId;
 
+    @Excel(name = "compId")
     private Long compId;
 
+    @Excel(name = "isRoot")
     private Byte isRoot;
 
+    @Excel(name = "treepath")
     private String treepath;
 
+    @Excel(name = "erpId")
     private String erpId;
 
+    @Excel(name = "erpcode")
     private String erpcode;
 
+    @Excel(name = "flagAssociateUser")
     private Byte flagAssociateUser;
 
+    @Excel(name = "flagAssociateSupplier")
     private Byte flagAssociateSupplier;
 
+    @Excel(name = "catalogNamePath")
     private String catalogNamePath;
 
+    @Excel(name = "createTime")
     private Date createTime;
 
+    @Excel(name = "creator")
     private Long creator;
 
+    @Excel(name = "updateTime")
     private Date updateTime;
 
+    @Excel(name = "modifier")
     private Long modifier;
 
     public Long getOldId() {

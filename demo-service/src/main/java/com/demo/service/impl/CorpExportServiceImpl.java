@@ -42,7 +42,8 @@ public class CorpExportServiceImpl implements CorpExportService {
 
     @Autowired
     private DubboTRegUserService dubboTRegUserService;
-/*
+
+    /* 本地数据源，仅供测试
     @Autowired
     @Qualifier("purchaseJdbcTemplate")
     private JdbcTemplate corpJdbcTemplate;*/
@@ -52,7 +53,7 @@ public class CorpExportServiceImpl implements CorpExportService {
     protected JdbcTemplate uniregJdbcTemplate;
 
     // 定义批处理的数值
-    private static final double NUM = 500.0;
+    private static final double PAGESIZE = 500.0;
 
 
     /**
@@ -63,32 +64,32 @@ public class CorpExportServiceImpl implements CorpExportService {
      * @param corpCatalogs
      * @return
      */
-    public Map<Long, Long> idMap(List<CorpCatalogs> corpCatalogs , Long destCompanyId) {
-        Long newRootId = uniregJdbcTemplate.queryForObject("select  id from corp_catalog where is_root = 1 and parent_id is null and company_id = ?", new Object[]{destCompanyId}, Long.class);
+    public Map<Long, Long> idMap(List<CorpCatalogs> corpCatalogs, Long destCompanyId) {
+        Long newRootId = uniregJdbcTemplate.queryForObject("select  id from `corp_catalog` where is_root = 1 and parent_id is null and company_id = ?", new Object[]{destCompanyId}, Long.class);
         Map<Long, Long> map = Maps.newHashMap();
-        log.info("即将进入循环 ------------");
-        log.info("参数值：{}", corpCatalogs.size());
+        log.info("进入方法：{}","CorpExportServiceImpl.idMap");
+        log.info("------------ 即将生成 catalog 新旧id对照关系 ------------");
+        log.info("需要生成 {} 个对照关系", corpCatalogs.size());
         if (corpCatalogs.size() <= 0) {
             log.error("参数为空，请检验");
         } else {
             log.info("生成id对应关系 key-value");
             for (int i = 0; i < corpCatalogs.size(); i++) {
                 Long oldId = corpCatalogs.get(i).getId();
-                if( null == corpCatalogs.get(i).getParentId() && corpCatalogs.get(i).getIsRoot() == 1){
+                if (null == corpCatalogs.get(i).getParentId() && corpCatalogs.get(i).getIsRoot() == 1) {
                     // 新生成的ID
                     map.put(oldId, newRootId);//代表对照关系
                 } else {
                     // 新生成的ID
                     map.put(oldId, IdWork.nextId());//代表对照关系
                 }
-                //log.info("oldId:{},newId:{}", oldId, newId);
             }
         }
         return map;
     }
 
     /**
-     * 采购品目录信息  及  对照关系表数据导出
+     * 采购品目录信息  及  采购品目录对照关系  处理
      *
      * @param originCompanyId destCompanyId
      * @return
@@ -97,51 +98,61 @@ public class CorpExportServiceImpl implements CorpExportService {
     @Transactional
     public Map<String, Object> exportCorpCatalogs(Long originCompanyId, Long destCompanyId) throws DataAccessException {
 
-        log.info("进入方法：{}", "exportCorpCatalogs()");
+        log.info("进入方法：{}", "com.demo.service.impl.CorpExportServiceImpl.exportCorpCatalogs");
 
-        // 根据companyId 查询 悦采吃啊够拼目录总记录数
+        // 根据companyId 查询 悦采采购品目录总记录数
         Long count = corpCatalogsMapper.selCataLogsByCompanyIdWtihCount(originCompanyId);
 
-        // 不符合条件的 采购品目录信息集合
+        // 不符合条件的 采购品目录信息存储
         List<CorpCatalogs> failList = new ArrayList<>();
 
-        // 新采购品目录集合
+        // 新采购品目录信息存储集合
         List<Object[]> newCatalogs = new ArrayList<>();
-        // 存储 中间表信息    包含：oldId  newId   companyId
+
+        // 存储 采购品目录中间表信息    包含：catalogId oldId  companyId
         List<Object[]> middle = new ArrayList<>();
 
         // 根据companyID查询用户中心信息
         TRegUser tRegUser = findByCondition(originCompanyId);
 
-        // 分页查询数量
+        // 存储分页信息
         List<CorpCatalogs> corpCatalogs = null;
         // 判断数据量的大小是否需要做批量处理
-        if (count > NUM) {
-            // 计算最后页的条数
-            int remainder = (int) (count % NUM);
-            // 计算 分页数 向上取整( 10.1 --> 11)
-            int ceil = (int) Math.ceil(count / NUM);
-            // 批量查询 采购品目录信息
+        if (count > PAGESIZE) {
+            log.info("---------- 批量读取数据 ---------");
+            // 计算最后页的数量
+            int remainder = (int) (count % PAGESIZE);
+            // 计算分页数  向上取整( 10.1 --> 11)
+            int ceil = (int) Math.ceil(count / PAGESIZE);
+            int pageNum = 0;
             for (int i = 0; i < ceil; i++) {
 
                 if (i == ceil - 1) {
-                    corpCatalogs = corpCatalogsMapper.selCataLogsByCompanyIdWithPageing(originCompanyId, i, remainder);
+                    corpCatalogs = corpCatalogsMapper.selCataLogsByCompanyIdWithPageing(originCompanyId, pageNum, remainder);
                 } else {
-                    corpCatalogs = corpCatalogsMapper.selCataLogsByCompanyIdWithPageing(originCompanyId, i, (int) NUM);
+                    corpCatalogs = corpCatalogsMapper.selCataLogsByCompanyIdWithPageing(originCompanyId, pageNum, (int) PAGESIZE);
                 }
+
+                pageNum += (int) PAGESIZE;
+
                 // 批量插入采购品目录信息
-                dealWithCatalogs(destCompanyId, failList, newCatalogs, middle, corpCatalogs , tRegUser);
+                dealWithCatalogs(destCompanyId, failList, newCatalogs, middle, corpCatalogs, tRegUser);
+                // 更新采购品目录树形结构
                 updateCatalogTreePath(originCompanyId);
             }
         } else {
+            log.info("---------- 读取数据 ---------");
             // 批量插入采购品目录信息
             corpCatalogs = corpCatalogsMapper.selCataLogsByCompanyIdWithPageing(originCompanyId, 0, count.intValue());
-            dealWithCatalogs(destCompanyId, failList, newCatalogs, middle, corpCatalogs , tRegUser);
+            // 批量插入采购品目录信息
+            dealWithCatalogs(destCompanyId, failList, newCatalogs, middle, corpCatalogs, tRegUser);
+            // 更新采购品目录树形结构
             updateCatalogTreePath(originCompanyId);
         }
-        // 如果  存在存储失败的数据，放入map集合
+        //不符合存储条件的数据，放入map集合
         if (failList.size() != 0 && failList != null) {
             Map<String, Object> map = Maps.newHashMap();
+            log.info("不符合条件的数量: {} ",failList.size());
             // 插入失败的
             map.put("failCatalog", failList);
             return map;
@@ -155,14 +166,14 @@ public class CorpExportServiceImpl implements CorpExportService {
      */
     private void updateCatalogTreePath(Long originCompanyId) {
 
-        String updateCatalogSql = "UPDATE corp_catalog c1 JOIN\n" +
-                "  corp_catalog c2\n" +
+        String updateCatalogSql = "UPDATE `corp_catalog` c1 JOIN\n" +
+                " `corp_catalog` c2\n" +
                 "  ON c1.PARENT_ID=c2.ID and c1.company_id = c2.company_id \n" +
                 "  SET c1.ID_PATH=concat(c2.ID_PATH,concat('',c1.id,'#'),'') where c1.company_id = ?;";
 
         // 通过遍历的方式更新 id_path
         for (int j = 0; j < 10; j++) {
-            int update = uniregJdbcTemplate.update(updateCatalogSql,originCompanyId);
+            int update = uniregJdbcTemplate.update(updateCatalogSql, originCompanyId);
             // 当update条数为0时，即id_path更新完成，结束循环
             if (update == 0) {
                 break;
@@ -170,12 +181,23 @@ public class CorpExportServiceImpl implements CorpExportService {
         }
     }
 
-    private void dealWithCatalogs(Long destCompanyId, List<CorpCatalogs> failList, List<Object[]> newCatalogs, List<Object[]> middle, List<CorpCatalogs> corpCatalogs , TRegUser tRegUser) {
+    /**
+     * 采购品目录信息 处理
+     * @param destCompanyId 新companyId
+     * @param failList  不符合存储条件的信息
+     * @param newCatalogs   新采购品目录信息存储
+     * @param middle    采购品目录 新旧id对照表
+     * @param corpCatalogs  采购品目录集合
+     * @param tRegUser  用户信息
+     */
+    private void dealWithCatalogs(Long destCompanyId, List<CorpCatalogs> failList, List<Object[]> newCatalogs, List<Object[]> middle, List<CorpCatalogs> corpCatalogs, TRegUser tRegUser) {
 
+        log.info("进入方法 {} , 处理采购品目录信息","com.demo.service.impl.CorpExportServiceImpl.dealWithCatalogs");
         // 获取新旧Id对照Map
-        Map<Long, Long> idsMap = idMap(corpCatalogs,destCompanyId);
+        Map<Long, Long> idsMap = idMap(corpCatalogs, destCompanyId);
 
-        String insertCatalogsSQL = "INSERT INTO `corp_catalog`(`ID`, `NAME`, `CODE`, `PARENT_ID`, `IS_ROOT`, `ID_PATH`, `NAME_PATH`, `company_id`, `create_user_id`, `create_user_name`, `create_time`, `update_user_id`, `update_user_name`, `update_time`) " +
+        String insertCatalogsSQL = "INSERT INTO `corp_catalog`(`ID`, `NAME`, `CODE`, `PARENT_ID`, `IS_ROOT`, `ID_PATH`, `NAME_PATH`, `company_id`, `create_user_id`, `create_user_name`, " +
+                "`create_time`, `update_user_id`, `update_user_name`, `update_time`) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
         String insertMiddleSQL = "INSERT INTO `middle_corp_catalog`(`catalog_id`, `old_id`, `company_id`) VALUES (?, ?, ?);";
@@ -211,7 +233,7 @@ public class CorpExportServiceImpl implements CorpExportService {
                     if (catalog.getCreateTime() == null) {
                         catalogNew.setCreateTime(new Date());
                     }
-                    // 设置最新时间
+                    // 更新时间为当前时间
                     catalogNew.setUpdateTime(new Date());
 
                     // 获取oldId
@@ -248,12 +270,19 @@ public class CorpExportServiceImpl implements CorpExportService {
                 e.printStackTrace();
             }
         }
+        log.info("批量插入采购品目录信息");
         int[] corp_catalogs = uniregJdbcTemplate.batchUpdate(insertCatalogsSQL, newCatalogs);
+
+        log.info("批量插入采购品对照表信息信息");
         int[] middles = uniregJdbcTemplate.batchUpdate(insertMiddleSQL, middle);
+
+        // 避免插入重复的数据
+        middle.clear();
+        newCatalogs.clear();
     }
 
     /**
-     * 采购品信息处理 及 失败数据导出
+     * 采购品信息 及 失败数据 处理
      *
      * @param originCompanyId 悦采companyId  隆道云companyId
      * @return
@@ -262,6 +291,7 @@ public class CorpExportServiceImpl implements CorpExportService {
     @Transactional
     public Map<String, Object> exportDirectorys(Long originCompanyId, Long destCompanyId) throws DataAccessException {
 
+        log.info("进入方法 {} ","com.demo.service.impl.CorpExportServiceImpl.exportDirectorys");
         // 查询需要导出的采购品信息总记录数
         Long count = corpDirectorysMapper.selCountByCompanyId(originCompanyId);
 
@@ -270,35 +300,38 @@ public class CorpExportServiceImpl implements CorpExportService {
         // 不符合条件的 采购品目录信息集合
         List<CorpDirectorys> failList = new ArrayList<>();
 
+        // 根据companyID查询用户中心信息
+        TRegUser tRegUser = findByCondition(originCompanyId);
+
+        // 存储 中间表信息    包含：directory_id  oldId   companyId
+        List<Object[]> middle = new ArrayList<>();
         // 分页查询数量
         List<CorpDirectorys> byCompanyIdWithPageing = null;
-        if (count > NUM) {
-            // 计算最后页的条数
-            int remainder = (int) (count % NUM);
+        if (count > PAGESIZE) {
+            log.info("---------- 批量读取数据 ---------");
+            // 计算最后页的数量
+            int remainder = (int) (count % PAGESIZE);
             // 计算 分页数 向上取整( 10.1 --> 11)
-            int ceil = (int) Math.ceil(count / NUM);
+            int ceil = (int) Math.ceil(count / PAGESIZE);
             int pageNum = 0;
             for (int i = 0; i < ceil; i++) {
-                if (i == ceil-1) {
+                if (i == ceil - 1) {
                     byCompanyIdWithPageing = corpDirectorysMapper.findByCompanyIdWithPageing(originCompanyId, pageNum, remainder);
                 } else {
-                    byCompanyIdWithPageing = corpDirectorysMapper.findByCompanyIdWithPageing(originCompanyId, pageNum, (int) NUM);
-                    if(i == 0){
-                        pageNum += (int)NUM + 1;
-                    }else{
-                        pageNum += (int)NUM;
-                    }
+                    byCompanyIdWithPageing = corpDirectorysMapper.findByCompanyIdWithPageing(originCompanyId, pageNum, (int) PAGESIZE);
+                    pageNum += (int) PAGESIZE;
+
                 }
-                dealWithDirectory(originCompanyId, destCompanyId, params, failList, byCompanyIdWithPageing);
+                dealWithDirectory(tRegUser, originCompanyId, destCompanyId, params, failList, byCompanyIdWithPageing,middle);
             }
         } else {
             byCompanyIdWithPageing = corpDirectorysMapper.findByCompanyIdWithPageing(originCompanyId, 0, count.intValue());
-            dealWithDirectory(originCompanyId, destCompanyId, params, failList, byCompanyIdWithPageing);
+            dealWithDirectory(tRegUser, originCompanyId, destCompanyId, params, failList, byCompanyIdWithPageing,middle);
         }
-        // 如果  存在存储失败的数据，放入map集合
+        // 不符合存储条件的数据，放入map集合
         if (failList.size() != 0 && failList != null) {
             Map<String, Object> map = Maps.newHashMap();
-            // 插入失败的
+            log.info("不符合条件的数量: {} ",failList.size());
             map.put("failDirectory", failList);
             return map;
         } else {
@@ -306,12 +339,19 @@ public class CorpExportServiceImpl implements CorpExportService {
         }
     }
 
-    private void  dealWithDirectory(Long originCompanyId, Long destCompanyId, List<Object[]> params, List<CorpDirectorys> failList, List<CorpDirectorys> byCompanyIdWithPageing) {
+    /**
+     * 采购品信息 处理
+     * @param tRegUser  用户中心信息
+     * @param originCompanyId   原companyId
+     * @param destCompanyId 新companyId
+     * @param params    批处理 参数
+     * @param failList  不符合条件的数据
+     * @param byCompanyIdWithPageing    分页数据
+     * @param middle    采购品中间表
+     */
+    private void dealWithDirectory(TRegUser tRegUser, Long originCompanyId, Long destCompanyId, List<Object[]> params, List<CorpDirectorys> failList, List<CorpDirectorys> byCompanyIdWithPageing , List<Object[]> middle) {
 
-        params.clear();
-        // 根据companyID查询用户中心信息
-        TRegUser tRegUser = findByCondition(originCompanyId);
-
+        log.info("进入方法：{} , 处理采购品","com.demo.service.impl.CorpExportServiceImpl.dealWithDirectory");
         // 插入采购品信息 SQL
         String insertSql = "INSERT INTO `corp_directory`\n" +
                 "(`ID`, `CATALOG_ID`, `CATALOG_NAME_PATH`, `CATALOG_ID_PATH`, `CODE`, `NAME`, `SPEC`, `ABANDON`, `PCODE`, `PRODUCTOR`, `UNITNAME`, `PRODUCING_ADDRESS`, `BRAND`, `PURPOSE`," +
@@ -319,12 +359,14 @@ public class CorpExportServiceImpl implements CorpExportService {
                 "`create_time`, `update_user_id`, `update_user_name`, `update_time`) \n" +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?);";
         // 更新采购品信息[catalog_id  和   catalog_id_path ] SQL
-        String updateSql = "UPDATE corp_directory cd\n" +
-                "JOIN middle_corp_catalog mcc ON cd.catalog_id = mcc.old_id\n" +
-                "JOIN corp_catalog ccl ON ccl.id = mcc.catalog_id \n" +
+        String updateSql = "UPDATE `corp_directory` cd\n" +
+                "JOIN `middle_corp_catalog` mcc ON cd.catalog_id = mcc.old_id\n" +
+                "JOIN `corp_catalog` ccl ON ccl.id = mcc.catalog_id \n" +
                 "SET cd.catalog_id = ccl.id,cd.catalog_id_path = ccl.id_path \n" +
                 "WHERE\n" +
                 "\t cd.company_id = ?";
+
+        String insertMiddle = "INSERT INTO `middle_corp_directory`(`directory_id`, `old_id`, `company_id`) VALUES (?, ?, ?);\n";
 
         for (int j = 0; j < byCompanyIdWithPageing.size(); j++) {
             CorpDirectorys directorys = byCompanyIdWithPageing.get(j);
@@ -355,26 +397,35 @@ public class CorpExportServiceImpl implements CorpExportService {
                 corpDirectorysNew.setCompanyId(destCompanyId);
 
                 corpDirectorysNew.setUpdateTime(new Date());
-
+                long newId = IdWork.nextId();
                 //悦采  catalog_name  对应隆道云  	catalog_name_path
                 //悦采  treepath      对应隆道云    catalog_id_path
                 params.add(new Object[]{
-                        IdWork.nextId(), corpDirectorysNew.getCatalogId(), corpDirectorysNew.getCatalogName(), corpDirectorysNew.getTreepath(), corpDirectorysNew.getCode(),
+                        newId, corpDirectorysNew.getCatalogId(), corpDirectorysNew.getCatalogName(), corpDirectorysNew.getTreepath(), corpDirectorysNew.getCode(),
                         corpDirectorysNew.getName(), corpDirectorysNew.getSpec(), corpDirectorysNew.getAbandon(), corpDirectorysNew.getPcode(), corpDirectorysNew.getProductor(),
                         corpDirectorysNew.getUnitname(), corpDirectorysNew.getProducingAddress(), corpDirectorysNew.getBrand(), corpDirectorysNew.getPurpose(), corpDirectorysNew.getMarketPrice(),
                         corpDirectorysNew.getSpeciality(), corpDirectorysNew.getSource(), corpDirectorysNew.getTechParameters(), corpDirectorysNew.getDemo(), corpDirectorysNew.getUnitPrecision(),
                         corpDirectorysNew.getPricePrecision(), corpDirectorysNew.getCompanyId(), corpDirectorysNew.getCreateUserId(), corpDirectorysNew.getCreateUserName(), corpDirectorysNew.getCreateTime(),
                         corpDirectorysNew.getUpdateUserId(), corpDirectorysNew.getUpdateUserName(), corpDirectorysNew.getUpdateTime()
                 });
+                middle.add(new Object[]{newId , corpDirectorysNew.getId() , originCompanyId});
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (InvocationTargetException e) {
                 e.printStackTrace();
             }
         }
-       int[] insertDirectorys = uniregJdbcTemplate.batchUpdate(insertSql, params);
 
-       int result = uniregJdbcTemplate.update(updateSql, originCompanyId);
+        log.info("---------- 批量插入采购品信息 ------------");
+        int[] insertDirectorys = uniregJdbcTemplate.batchUpdate(insertSql, params);
+        log.info("---------- 批量插入采购品中间表信息(directorys_id , oldId , companyId) ----------");
+        int[] middleTable = uniregJdbcTemplate.batchUpdate(insertMiddle, middle);
+        log.info("---------- 更新采购品的 catalog_id 和 catalog_id_path------------");
+        int result = uniregJdbcTemplate.update(updateSql, originCompanyId);
+
+        // 避免多次调用list值追加问题
+        params.clear();
+        middle.clear();
     }
 
     /**
@@ -390,13 +441,13 @@ public class CorpExportServiceImpl implements CorpExportService {
 
         ServiceResult<List<TRegUser>> byCondition = dubboTRegUserService.findByCondition(tRegUser);
         if (!byCondition.getSuccess()) {
-            log.error("{}调用{}时发生未知异常,error Message:{}", "com.demo.controller.CorpExportController.test",
+            log.error("{}调用{}时发生未知异常,error Message:{}", "cn.bidlink.usercenter.server.service.DubboTRegUserService.findByCondition(cn.bidlink.usercenter.server.entity.TRegUser)",
                     "byCondition", byCondition.getCode() + "_" + byCondition.getMessage());
             throw new RuntimeException("err_code:" + byCondition.getCode() + ",err_msg:" + byCondition.getMessage());
         }
         List<TRegUser> result = byCondition.getResult();
         if (result == null) {
-            log.warn("com.demo.controller.CorpExportController.test时未获取到结果");
+            log.error("查询 中心库信息为 null");
             return null;
         } else {
             TRegUser user = result.get(0);

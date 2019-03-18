@@ -32,8 +32,9 @@ public class SupplierController {
 
     //迁移供应商准入记录
     @RequestMapping("/supplierAdmittanceRecord")
-    public String SupplierAdmittanceRecord(){
-        String result = supplierService.handleSupplierAdmittanceRecode(1113172701L,1113172701L,new ArrayList<Long>());
+    public String SupplierAdmittanceRecord(@RequestParam("originCompanyId") Long originCompanyId ,
+                                           @RequestParam("destCompanyId") Long destCompanyId ){
+        String result = supplierService.handleSupplierAdmittanceRecode(originCompanyId,destCompanyId,new ArrayList<Long>());
         return result;
     }
 

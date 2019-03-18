@@ -1,45 +1,41 @@
 package com.demo.model;
 
-import cn.afterturn.easypoi.excel.annotation.Excel;
-
-import javax.validation.constraints.Max;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @author : <a href="mailto:congyaozhu@ebnew.com">congyaozhu</a>
  * @Date : Created in  21:09 2019-02-19
- * @Description : 采购品目录  对应数据库字段
+ * @Description : 采购品目录【隆道云】
  */
-public class CorpCatalogNew {
-    @Excel(name = "id")
+public class CorpCatalogNew implements Serializable {
+
     private Long id;
-    @Excel(name = "name")
-    @Max(value = 50,message = "name 最多不能超过50")
+
     private String name;
-    @Excel(name = "code")
-    @Max(value = 20,message = "code 最多不能超过20")
+
     private String code;
-    @Excel(name = "parentId")
+
     private Long parentId;
-    @Excel(name = "isRoot")
+
     private int isRoot;
-    @Excel(name = "treePath")
+
     private String treepath;
-    @Excel(name = "catalogNamePath")
+
     private String catalogNamePath;
-    @Excel(name = "companyId")
+
     private Long companyId;
-    @Excel(name = "createUserId")
+
     private Long createUserId;
-    @Excel(name = "createUserName")
+
     private String createUserName;
-    @Excel(name = "createTime")
+
     private Date createTime;
-    @Excel(name = "updateUserId")
+
     private Long updateUserId;
-    @Excel(name = "updateUserName")
+
     private String updateUserName;
-    @Excel(name = "updateTime")
+
     private Date updateTime;
 
     public CorpCatalogNew() {

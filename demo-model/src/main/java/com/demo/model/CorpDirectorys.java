@@ -13,78 +13,75 @@ public class CorpDirectorys implements Serializable {
     @Excel(name = "id")
     private Long id;
 
-    @Max(value = 20,message = "code 最大长度为20")
-    @Excel(name = "code")
+    @Excel(name = "采购品编码")
     private String code;
 
-    @Excel(name = "catalogId")
+    @Excel(name = "采购目录的ID")
     private Long catalogId;
 
-    @Excel(name = "catalogName")
+    @Excel(name = "所属分类")
     private String catalogName;
 
     @Excel(name = "demo")
     private String demo;
 
-    @Max(value = 200,message = "name 最大长度为200")
-    @Excel(name = "name")
+    @Excel(name = "采购品名称")
     private String name;
 
-    @Max(value = 500,message = "spec 最大长度为500")
-    @Excel(name = "spec")
+    @Excel(name = "规格")
     private String spec;
 
     @Max(value = 4,message = "abandon 最大长度为4")
-    @Excel(name = "abandon")
+    @Excel(name = "是否禁用")
     private Long abandon;
 
-    @Excel(name = "pcode")
+    @Excel(name = "货号")
     private String pcode;
 
-    @Excel(name = "productor")
+    @Excel(name = "制造商")
     private String productor;
 
     // 对应LDY Catalog_id_path
-    @Excel(name = "treepath")
+    @Excel(name = "目录树")
     private String treepath;
 
     // 对应LDY的Update_time
-    @Excel(name = "lastmodifytime")
+    @Excel(name = "最后修改时间")
     private Date lastmodifytime;
 
-    @Excel(name = "unitname")
+    @Excel(name = "计量单位名")
     private String unitname;
 
-    @Excel(name = "createTime")
+    @Excel(name = "创建时间")
     private Date createTime;
 
-    @Excel(name = "brand")
+    @Excel(name = "品牌")
     private String brand;
 
-    @Excel(name = "purpose")
+    @Excel(name = "用途")
     private String purpose;
 
-    @Excel(name = "marketPrice")
+    @Excel(name = "市场参考价格")
     private String marketPrice;
 
-    @Excel(name = "speciality")
+    @Excel(name = "产品特性")
     private String speciality;
 
-    @Excel(name = "techParameters")
+    @Excel(name = "技术参数")
     private String techParameters;
 
     // 不为空，直接存储，否则，查询主账号
-    @Excel(name = "creator")
+    @Excel(name = "创建人")
     private Long creator;
 
     // 不为空，直接存储，否则，查询主账号
-    @Excel(name = "modifier")
+    @Excel(name = "修改人")
     private Long modifier;
 
-    @Excel(name = "producingAddress")
+    @Excel(name = "产地")
     private String producingAddress;
 
-    @Excel(name = "companyId")
+    @Excel(name = "企业ID")
     private Long companyId;
 
 

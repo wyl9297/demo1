@@ -11,19 +11,19 @@ public class CorpCatalogs extends CorpCatalogsKey {
     @Excel(name = "oldId")
     private Long oldId;
 
-    @Excel(name = "name")
+    @Excel(name = "分类名称")
     private String name;
 
-    @Excel(name = "code")
+    @Excel(name = "分类编码")
     private String code;
 
     @Excel(name = "demo")
     private String demo;
 
-    @Excel(name = "parentId")
+    @Excel(name = "所在分类")
     private Long parentId;
 
-    @Excel(name = "compId")
+    @Excel(name = "企业ID")
     private Long compId;
 
     @Excel(name = "isRoot")
@@ -35,28 +35,28 @@ public class CorpCatalogs extends CorpCatalogsKey {
     @Excel(name = "erpId")
     private String erpId;
 
-    @Excel(name = "erpcode")
+    @Excel(name = "ERP编码")
     private String erpcode;
 
-    @Excel(name = "flagAssociateUser")
+    @Excel(name = "是否关联用户")
     private Byte flagAssociateUser;
 
-    @Excel(name = "flagAssociateSupplier")
+    @Excel(name = "是否关联供应商")
     private Byte flagAssociateSupplier;
 
-    @Excel(name = "catalogNamePath")
+    @Excel(name = "分类名称路径")
     private String catalogNamePath;
 
-    @Excel(name = "createTime")
+    @Excel(name = "创建时间")
     private Date createTime;
 
-    @Excel(name = "creator")
+    @Excel(name = "创建人")
     private Long creator;
 
-    @Excel(name = "updateTime")
+    @Excel(name = "更新时间")
     private Date updateTime;
 
-    @Excel(name = "modifier")
+    @Excel(name = "修改人")
     private Long modifier;
 
     public Long getOldId() {

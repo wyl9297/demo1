@@ -68,7 +68,7 @@ public class CorpExportController {
             if (!CollectionUtils.isEmpty(catalogsMap)) {
                 // 导出不符合条件的采购品信息
                 ExportParams exportParams = new ExportParams();
-                exportParams.setSheetName("eroor_catalog");
+                exportParams.setSheetName("采购品目录信息");
                 failCorpCatalog.put("title", exportParams);
                 failCorpCatalog.put("entity", CorpCatalogs.class);
                 failCorpCatalog.put("data", catalogsMap.get("failCatalog"));
@@ -78,7 +78,7 @@ public class CorpExportController {
             if (!CollectionUtils.isEmpty(directorysMap)) {
                 // 导出不符合条件的采购品信息
                 ExportParams exportParams3 = new ExportParams();
-                exportParams3.setSheetName("eroor_directorys");
+                exportParams3.setSheetName("采购品信息");
                 failDirectory.put("title", exportParams3);
                 failDirectory.put("entity", CorpDirectorys.class);
                 failDirectory.put("data", directorysMap.get("failDirectory"));

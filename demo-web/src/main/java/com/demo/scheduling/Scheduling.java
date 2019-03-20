@@ -1,5 +1,8 @@
 package com.demo.scheduling;
 
+import com.demo.controller.CorpExportController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -11,11 +14,14 @@ import org.springframework.scheduling.annotation.Scheduled;
 @EnableScheduling
 public class Scheduling {
 
+    private static Logger log = LoggerFactory.getLogger(CorpExportController.class);
+
     Integer i = 0;
 
-    @Scheduled(cron = "0 0 12 * * ?")
+    @Scheduled(cron = "0 0/5 * * * ?")
     public void scheduler() {
-        System.out.println(">>>>>>>>> SchedulingConfig.scheduler()" + i ++ );
+        log.info("我来露个脸。。。。");
+        log.info(">>>>>>>>> SchedulingConfig.scheduler()" + i ++ );
     }
     /*
     "0 0 12 * * ?"每天中午十二点触发

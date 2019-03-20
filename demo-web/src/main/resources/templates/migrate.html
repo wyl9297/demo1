@@ -8,9 +8,9 @@
 
     <div style="text-align: center">
 
-    <h3>导出采购品excel</h3>
+    <h3>迁移部门及人员和部门关联关系(人员必须已在隆道云中心库)</h3>
     <br/>
-    <form action="#" th:action="@{/corpExport}" method="post">
+    <form action="#" th:action="@{/handleRegDepartment}" method="post">
         悦采公司ID：<input type="text" th:name="originCompanyId" />
         隆道云公司ID：<input type="text" th:name="destCompanyId" />
         <input type="submit" th:name="开始迁移" />
@@ -18,9 +18,9 @@
     <br/><br/><br/>
     <hr/>
     <br/><br/>
-    <h3>迁移部门及人员和部门关联关系(人员必须已在隆道云中心库)</h3>
+    <h3>采购品目录和采购品数据迁移</h3>
     <br/>
-    <form action="#" th:action="@{/handleRegDepartment}" method="post">
+    <form action="#" th:action="@{/corpExport}" method="post">
         悦采公司ID：<input type="text" th:name="originCompanyId" />
         隆道云公司ID：<input type="text" th:name="destCompanyId" />
         <input type="submit" th:name="开始迁移" />
@@ -36,7 +36,7 @@
         <input type="submit" th:name="开始迁移" />
     </form>
     <br/>
-    <h3>供应商采购品关联关系迁移</h3>
+    <h3>供应商采购品关联关系迁移（必须先迁移采购品）</h3>
     <br/>
     <form action="#" th:action="@{/catalogRelationMigrate}" method="post">
         悦采公司ID：<input type="text" th:name="originCompanyId" />

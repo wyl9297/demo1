@@ -53,7 +53,7 @@ public class CorpExportServiceImpl implements CorpExportService {
     protected JdbcTemplate uniregJdbcTemplate;
 
     // 定义批处理的数值
-    private static final double PAGESIZE = 500.0;
+    private static final double PAGESIZE = 1500.0;
 
 
     /**

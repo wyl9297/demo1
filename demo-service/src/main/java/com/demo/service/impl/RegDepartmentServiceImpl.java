@@ -122,17 +122,22 @@ public class RegDepartmentServiceImpl implements RegDepartmentService {
         //新旧id对照的map key旧id value新id
         Map<Long, Long> oldToNewMap = new HashMap();
         //最上级分类
-        Map<String, Object> queryForMap = aclJdbcTemplate.queryForMap("select ORGID FROM sys_org where COMPANYID = ? and ORGSUPID = ? ",companyId,companyId);
+       // Map<String, Object> queryForMap = aclJdbcTemplate.queryForMap("select ORGID FROM sys_org where COMPANYID = ? and ORGSUPID = ? ",companyId,companyId);
         //数据清洗
         for ( RegDepartment regDepartment : regDepartmentList) {
             Org org = new Org();
             long newId = IdWork.nextId();
             if( BigDecimal.ZERO.equals(regDepartment.getParentId())){
-               if( null != queryForMap ){
+               /*if( null != queryForMap ){
                    if( null != queryForMap.get("ORGID") ){
                        org.setOrgSupId(Long.valueOf(queryForMap.get("ORGID").toString()));
                    }
-               }
+               }*/
+                org.setOrgSupId(companyId);
+                org.setPath( companyId +  "." + newId + ".");
+                org.setOrgPathname("/" + regDepartment.getName());
+                aclJdbcTemplate.update("INSERT INTO sys_user_org (USERORGID, ORGID, USERID, ISPRIMARY, ISCHARGE, CREATEBY, CREATETIME) " +
+                        "VALUES (?, ?, ?, '1', '0', NULL , ?);\n",IdWork.nextId(),newId,regUser.getId(),new Date());
             }else {
                 org.setOrgSupId(Long.valueOf(regDepartment.getParentId().toString()));
             }

@@ -8,7 +8,7 @@ public class CorpCatalogsKey {
     @Excel(name = "id")
     private Long id;
 
-    @Excel(name = "companyId")
+    @Excel(name = "企业ID")
     private Long companyId;
 
     public Long getId() {

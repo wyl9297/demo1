@@ -8,6 +8,17 @@
 
     <div style="text-align: center">
 
+    <h3>导出采购品校验</h3>
+    <br/>
+    <form action="#" th:action="@{/checkCorp}" method="post">
+        悦采公司ID：<input type="text" th:name="originCompanyId" />
+        隆道云公司ID：<input type="text" th:name="destCompanyId" />
+        <input type="submit" th:name="开始迁移" />
+    </form>
+    <br/><br/><br/>
+    <hr/>
+    <br/><br/>
+
     <h3>迁移部门及人员和部门关联关系(人员必须已在隆道云中心库)</h3>
     <br/>
     <form action="#" th:action="@{/handleRegDepartment}" method="post">

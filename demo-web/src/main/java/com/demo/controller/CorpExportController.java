@@ -100,4 +100,57 @@ public class CorpExportController {
             return false;
         }
     }
+
+    @RequestMapping("/checkCorp")
+    @ResponseBody
+    public String checkCorp(HttpServletResponse response,
+                          @RequestParam("originCompanyId") Long originCompanyId,
+                          @RequestParam("destCompanyId") Long destCompanyId)  {
+        Map<String, Object> map = corpExportService.checkCorp(originCompanyId, destCompanyId);
+        log.info("进入方法：{}","com.demo.controller.CorpExportController.exportExcel");
+        if (CollectionUtils.isEmpty(map)) {
+            log.info("----------采购品信息和采购品目录信息正常，无不符合条件的数据-----------");
+            return "校验通过";
+        } else {
+            log.info("----------准备导出不符合条件的数据-----------");
+            Map<String, Object> failCorpCatalog = new HashMap<>();
+            Map<String, Object> failDirectory = new HashMap<>();
+            List<CorpCatalogs> failCatalogs = (List<CorpCatalogs>) map.get("failCatalogs");
+            List<Map<String, Object>> list = new ArrayList<>();
+            if (!CollectionUtils.isEmpty(failCatalogs)) {
+                // 导出不符合条件的采购品信息
+                ExportParams exportParams = new ExportParams();
+                exportParams.setSheetName("采购品目录信息");
+                failCorpCatalog.put("title", exportParams);
+                failCorpCatalog.put("entity", CorpCatalogs.class);
+                failCorpCatalog.put("data", failCatalogs);
+                list.add(failCorpCatalog);
+            }
+
+            List<CorpDirectorys> failDirectorys = (List<CorpDirectorys>) map.get("failDirectorys");
+            if (!CollectionUtils.isEmpty(failDirectorys)) {
+                // 导出不符合条件的采购品信息
+                ExportParams exportParams3 = new ExportParams();
+                exportParams3.setSheetName("采购品信息");
+                failDirectory.put("title", exportParams3);
+                failDirectory.put("entity", CorpDirectorys.class);
+                failDirectory.put("data", failDirectorys);
+                list.add(failDirectory);
+            }
+
+            Workbook workbook = ExcelExportUtil.exportExcel(list, ExcelType.HSSF);
+
+            // 设置响应输出的头类型
+            response.setHeader("content-Type", "application/vnd.ms-excel");
+            // 下载文件的默认名称
+            response.setHeader("Content-Disposition", "attachment;filename=Error_Info.xls");
+            try {
+                workbook.write(response.getOutputStream());
+            } catch (IOException e) {
+                System.out.println("导出Excel出错啦！！！");
+                e.printStackTrace();
+            }
+            return "校验未通过";
+        }
+    }
 }

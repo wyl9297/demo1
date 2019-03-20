@@ -4,10 +4,7 @@ import cn.bidlink.base.ServiceResult;
 import cn.bidlink.framework.util.gen.IdWork;
 import cn.bidlink.usercenter.server.entity.TRegUser;
 import cn.bidlink.usercenter.server.service.DubboTRegUserService;
-import com.demo.model.CorpCatalogNew;
-import com.demo.model.CorpCatalogs;
-import com.demo.model.CorpDirectorys;
-import com.demo.model.CorpDirectorysNew;
+import com.demo.model.*;
 import com.demo.persistence.dao.CorpCatalogsMapper;
 import com.demo.persistence.dao.CorpDirectorysMapper;
 import com.demo.service.CorpExportService;
@@ -23,7 +20,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author : <a href="mailto:congyaozhu@ebnew.com">congyaozhu</a>
@@ -67,7 +67,7 @@ public class CorpExportServiceImpl implements CorpExportService {
     public Map<Long, Long> idMap(List<CorpCatalogs> corpCatalogs, Long destCompanyId) {
         Long newRootId = uniregJdbcTemplate.queryForObject("select  id from `corp_catalog` where is_root = 1 and parent_id is null and company_id = ?", new Object[]{destCompanyId}, Long.class);
         Map<Long, Long> map = Maps.newHashMap();
-        log.info("进入方法：{}","CorpExportServiceImpl.idMap");
+        log.info("进入方法：{}", "CorpExportServiceImpl.idMap");
         log.info("------------ 即将生成 catalog 新旧id对照关系 ------------");
         log.info("需要生成 {} 个对照关系", corpCatalogs.size());
         if (corpCatalogs.size() <= 0) {
@@ -152,7 +152,7 @@ public class CorpExportServiceImpl implements CorpExportService {
         //不符合存储条件的数据，放入map集合
         if (failList.size() != 0 && failList != null) {
             Map<String, Object> map = Maps.newHashMap();
-            log.info("不符合条件的数量: {} ",failList.size());
+            log.info("不符合条件的数量: {} ", failList.size());
             // 插入失败的
             map.put("failCatalog", failList);
             return map;
@@ -183,16 +183,17 @@ public class CorpExportServiceImpl implements CorpExportService {
 
     /**
      * 采购品目录信息 处理
+     *
      * @param destCompanyId 新companyId
-     * @param failList  不符合存储条件的信息
+     * @param failList      不符合存储条件的信息
      * @param newCatalogs   新采购品目录信息存储
-     * @param middle    采购品目录 新旧id对照表
+     * @param middle        采购品目录 新旧id对照表
      * @param corpCatalogs  采购品目录集合
-     * @param tRegUser  用户信息
+     * @param tRegUser      用户信息
      */
     private void dealWithCatalogs(Long destCompanyId, List<CorpCatalogs> failList, List<Object[]> newCatalogs, List<Object[]> middle, List<CorpCatalogs> corpCatalogs, TRegUser tRegUser) {
 
-        log.info("进入方法 {} , 处理采购品目录信息","com.demo.service.impl.CorpExportServiceImpl.dealWithCatalogs");
+        log.info("进入方法 {} , 处理采购品目录信息", "com.demo.service.impl.CorpExportServiceImpl.dealWithCatalogs");
         // 获取新旧Id对照Map
         Map<Long, Long> idsMap = idMap(corpCatalogs, destCompanyId);
 
@@ -291,7 +292,7 @@ public class CorpExportServiceImpl implements CorpExportService {
     @Transactional
     public Map<String, Object> exportDirectorys(Long originCompanyId, Long destCompanyId) throws DataAccessException {
 
-        log.info("进入方法 {} ","com.demo.service.impl.CorpExportServiceImpl.exportDirectorys");
+        log.info("进入方法 {} ", "com.demo.service.impl.CorpExportServiceImpl.exportDirectorys");
         // 查询需要导出的采购品信息总记录数
         Long count = corpDirectorysMapper.selCountByCompanyId(originCompanyId);
 
@@ -322,16 +323,16 @@ public class CorpExportServiceImpl implements CorpExportService {
                     pageNum += (int) PAGESIZE;
 
                 }
-                dealWithDirectory(tRegUser, originCompanyId, destCompanyId, params, failList, byCompanyIdWithPageing,middle);
+                dealWithDirectory(tRegUser, originCompanyId, destCompanyId, params, failList, byCompanyIdWithPageing, middle);
             }
         } else {
             byCompanyIdWithPageing = corpDirectorysMapper.findByCompanyIdWithPageing(originCompanyId, 0, count.intValue());
-            dealWithDirectory(tRegUser, originCompanyId, destCompanyId, params, failList, byCompanyIdWithPageing,middle);
+            dealWithDirectory(tRegUser, originCompanyId, destCompanyId, params, failList, byCompanyIdWithPageing, middle);
         }
         // 不符合存储条件的数据，放入map集合
         if (failList.size() != 0 && failList != null) {
             Map<String, Object> map = Maps.newHashMap();
-            log.info("不符合条件的数量: {} ",failList.size());
+            log.info("不符合条件的数量: {} ", failList.size());
             map.put("failDirectory", failList);
             return map;
         } else {
@@ -341,17 +342,18 @@ public class CorpExportServiceImpl implements CorpExportService {
 
     /**
      * 采购品信息 处理
-     * @param tRegUser  用户中心信息
-     * @param originCompanyId   原companyId
-     * @param destCompanyId 新companyId
-     * @param params    批处理 参数
-     * @param failList  不符合条件的数据
-     * @param byCompanyIdWithPageing    分页数据
-     * @param middle    采购品中间表
+     *
+     * @param tRegUser               用户中心信息
+     * @param originCompanyId        原companyId
+     * @param destCompanyId          新companyId
+     * @param params                 批处理 参数
+     * @param failList               不符合条件的数据
+     * @param byCompanyIdWithPageing 分页数据
+     * @param middle                 采购品中间表
      */
-    private void dealWithDirectory(TRegUser tRegUser, Long originCompanyId, Long destCompanyId, List<Object[]> params, List<CorpDirectorys> failList, List<CorpDirectorys> byCompanyIdWithPageing , List<Object[]> middle) {
+    private void dealWithDirectory(TRegUser tRegUser, Long originCompanyId, Long destCompanyId, List<Object[]> params, List<CorpDirectorys> failList, List<CorpDirectorys> byCompanyIdWithPageing, List<Object[]> middle) {
 
-        log.info("进入方法：{} , 处理采购品","com.demo.service.impl.CorpExportServiceImpl.dealWithDirectory");
+        log.info("进入方法：{} , 处理采购品", "com.demo.service.impl.CorpExportServiceImpl.dealWithDirectory");
         // 插入采购品信息 SQL
         String insertSql = "INSERT INTO `corp_directory`\n" +
                 "(`ID`, `CATALOG_ID`, `CATALOG_NAME_PATH`, `CATALOG_ID_PATH`, `CODE`, `NAME`, `SPEC`, `ABANDON`, `PCODE`, `PRODUCTOR`, `UNITNAME`, `PRODUCING_ADDRESS`, `BRAND`, `PURPOSE`," +
@@ -408,7 +410,7 @@ public class CorpExportServiceImpl implements CorpExportService {
                         corpDirectorysNew.getPricePrecision(), corpDirectorysNew.getCompanyId(), corpDirectorysNew.getCreateUserId(), corpDirectorysNew.getCreateUserName(), corpDirectorysNew.getCreateTime(),
                         corpDirectorysNew.getUpdateUserId(), corpDirectorysNew.getUpdateUserName(), corpDirectorysNew.getUpdateTime()
                 });
-                middle.add(new Object[]{newId , corpDirectorysNew.getId() , originCompanyId});
+                middle.add(new Object[]{newId, corpDirectorysNew.getId(), originCompanyId});
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (InvocationTargetException e) {
@@ -453,5 +455,34 @@ public class CorpExportServiceImpl implements CorpExportService {
             TRegUser user = result.get(0);
             return user;
         }
+    }
+
+    @Override
+    public Map<String, Object> checkCorp(Long originCompanyId, Long destCompanyId) {
+        List<CorpCatalogs> catalogs = corpCatalogsMapper.selCataLogsByCompanyId(originCompanyId);
+        List<CorpCatalogs> failCatalogs = new ArrayList<>();
+        for (int j = 0; j < catalogs.size(); j++) {
+            CorpCatalogs catalog = catalogs.get(j);
+            if (catalog.getName().length() > 50 || catalog.getCode().length() > 20) {
+                log.error("请检查name code 字段，存储失败。原因：长度过长 --> id:{},name:{},companyId:{}", catalog.getId(), catalog.getName(), catalog.getCompanyId());
+                failCatalogs.add(catalog);
+                continue;
+            }
+
+        }
+        List<CorpDirectorys> failDirectorys = new ArrayList<>();
+        List<CorpDirectorys> corpDirectorys = corpDirectorysMapper.findByCompanyId(originCompanyId);
+        for (int i = 0; i < corpDirectorys.size(); i++) {
+            CorpDirectorys directorys = corpDirectorys.get(i);
+            if (directorys.getName().length() > 200 || (directorys.getCode() != null && directorys.getCode().length() > 20) || (directorys.getSpec() != null && directorys.getSpec().length() > 500)) {
+                log.error("字符长度过长，存储失败,name 长度为：{},code 长度为：{},spec 长度为：{}", directorys.getName().length(), directorys.getCode().length(), directorys.getSpec().length());
+                failDirectorys.add(directorys);
+                continue;
+            }
+        }
+        Map<String, Object> map = Maps.newHashMap();
+        map.put("failCatalogs", failCatalogs);
+        map.put("failDirectorys", failDirectorys);
+        return map;
     }
 }

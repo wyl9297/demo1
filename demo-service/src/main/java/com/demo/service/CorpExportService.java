@@ -20,4 +20,7 @@ public interface CorpExportService {
     // 根据companyID查询中心库信息
     TRegUser findByCondition(Long companyId);
 
+    // 校验采购品信息是否符合条件
+    Map<String , Object> checkCorp(Long originCompanyId , Long destCompanyId);
+
 }

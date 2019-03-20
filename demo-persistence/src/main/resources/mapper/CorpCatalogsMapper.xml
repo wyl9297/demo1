@@ -8,7 +8,6 @@
     <result column="CODE" property="code" jdbcType="VARCHAR" />
     <result column="DEMO" property="demo" jdbcType="VARCHAR" />
     <result column="PARENT_ID" property="parentId" jdbcType="BIGINT" />
-    <result column="COMP_ID" property="compId" jdbcType="BIGINT" />
     <result column="IS_ROOT" property="isRoot" jdbcType="TINYINT" />
     <result column="TREEPATH" property="treepath" jdbcType="VARCHAR" />
     <result column="ERP_ID" property="erpId" jdbcType="VARCHAR" />

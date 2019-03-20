@@ -23,13 +23,10 @@ public class CorpCatalogs extends CorpCatalogsKey {
     @Excel(name = "所在分类")
     private Long parentId;
 
-    @Excel(name = "企业ID")
-    private Long compId;
-
     @Excel(name = "isRoot")
     private Byte isRoot;
 
-    @Excel(name = "treepath")
+    @Excel(name = "目录树")
     private String treepath;
 
     @Excel(name = "erpId")
@@ -97,14 +94,6 @@ public class CorpCatalogs extends CorpCatalogsKey {
 
     public void setParentId(Long parentId) {
         this.parentId = parentId;
-    }
-
-    public Long getCompId() {
-        return compId;
-    }
-
-    public void setCompId(Long compId) {
-        this.compId = compId;
     }
 
     public Byte getIsRoot() {

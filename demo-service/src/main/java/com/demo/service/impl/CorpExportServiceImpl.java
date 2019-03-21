@@ -357,9 +357,9 @@ public class CorpExportServiceImpl implements CorpExportService {
         // 插入采购品信息 SQL
         String insertSql = "INSERT INTO `corp_directory`\n" +
                 "(`ID`, `CATALOG_ID`, `CATALOG_NAME_PATH`, `CATALOG_ID_PATH`, `CODE`, `NAME`, `SPEC`, `ABANDON`, `PCODE`, `PRODUCTOR`, `UNITNAME`, `PRODUCING_ADDRESS`, `BRAND`, `PURPOSE`," +
-                " `MARKET_PRICE`, `SPECIALITY`, `SOURCE`, `tech_parameters`, `DEMO`, `unit_precision`, `price_precision`, `company_id`, `create_user_id`, `create_user_name`, " +
+                " `MARKET_PRICE`, `SPECIALITY`, `SOURCE`, `tech_parameters`, `DEMO`, `company_id`, `create_user_id`, `create_user_name`, " +
                 "`create_time`, `update_user_id`, `update_user_name`, `update_time`) \n" +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?);";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
         // 更新采购品信息[catalog_id  和   catalog_id_path ] SQL
         String updateSql = "UPDATE `corp_directory` cd\n" +
                 "JOIN `middle_corp_catalog` mcc ON cd.catalog_id = mcc.old_id\n" +
@@ -405,9 +405,8 @@ public class CorpExportServiceImpl implements CorpExportService {
                 params.add(new Object[]{
                         newId, corpDirectorysNew.getCatalogId(), corpDirectorysNew.getCatalogName(), corpDirectorysNew.getTreepath(), corpDirectorysNew.getCode(),
                         corpDirectorysNew.getName(), corpDirectorysNew.getSpec(), corpDirectorysNew.getAbandon(), corpDirectorysNew.getPcode(), corpDirectorysNew.getProductor(),
-                        corpDirectorysNew.getUnitname(), corpDirectorysNew.getProducingAddress(), corpDirectorysNew.getBrand(), corpDirectorysNew.getPurpose(), corpDirectorysNew.getMarketPrice(),
-                        corpDirectorysNew.getSpeciality(), corpDirectorysNew.getSource(), corpDirectorysNew.getTechParameters(), corpDirectorysNew.getDemo(), corpDirectorysNew.getUnitPrecision(),
-                        corpDirectorysNew.getPricePrecision(), corpDirectorysNew.getCompanyId(), corpDirectorysNew.getCreateUserId(), corpDirectorysNew.getCreateUserName(), corpDirectorysNew.getCreateTime(),
+                        corpDirectorysNew.getUnitName(), corpDirectorysNew.getProducingAddress(), corpDirectorysNew.getBrand(), corpDirectorysNew.getPurpose(), corpDirectorysNew.getMarketPrice(),
+                        corpDirectorysNew.getSpeciality(), corpDirectorysNew.getSource(), corpDirectorysNew.getTechParameters(), corpDirectorysNew.getDemo(), corpDirectorysNew.getCompanyId(), corpDirectorysNew.getCreateUserId(), corpDirectorysNew.getCreateUserName(), corpDirectorysNew.getCreateTime(),
                         corpDirectorysNew.getUpdateUserId(), corpDirectorysNew.getUpdateUserName(), corpDirectorysNew.getUpdateTime()
                 });
                 middle.add(new Object[]{newId, corpDirectorysNew.getId(), originCompanyId});

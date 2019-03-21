@@ -11,6 +11,7 @@
     <result column="NAME" property="name" jdbcType="VARCHAR" />
     <result column="SPEC" property="spec" jdbcType="VARCHAR" />
     <result column="ABANDON" property="abandon" jdbcType="BIGINT" />
+    <result column="UNITNAME" property="unitName" jdbcType="VARCHAR" />
     <result column="PCODE" property="pcode" jdbcType="VARCHAR" />
     <result column="PRODUCTOR" property="productor" jdbcType="VARCHAR" />
     <result column="TREEPATH" property="treepath" jdbcType="VARCHAR" />
@@ -27,7 +28,7 @@
   </resultMap>
   <sql id="Base_Column_List" >
     ID, company_id, OLD_ID, CODE, CATALOG_ID, CATALOG_NAME, DEMO, NAME, SPEC,
-     ABANDON, PCODE, PRODUCTOR, TREEPATH, LASTMODIFYTIME,
+    ABANDON, PCODE, PRODUCTOR, TREEPATH, LASTMODIFYTIME,UNITNAME,
     CREATE_TIME, PRODUCING_ADDRESS , BRAND, PURPOSE, MARKET_PRICE, SPECIALITY, tech_parameters,
    creator, modifier
   </sql>
@@ -61,7 +62,7 @@
     limit #{startPage} , #{pageSize}
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.demo.model.CorpDirectorysKey" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from corp_directorys
     where ID = #{id,jdbcType=BIGINT}
@@ -76,33 +77,33 @@
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into corp_directorys (company_id, OLD_ID, CODE, 
-      CATALOG_ID, CATALOG_NAME, DEMO, 
-      NAME, ORGID, SPEC, UNITTYPE, 
-      ABANDON, PCODE, PRODUCTOR, 
-      TREEPATH, LASTMODIFYTIME, MODIFYMODE, 
-      MODIFYER, ERPCODE, PID_ERPCODE, 
-      DIR_PIC, DIR_OTHER_PIC, COMP_ID, 
-      IMG_ID, IMG_NAME, IMG_OTHER_ID, 
-      IMG_OTHER_NAME, UNITEXTNAME, UNITNAME, 
-      FLAG_ASSOCIATE_USER, FLAG_ASSOCIATE_SUPPLIER, 
-      CREATE_TIME, PRODUCING_ADDRESS, BRAND, 
-      PURPOSE, MARKET_PRICE, SPECIALITY, 
-      tech_parameters, erp_id, creator, 
+    insert into corp_directorys (company_id, OLD_ID, CODE,
+      CATALOG_ID, CATALOG_NAME, DEMO,
+      NAME, ORGID, SPEC, UNITTYPE,
+      ABANDON, PCODE, PRODUCTOR,
+      TREEPATH, LASTMODIFYTIME, MODIFYMODE,
+      MODIFYER, ERPCODE, PID_ERPCODE,
+      DIR_PIC, DIR_OTHER_PIC, COMP_ID,
+      IMG_ID, IMG_NAME, IMG_OTHER_ID,
+      IMG_OTHER_NAME, UNITEXTNAME, UNITNAME,
+      FLAG_ASSOCIATE_USER, FLAG_ASSOCIATE_SUPPLIER,
+      CREATE_TIME, PRODUCING_ADDRESS, BRAND,
+      PURPOSE, MARKET_PRICE, SPECIALITY,
+      tech_parameters, erp_id, creator,
       modifier, md5)
-    values (#{companyId,jdbcType=BIGINT}, #{oldId,jdbcType=BIGINT}, #{code,jdbcType=VARCHAR}, 
+    values (#{companyId,jdbcType=BIGINT}, #{oldId,jdbcType=BIGINT}, #{code,jdbcType=VARCHAR},
       #{catalogId,jdbcType=BIGINT}, #{catalogName,jdbcType=VARCHAR}, #{demo,jdbcType=VARCHAR},
-      #{name,jdbcType=VARCHAR}, #{orgid,jdbcType=BIGINT}, #{spec,jdbcType=VARCHAR}, #{unittype,jdbcType=VARCHAR}, 
-      #{abandon,jdbcType=BIGINT}, #{pcode,jdbcType=VARCHAR}, #{productor,jdbcType=VARCHAR}, 
-      #{treepath,jdbcType=VARCHAR}, #{lastmodifytime,jdbcType=TIMESTAMP}, #{modifymode,jdbcType=TINYINT}, 
-      #{modifyer,jdbcType=VARCHAR}, #{erpcode,jdbcType=VARCHAR}, #{pidErpcode,jdbcType=VARCHAR}, 
-      #{dirPic,jdbcType=VARCHAR}, #{dirOtherPic,jdbcType=VARCHAR}, #{compId,jdbcType=BIGINT}, 
-      #{imgId,jdbcType=VARCHAR}, #{imgName,jdbcType=VARCHAR}, #{imgOtherId,jdbcType=VARCHAR}, 
-      #{imgOtherName,jdbcType=VARCHAR}, #{unitextname,jdbcType=VARCHAR}, #{unitname,jdbcType=VARCHAR}, 
-      #{flagAssociateUser,jdbcType=TINYINT}, #{flagAssociateSupplier,jdbcType=TINYINT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{producingAddress,jdbcType=VARCHAR}, #{brand,jdbcType=VARCHAR}, 
-      #{purpose,jdbcType=VARCHAR}, #{marketPrice,jdbcType=VARCHAR}, #{speciality,jdbcType=VARCHAR}, 
-      #{techParameters,jdbcType=VARCHAR}, #{erpId,jdbcType=VARCHAR}, #{creator,jdbcType=BIGINT}, 
+      #{name,jdbcType=VARCHAR}, #{orgid,jdbcType=BIGINT}, #{spec,jdbcType=VARCHAR}, #{unittype,jdbcType=VARCHAR},
+      #{abandon,jdbcType=BIGINT}, #{pcode,jdbcType=VARCHAR}, #{productor,jdbcType=VARCHAR},
+      #{treepath,jdbcType=VARCHAR}, #{lastmodifytime,jdbcType=TIMESTAMP}, #{modifymode,jdbcType=TINYINT},
+      #{modifyer,jdbcType=VARCHAR}, #{erpcode,jdbcType=VARCHAR}, #{pidErpcode,jdbcType=VARCHAR},
+      #{dirPic,jdbcType=VARCHAR}, #{dirOtherPic,jdbcType=VARCHAR}, #{compId,jdbcType=BIGINT},
+      #{imgId,jdbcType=VARCHAR}, #{imgName,jdbcType=VARCHAR}, #{imgOtherId,jdbcType=VARCHAR},
+      #{imgOtherName,jdbcType=VARCHAR}, #{unitextname,jdbcType=VARCHAR}, #{unitname,jdbcType=VARCHAR},
+      #{flagAssociateUser,jdbcType=TINYINT}, #{flagAssociateSupplier,jdbcType=TINYINT},
+      #{createTime,jdbcType=TIMESTAMP}, #{producingAddress,jdbcType=VARCHAR}, #{brand,jdbcType=VARCHAR},
+      #{purpose,jdbcType=VARCHAR}, #{marketPrice,jdbcType=VARCHAR}, #{speciality,jdbcType=VARCHAR},
+      #{techParameters,jdbcType=VARCHAR}, #{erpId,jdbcType=VARCHAR}, #{creator,jdbcType=BIGINT},
       #{modifier,jdbcType=BIGINT}, #{md5,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.demo.model.CorpDirectorys" >

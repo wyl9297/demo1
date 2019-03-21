@@ -1,7 +1,5 @@
 package com.demo.model;
 
-import cn.afterturn.easypoi.excel.annotation.Excel;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -34,7 +32,7 @@ public class CorpDirectorysNew implements Serializable {
     // 对应LDY的Update_time
     private Date updateTime;
 
-    private String unitname;
+    private String unitName;
 
     private Date createTime;
 
@@ -51,10 +49,9 @@ public class CorpDirectorysNew implements Serializable {
     // 不为空，直接存储，否则，查询主账号
     private Long createUserId;
 
-    @Excel(name = "createUserName")
     private String createUserName;
 
-     // value = 2
+    // value = 2
     private Long unitPrecision;
 
     // value = 2
@@ -182,12 +179,12 @@ public class CorpDirectorysNew implements Serializable {
         this.productor = productor == null ? null : productor.trim();
     }
 
-    public String getUnitname() {
-        return unitname;
+    public String getUnitName() {
+        return unitName;
     }
 
-    public void setUnitname(String unitname) {
-        this.unitname = unitname == null ? null : unitname.trim();
+    public void setUnitName(String unitName) {
+        this.unitName = unitName;
     }
 
     public void setUpdateTime(Date updateTime) {

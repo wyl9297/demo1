@@ -262,7 +262,7 @@
     SELECT
       GROUP_CONCAT(supplier_id)
     FROM
-      `supplier`
+      `bsm_company_supplier_apply`
     WHERE
       company_id = #{companyId}
     GROUP BY company_id;

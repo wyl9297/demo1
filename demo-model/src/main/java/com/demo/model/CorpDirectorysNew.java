@@ -34,7 +34,7 @@ public class CorpDirectorysNew implements Serializable {
     // 对应LDY的Update_time
     private Date updateTime;
 
-    private String unitname;
+    private String unitName;
 
     private Date createTime;
 
@@ -182,12 +182,12 @@ public class CorpDirectorysNew implements Serializable {
         this.productor = productor == null ? null : productor.trim();
     }
 
-    public String getUnitname() {
-        return unitname;
+    public String getUnitName() {
+        return unitName;
     }
 
-    public void setUnitname(String unitname) {
-        this.unitname = unitname == null ? null : unitname.trim();
+    public void setUnitName(String unitName) {
+        this.unitName = unitName;
     }
 
     public void setUpdateTime(Date updateTime) {

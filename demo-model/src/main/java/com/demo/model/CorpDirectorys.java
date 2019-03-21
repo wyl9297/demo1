@@ -50,7 +50,7 @@ public class CorpDirectorys implements Serializable {
     private Date lastmodifytime;
 
     @Excel(name = "计量单位名")
-    private String unitname;
+    private String unitName;
 
     @Excel(name = "创建时间")
     private Date createTime;
@@ -198,12 +198,12 @@ public class CorpDirectorys implements Serializable {
         this.lastmodifytime = lastmodifytime;
     }
 
-    public String getUnitname() {
-        return unitname;
+    public String getUnitName() {
+        return unitName;
     }
 
-    public void setUnitname(String unitname) {
-        this.unitname = unitname == null ? null : unitname.trim();
+    public void setUnitName(String unitName) {
+        this.unitName = unitName;
     }
 
     public Date getCreateTime() {

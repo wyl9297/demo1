@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.bidlink.datacenter.actualize.persistence.dao.CorpDirectorysMapper" >
+  <resultMap id="BaseResultMap" type="cn.bidlink.datacenter.actualize.model.CorpDirectorys" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <id column="COMPANY_ID" property="companyId" jdbcType="BIGINT" />
+    <result column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="CATALOG_ID" property="catalogId" jdbcType="BIGINT" />
+    <result column="CATALOG_NAME" property="catalogName" jdbcType="VARCHAR" />
+    <result column="DEMO" property="demo" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="SPEC" property="spec" jdbcType="VARCHAR" />
+    <result column="ABANDON" property="abandon" jdbcType="BIGINT" />
+    <result column="UNITNAME" property="unitName" jdbcType="VARCHAR" />
+    <result column="PCODE" property="pcode" jdbcType="VARCHAR" />
+    <result column="PRODUCTOR" property="productor" jdbcType="VARCHAR" />
+    <result column="TREEPATH" property="treepath" jdbcType="VARCHAR" />
+    <result column="LASTMODIFYTIME" property="lastmodifytime" jdbcType="TIMESTAMP" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="PRODUCING_ADDRESS" property="producingAddress" jdbcType="VARCHAR" />
+    <result column="BRAND" property="brand" jdbcType="VARCHAR" />
+    <result column="PURPOSE" property="purpose" jdbcType="VARCHAR" />
+    <result column="MARKET_PRICE" property="marketPrice" jdbcType="VARCHAR" />
+    <result column="SPECIALITY" property="speciality" jdbcType="VARCHAR" />
+    <result column="TECH_PARAMETERS" property="techParameters" jdbcType="VARCHAR" />
+    <result column="CREATOR" property="creator" jdbcType="BIGINT" />
+    <result column="MODIFIER" property="modifier" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, company_id, OLD_ID, CODE, CATALOG_ID, CATALOG_NAME, DEMO, NAME, SPEC,
+    ABANDON, PCODE, PRODUCTOR, TREEPATH, LASTMODIFYTIME,UNITNAME,
+    CREATE_TIME, PRODUCING_ADDRESS , BRAND, PURPOSE, MARKET_PRICE, SPECIALITY, tech_parameters,
+   creator, modifier
+  </sql>
+
+  <select id="findByCompanyId" parameterType="long" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from corp_directorys
+    <where>
+      <if test="companyId != null">
+        company_id = #{companyId}
+      </if>
+    </where>
+  </select>
+  <select id="selCountByCompanyId" parameterType="long" resultType="long">
+    select count(1)
+    from corp_directorys
+    <where>
+      <if test="companyId != null">
+        company_id = #{companyId}
+      </if>
+    </where>
+  </select>
+  <select id="findByCompanyIdWithPageing"  resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from corp_directorys
+    <where>
+      <if test="companyId != null">
+        company_id = #{companyId}
+      </if>
+    </where>
+    limit #{startPage} , #{pageSize}
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.bidlink.datacenter.actualize.model.CorpDirectorysKey" >
+    select
+    <include refid="Base_Column_List" />
+    from corp_directorys
+    where ID = #{id,jdbcType=BIGINT}
+      and company_id = #{companyId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="cn.bidlink.datacenter.actualize.model.CorpDirectorysKey" >
+    delete from corp_directorys
+    where ID = #{id,jdbcType=BIGINT}
+      and company_id = #{companyId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.bidlink.datacenter.actualize.model.CorpDirectorys" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into corp_directorys (company_id, OLD_ID, CODE,
+      CATALOG_ID, CATALOG_NAME, DEMO,
+      NAME, ORGID, SPEC, UNITTYPE,
+      ABANDON, PCODE, PRODUCTOR,
+      TREEPATH, LASTMODIFYTIME, MODIFYMODE,
+      MODIFYER, ERPCODE, PID_ERPCODE,
+      DIR_PIC, DIR_OTHER_PIC, COMP_ID,
+      IMG_ID, IMG_NAME, IMG_OTHER_ID,
+      IMG_OTHER_NAME, UNITEXTNAME, UNITNAME,
+      FLAG_ASSOCIATE_USER, FLAG_ASSOCIATE_SUPPLIER,
+      CREATE_TIME, PRODUCING_ADDRESS, BRAND,
+      PURPOSE, MARKET_PRICE, SPECIALITY,
+      tech_parameters, erp_id, creator,
+      modifier, md5)
+    values (#{companyId,jdbcType=BIGINT}, #{oldId,jdbcType=BIGINT}, #{code,jdbcType=VARCHAR},
+      #{catalogId,jdbcType=BIGINT}, #{catalogName,jdbcType=VARCHAR}, #{demo,jdbcType=VARCHAR},
+      #{name,jdbcType=VARCHAR}, #{orgid,jdbcType=BIGINT}, #{spec,jdbcType=VARCHAR}, #{unittype,jdbcType=VARCHAR},
+      #{abandon,jdbcType=BIGINT}, #{pcode,jdbcType=VARCHAR}, #{productor,jdbcType=VARCHAR},
+      #{treepath,jdbcType=VARCHAR}, #{lastmodifytime,jdbcType=TIMESTAMP}, #{modifymode,jdbcType=TINYINT},
+      #{modifyer,jdbcType=VARCHAR}, #{erpcode,jdbcType=VARCHAR}, #{pidErpcode,jdbcType=VARCHAR},
+      #{dirPic,jdbcType=VARCHAR}, #{dirOtherPic,jdbcType=VARCHAR}, #{compId,jdbcType=BIGINT},
+      #{imgId,jdbcType=VARCHAR}, #{imgName,jdbcType=VARCHAR}, #{imgOtherId,jdbcType=VARCHAR},
+      #{imgOtherName,jdbcType=VARCHAR}, #{unitextname,jdbcType=VARCHAR}, #{unitname,jdbcType=VARCHAR},
+      #{flagAssociateUser,jdbcType=TINYINT}, #{flagAssociateSupplier,jdbcType=TINYINT},
+      #{createTime,jdbcType=TIMESTAMP}, #{producingAddress,jdbcType=VARCHAR}, #{brand,jdbcType=VARCHAR},
+      #{purpose,jdbcType=VARCHAR}, #{marketPrice,jdbcType=VARCHAR}, #{speciality,jdbcType=VARCHAR},
+      #{techParameters,jdbcType=VARCHAR}, #{erpId,jdbcType=VARCHAR}, #{creator,jdbcType=BIGINT},
+      #{modifier,jdbcType=BIGINT}, #{md5,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.bidlink.datacenter.actualize.model.CorpDirectorys" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into corp_directorys
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="companyId != null" >
+        company_id,
+      </if>
+      <if test="oldId != null" >
+        OLD_ID,
+      </if>
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="catalogId != null" >
+        CATALOG_ID,
+      </if>
+      <if test="catalogName != null" >
+        CATALOG_NAME,
+      </if>
+      <if test="demo != null" >
+        DEMO,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="orgid != null" >
+        ORGID,
+      </if>
+      <if test="spec != null" >
+        SPEC,
+      </if>
+      <if test="unittype != null" >
+        UNITTYPE,
+      </if>
+      <if test="abandon != null" >
+        ABANDON,
+      </if>
+      <if test="pcode != null" >
+        PCODE,
+      </if>
+      <if test="productor != null" >
+        PRODUCTOR,
+      </if>
+      <if test="treepath != null" >
+        TREEPATH,
+      </if>
+      <if test="lastmodifytime != null" >
+        LASTMODIFYTIME,
+      </if>
+      <if test="modifymode != null" >
+        MODIFYMODE,
+      </if>
+      <if test="modifyer != null" >
+        MODIFYER,
+      </if>
+      <if test="erpcode != null" >
+        ERPCODE,
+      </if>
+      <if test="pidErpcode != null" >
+        PID_ERPCODE,
+      </if>
+      <if test="dirPic != null" >
+        DIR_PIC,
+      </if>
+      <if test="dirOtherPic != null" >
+        DIR_OTHER_PIC,
+      </if>
+      <if test="compId != null" >
+        COMP_ID,
+      </if>
+      <if test="imgId != null" >
+        IMG_ID,
+      </if>
+      <if test="imgName != null" >
+        IMG_NAME,
+      </if>
+      <if test="imgOtherId != null" >
+        IMG_OTHER_ID,
+      </if>
+      <if test="imgOtherName != null" >
+        IMG_OTHER_NAME,
+      </if>
+      <if test="unitextname != null" >
+        UNITEXTNAME,
+      </if>
+      <if test="unitname != null" >
+        UNITNAME,
+      </if>
+      <if test="flagAssociateUser != null" >
+        FLAG_ASSOCIATE_USER,
+      </if>
+      <if test="flagAssociateSupplier != null" >
+        FLAG_ASSOCIATE_SUPPLIER,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="producingAddress != null" >
+        PRODUCING_ADDRESS,
+      </if>
+      <if test="brand != null" >
+        BRAND,
+      </if>
+      <if test="purpose != null" >
+        PURPOSE,
+      </if>
+      <if test="marketPrice != null" >
+        MARKET_PRICE,
+      </if>
+      <if test="speciality != null" >
+        SPECIALITY,
+      </if>
+      <if test="techParameters != null" >
+        tech_parameters,
+      </if>
+      <if test="erpId != null" >
+        erp_id,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+      <if test="md5 != null" >
+        md5,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="companyId != null" >
+        #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="oldId != null" >
+        #{oldId,jdbcType=BIGINT},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="catalogId != null" >
+        #{catalogId,jdbcType=BIGINT},
+      </if>
+      <if test="catalogName != null" >
+        #{catalogName,jdbcType=VARCHAR},
+      </if>
+      <if test="demo != null" >
+        #{demo,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="orgid != null" >
+        #{orgid,jdbcType=BIGINT},
+      </if>
+      <if test="spec != null" >
+        #{spec,jdbcType=VARCHAR},
+      </if>
+      <if test="unittype != null" >
+        #{unittype,jdbcType=VARCHAR},
+      </if>
+      <if test="abandon != null" >
+        #{abandon,jdbcType=BIGINT},
+      </if>
+      <if test="pcode != null" >
+        #{pcode,jdbcType=VARCHAR},
+      </if>
+      <if test="productor != null" >
+        #{productor,jdbcType=VARCHAR},
+      </if>
+      <if test="treepath != null" >
+        #{treepath,jdbcType=VARCHAR},
+      </if>
+      <if test="lastmodifytime != null" >
+        #{lastmodifytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifymode != null" >
+        #{modifymode,jdbcType=TINYINT},
+      </if>
+      <if test="modifyer != null" >
+        #{modifyer,jdbcType=VARCHAR},
+      </if>
+      <if test="erpcode != null" >
+        #{erpcode,jdbcType=VARCHAR},
+      </if>
+      <if test="pidErpcode != null" >
+        #{pidErpcode,jdbcType=VARCHAR},
+      </if>
+      <if test="dirPic != null" >
+        #{dirPic,jdbcType=VARCHAR},
+      </if>
+      <if test="dirOtherPic != null" >
+        #{dirOtherPic,jdbcType=VARCHAR},
+      </if>
+      <if test="compId != null" >
+        #{compId,jdbcType=BIGINT},
+      </if>
+      <if test="imgId != null" >
+        #{imgId,jdbcType=VARCHAR},
+      </if>
+      <if test="imgName != null" >
+        #{imgName,jdbcType=VARCHAR},
+      </if>
+      <if test="imgOtherId != null" >
+        #{imgOtherId,jdbcType=VARCHAR},
+      </if>
+      <if test="imgOtherName != null" >
+        #{imgOtherName,jdbcType=VARCHAR},
+      </if>
+      <if test="unitextname != null" >
+        #{unitextname,jdbcType=VARCHAR},
+      </if>
+      <if test="unitname != null" >
+        #{unitname,jdbcType=VARCHAR},
+      </if>
+      <if test="flagAssociateUser != null" >
+        #{flagAssociateUser,jdbcType=TINYINT},
+      </if>
+      <if test="flagAssociateSupplier != null" >
+        #{flagAssociateSupplier,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="producingAddress != null" >
+        #{producingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="brand != null" >
+        #{brand,jdbcType=VARCHAR},
+      </if>
+      <if test="purpose != null" >
+        #{purpose,jdbcType=VARCHAR},
+      </if>
+      <if test="marketPrice != null" >
+        #{marketPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="speciality != null" >
+        #{speciality,jdbcType=VARCHAR},
+      </if>
+      <if test="techParameters != null" >
+        #{techParameters,jdbcType=VARCHAR},
+      </if>
+      <if test="erpId != null" >
+        #{erpId,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=BIGINT},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=BIGINT},
+      </if>
+      <if test="md5 != null" >
+        #{md5,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.bidlink.datacenter.actualize.model.CorpDirectorys" >
+    update corp_directorys
+    <set >
+      <if test="oldId != null" >
+        OLD_ID = #{oldId,jdbcType=BIGINT},
+      </if>
+      <if test="code != null" >
+        CODE = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="catalogId != null" >
+        CATALOG_ID = #{catalogId,jdbcType=BIGINT},
+      </if>
+      <if test="catalogName != null" >
+        CATALOG_NAME = #{catalogName,jdbcType=VARCHAR},
+      </if>
+      <if test="demo != null" >
+        DEMO = #{demo,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="orgid != null" >
+        ORGID = #{orgid,jdbcType=BIGINT},
+      </if>
+      <if test="spec != null" >
+        SPEC = #{spec,jdbcType=VARCHAR},
+      </if>
+      <if test="unittype != null" >
+        UNITTYPE = #{unittype,jdbcType=VARCHAR},
+      </if>
+      <if test="abandon != null" >
+        ABANDON = #{abandon,jdbcType=BIGINT},
+      </if>
+      <if test="pcode != null" >
+        PCODE = #{pcode,jdbcType=VARCHAR},
+      </if>
+      <if test="productor != null" >
+        PRODUCTOR = #{productor,jdbcType=VARCHAR},
+      </if>
+      <if test="treepath != null" >
+        TREEPATH = #{treepath,jdbcType=VARCHAR},
+      </if>
+      <if test="lastmodifytime != null" >
+        LASTMODIFYTIME = #{lastmodifytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifymode != null" >
+        MODIFYMODE = #{modifymode,jdbcType=TINYINT},
+      </if>
+      <if test="modifyer != null" >
+        MODIFYER = #{modifyer,jdbcType=VARCHAR},
+      </if>
+      <if test="erpcode != null" >
+        ERPCODE = #{erpcode,jdbcType=VARCHAR},
+      </if>
+      <if test="pidErpcode != null" >
+        PID_ERPCODE = #{pidErpcode,jdbcType=VARCHAR},
+      </if>
+      <if test="dirPic != null" >
+        DIR_PIC = #{dirPic,jdbcType=VARCHAR},
+      </if>
+      <if test="dirOtherPic != null" >
+        DIR_OTHER_PIC = #{dirOtherPic,jdbcType=VARCHAR},
+      </if>
+      <if test="compId != null" >
+        COMP_ID = #{compId,jdbcType=BIGINT},
+      </if>
+      <if test="imgId != null" >
+        IMG_ID = #{imgId,jdbcType=VARCHAR},
+      </if>
+      <if test="imgName != null" >
+        IMG_NAME = #{imgName,jdbcType=VARCHAR},
+      </if>
+      <if test="imgOtherId != null" >
+        IMG_OTHER_ID = #{imgOtherId,jdbcType=VARCHAR},
+      </if>
+      <if test="imgOtherName != null" >
+        IMG_OTHER_NAME = #{imgOtherName,jdbcType=VARCHAR},
+      </if>
+      <if test="unitextname != null" >
+        UNITEXTNAME = #{unitextname,jdbcType=VARCHAR},
+      </if>
+      <if test="unitname != null" >
+        UNITNAME = #{unitname,jdbcType=VARCHAR},
+      </if>
+      <if test="flagAssociateUser != null" >
+        FLAG_ASSOCIATE_USER = #{flagAssociateUser,jdbcType=TINYINT},
+      </if>
+      <if test="flagAssociateSupplier != null" >
+        FLAG_ASSOCIATE_SUPPLIER = #{flagAssociateSupplier,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="producingAddress != null" >
+        PRODUCING_ADDRESS = #{producingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="brand != null" >
+        BRAND = #{brand,jdbcType=VARCHAR},
+      </if>
+      <if test="purpose != null" >
+        PURPOSE = #{purpose,jdbcType=VARCHAR},
+      </if>
+      <if test="marketPrice != null" >
+        MARKET_PRICE = #{marketPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="speciality != null" >
+        SPECIALITY = #{speciality,jdbcType=VARCHAR},
+      </if>
+      <if test="techParameters != null" >
+        tech_parameters = #{techParameters,jdbcType=VARCHAR},
+      </if>
+      <if test="erpId != null" >
+        erp_id = #{erpId,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=BIGINT},
+      </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=BIGINT},
+      </if>
+      <if test="md5 != null" >
+        md5 = #{md5,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+      and company_id = #{companyId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.bidlink.datacenter.actualize.model.CorpDirectorys" >
+    update corp_directorys
+    set OLD_ID = #{oldId,jdbcType=BIGINT},
+      CODE = #{code,jdbcType=VARCHAR},
+      CATALOG_ID = #{catalogId,jdbcType=BIGINT},
+      CATALOG_NAME = #{catalogName,jdbcType=VARCHAR},
+      DEMO = #{demo,jdbcType=VARCHAR},
+      NAME = #{name,jdbcType=VARCHAR},
+      ORGID = #{orgid,jdbcType=BIGINT},
+      SPEC = #{spec,jdbcType=VARCHAR},
+      UNITTYPE = #{unittype,jdbcType=VARCHAR},
+      ABANDON = #{abandon,jdbcType=BIGINT},
+      PCODE = #{pcode,jdbcType=VARCHAR},
+      PRODUCTOR = #{productor,jdbcType=VARCHAR},
+      TREEPATH = #{treepath,jdbcType=VARCHAR},
+      LASTMODIFYTIME = #{lastmodifytime,jdbcType=TIMESTAMP},
+      MODIFYMODE = #{modifymode,jdbcType=TINYINT},
+      MODIFYER = #{modifyer,jdbcType=VARCHAR},
+      ERPCODE = #{erpcode,jdbcType=VARCHAR},
+      PID_ERPCODE = #{pidErpcode,jdbcType=VARCHAR},
+      DIR_PIC = #{dirPic,jdbcType=VARCHAR},
+      DIR_OTHER_PIC = #{dirOtherPic,jdbcType=VARCHAR},
+      COMP_ID = #{compId,jdbcType=BIGINT},
+      IMG_ID = #{imgId,jdbcType=VARCHAR},
+      IMG_NAME = #{imgName,jdbcType=VARCHAR},
+      IMG_OTHER_ID = #{imgOtherId,jdbcType=VARCHAR},
+      IMG_OTHER_NAME = #{imgOtherName,jdbcType=VARCHAR},
+      UNITEXTNAME = #{unitextname,jdbcType=VARCHAR},
+      UNITNAME = #{unitname,jdbcType=VARCHAR},
+      FLAG_ASSOCIATE_USER = #{flagAssociateUser,jdbcType=TINYINT},
+      FLAG_ASSOCIATE_SUPPLIER = #{flagAssociateSupplier,jdbcType=TINYINT},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      PRODUCING_ADDRESS = #{producingAddress,jdbcType=VARCHAR},
+      BRAND = #{brand,jdbcType=VARCHAR},
+      PURPOSE = #{purpose,jdbcType=VARCHAR},
+      MARKET_PRICE = #{marketPrice,jdbcType=VARCHAR},
+      SPECIALITY = #{speciality,jdbcType=VARCHAR},
+      tech_parameters = #{techParameters,jdbcType=VARCHAR},
+      erp_id = #{erpId,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=BIGINT},
+      modifier = #{modifier,jdbcType=BIGINT},
+      md5 = #{md5,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+      and company_id = #{companyId,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,945 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.bidlink.datacenter.actualize.persistence.dao.BsmCompanySupplierApplyMapper" >
+  <resultMap id="BaseResultMap" type="cn.bidlink.datacenter.actualize.model.BsmCompanySupplierApply" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <id column="company_id" property="companyId" jdbcType="BIGINT" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="company_region_code" property="companyRegionCode" jdbcType="VARCHAR" />
+    <result column="company_region" property="companyRegion" jdbcType="VARCHAR" />
+    <result column="company_industry" property="companyIndustry" jdbcType="VARCHAR" />
+    <result column="company_industry_code" property="companyIndustryCode" jdbcType="VARCHAR" />
+    <result column="supplier_id" property="supplierId" jdbcType="BIGINT" />
+    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+    <result column="supplier_status" property="supplierStatus" jdbcType="TINYINT" />
+    <result column="supplier_region_code" property="supplierRegionCode" jdbcType="VARCHAR" />
+    <result column="supplier_region" property="supplierRegion" jdbcType="VARCHAR" />
+    <result column="supplier_apply_intro" property="supplierApplyIntro" jdbcType="VARCHAR" />
+    <result column="supplier_industry_code" property="supplierIndustryCode" jdbcType="VARCHAR" />
+    <result column="supplier_industry" property="supplierIndustry" jdbcType="VARCHAR" />
+    <result column="source_status" property="sourceStatus" jdbcType="TINYINT" />
+    <result column="auth_status" property="authStatus" jdbcType="TINYINT" />
+    <result column="authen_number" property="authenNumber" jdbcType="INTEGER" />
+    <result column="trade_number" property="tradeNumber" jdbcType="INTEGER" />
+    <result column="trade_price" property="tradePrice" jdbcType="INTEGER" />
+    <result column="linkman" property="linkman" jdbcType="VARCHAR" />
+    <result column="contact_info" property="contactInfo" jdbcType="VARCHAR" />
+    <result column="fax" property="fax" jdbcType="VARCHAR" />
+    <result column="mail" property="mail" jdbcType="VARCHAR" />
+    <result column="space_address_url" property="spaceAddressUrl" jdbcType="VARCHAR" />
+    <result column="submit_approve_user_id" property="submitApproveUserId" jdbcType="BIGINT" />
+    <result column="submit_approve_user_name" property="submitApproveUserName" jdbcType="VARCHAR" />
+    <result column="approve_time" property="approveTime" jdbcType="TIMESTAMP" />
+    <result column="reserve" property="reserve" jdbcType="VARCHAR" />
+    <result column="instance_id" property="instanceId" jdbcType="BIGINT" />
+    <result column="main_product" property="mainProduct" jdbcType="VARCHAR" />
+    <result column="supplier_code" property="supplierCode" jdbcType="VARCHAR" />
+    <result column="name_english" property="nameEnglish" jdbcType="VARCHAR" />
+    <result column="com_typestr" property="comTypestr" jdbcType="VARCHAR" />
+    <result column="commu_addr" property="commuAddr" jdbcType="VARCHAR" />
+    <result column="boss_name" property="bossName" jdbcType="VARCHAR" />
+    <result column="fund" property="fund" jdbcType="DOUBLE" />
+    <result column="fundunit_value" property="fundunitValue" jdbcType="VARCHAR" />
+    <result column="www_station" property="wwwStation" jdbcType="VARCHAR" />
+    <result column="main_user_id" property="mainUserId" jdbcType="BIGINT" />
+    <result column="main_user_name" property="mainUserName" jdbcType="VARCHAR" />
+    <result column="main_user_mobile" property="mainUserMobile" jdbcType="VARCHAR" />
+    <result column="classification" property="classification" jdbcType="VARCHAR" />
+    <result column="supplier_remark" property="supplierRemark" jdbcType="VARCHAR" />
+    <result column="credit_verification" property="creditVerification" jdbcType="VARCHAR" />
+    <result column="credit_verification_state" property="creditVerificationState" jdbcType="TINYINT" />
+    <result column="credit_verification_time" property="creditVerificationTime" jdbcType="TIMESTAMP" />
+    <result column="credit_verification_name" property="creditVerificationName" jdbcType="VARCHAR" />
+    <result column="responseTime" property="responsetime" jdbcType="TIMESTAMP" />
+    <result column="recruitId" property="recruitid" jdbcType="BIGINT" />
+    <result column="is_kernel" property="isKernel" jdbcType="TINYINT" />
+    <result column="level" property="level" jdbcType="TINYINT" />
+    <result column="approve_remark" property="approveRemark" jdbcType="VARCHAR" />
+    <result column="page_skip" property="pageSkip" jdbcType="TINYINT" />
+    <result column="business_model" property="businessModel" jdbcType="VARCHAR" />
+    <result column="custom_def_id" property="customDefId" jdbcType="BIGINT" />
+    <result column="release_reason" property="releaseReason" jdbcType="VARCHAR" />
+    <result column="release_user_id" property="releaseUserId" jdbcType="BIGINT" />
+    <result column="release_user_name" property="releaseUserName" jdbcType="VARCHAR" />
+    <result column="release_time" property="releaseTime" jdbcType="TIMESTAMP" />
+    <result column="supplier_tax_num" property="supplierTaxNum" jdbcType="VARCHAR" />
+    <result column="bank_name" property="bankName" jdbcType="VARCHAR" />
+    <result column="bank_account" property="bankAccount" jdbcType="VARCHAR" />
+    <result column="supplier_trade_evaluation" property="supplierTradeEvaluation" jdbcType="TINYINT" />
+    <result column="report_supplier_level" property="reportSupplierLevel" jdbcType="VARCHAR" />
+    <result column="bsm_evaluation_id" property="bsmEvaluationId" jdbcType="BIGINT" />
+    <result column="last_evaluation_time" property="lastEvaluationTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+    <result column="create_user_name" property="createUserName" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user_id" property="updateUserId" jdbcType="BIGINT" />
+    <result column="update_user_name" property="updateUserName" jdbcType="VARCHAR" />
+    <result column="file_name" property="fileName" jdbcType="VARCHAR" />
+    <result column="file_path" property="filePath" jdbcType="VARCHAR" />
+    <result column="company_code" property="companyCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, company_id, company_name, company_region_code, company_region, company_industry, 
+    company_industry_code, supplier_id, supplier_name, supplier_status, supplier_region_code, 
+    supplier_region, supplier_apply_intro, supplier_industry_code, supplier_industry, 
+    source_status, auth_status, authen_number, trade_number, trade_price, linkman, contact_info, 
+    fax, mail, space_address_url, submit_approve_user_id, submit_approve_user_name, approve_time, 
+    reserve, instance_id, main_product, supplier_code, name_english, com_typestr, commu_addr, 
+    boss_name, fund, fundunit_value, www_station, main_user_id, main_user_name, main_user_mobile, 
+    classification, supplier_remark, credit_verification, credit_verification_state, 
+    credit_verification_time, credit_verification_name, responseTime, recruitId, is_kernel, 
+    level, approve_remark, page_skip, business_model, custom_def_id, release_reason, 
+    release_user_id, release_user_name, release_time, supplier_tax_num, bank_name, bank_account, 
+    supplier_trade_evaluation, report_supplier_level, bsm_evaluation_id, last_evaluation_time, 
+    create_time, create_user_id, create_user_name, update_time, update_user_id, update_user_name, 
+    file_name, file_path, company_code
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.bidlink.datacenter.actualize.model.BsmCompanySupplierApplyKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from bsm_company_supplier_apply
+    where id = #{id,jdbcType=BIGINT}
+      and company_id = #{companyId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByCompanyId" resultMap="BaseResultMap">
+      select
+        <include refid="Base_Column_List" />
+      from bsm_company_supplier_apply where company_id = #{companyId}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="cn.bidlink.datacenter.actualize.model.BsmCompanySupplierApplyKey" >
+    delete from bsm_company_supplier_apply
+    where id = #{id,jdbcType=BIGINT}
+      and company_id = #{companyId,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert" parameterType="cn.bidlink.datacenter.actualize.model.BsmCompanySupplierApply" >
+    insert into bsm_company_supplier_apply (id, company_id, company_name, 
+      company_region_code, company_region, company_industry, 
+      company_industry_code, supplier_id, supplier_name, 
+      supplier_status, supplier_region_code, supplier_region, 
+      supplier_apply_intro, supplier_industry_code, 
+      supplier_industry, source_status, auth_status, 
+      authen_number, trade_number, trade_price, 
+      linkman, contact_info, fax, 
+      mail, space_address_url, submit_approve_user_id, 
+      submit_approve_user_name, approve_time, reserve, 
+      instance_id, main_product, supplier_code, 
+      name_english, com_typestr, commu_addr, 
+      boss_name, fund, fundunit_value, 
+      www_station, main_user_id, main_user_name, 
+      main_user_mobile, classification, supplier_remark, 
+      credit_verification, credit_verification_state, 
+      credit_verification_time, credit_verification_name, 
+      responseTime, recruitId, is_kernel, 
+      level, approve_remark, page_skip, 
+      business_model, custom_def_id, release_reason, 
+      release_user_id, release_user_name, release_time, 
+      supplier_tax_num, bank_name, bank_account, 
+      supplier_trade_evaluation, report_supplier_level, 
+      bsm_evaluation_id, last_evaluation_time, create_time, 
+      create_user_id, create_user_name, update_time, 
+      update_user_id, update_user_name, file_name, 
+      file_path, company_code)
+    values (#{id,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT}, #{companyName,jdbcType=VARCHAR}, 
+      #{companyRegionCode,jdbcType=VARCHAR}, #{companyRegion,jdbcType=VARCHAR}, #{companyIndustry,jdbcType=VARCHAR}, 
+      #{companyIndustryCode,jdbcType=VARCHAR}, #{supplierId,jdbcType=BIGINT}, #{supplierName,jdbcType=VARCHAR}, 
+      #{supplierStatus,jdbcType=TINYINT}, #{supplierRegionCode,jdbcType=VARCHAR}, #{supplierRegion,jdbcType=VARCHAR}, 
+      #{supplierApplyIntro,jdbcType=VARCHAR}, #{supplierIndustryCode,jdbcType=VARCHAR}, 
+      #{supplierIndustry,jdbcType=VARCHAR}, #{sourceStatus,jdbcType=TINYINT}, #{authStatus,jdbcType=TINYINT}, 
+      #{authenNumber,jdbcType=INTEGER}, #{tradeNumber,jdbcType=INTEGER}, #{tradePrice,jdbcType=INTEGER}, 
+      #{linkman,jdbcType=VARCHAR}, #{contactInfo,jdbcType=VARCHAR}, #{fax,jdbcType=VARCHAR}, 
+      #{mail,jdbcType=VARCHAR}, #{spaceAddressUrl,jdbcType=VARCHAR}, #{submitApproveUserId,jdbcType=BIGINT}, 
+      #{submitApproveUserName,jdbcType=VARCHAR}, #{approveTime,jdbcType=TIMESTAMP}, #{reserve,jdbcType=VARCHAR}, 
+      #{instanceId,jdbcType=BIGINT}, #{mainProduct,jdbcType=VARCHAR}, #{supplierCode,jdbcType=VARCHAR}, 
+      #{nameEnglish,jdbcType=VARCHAR}, #{comTypestr,jdbcType=VARCHAR}, #{commuAddr,jdbcType=VARCHAR}, 
+      #{bossName,jdbcType=VARCHAR}, #{fund,jdbcType=DOUBLE}, #{fundunitValue,jdbcType=VARCHAR}, 
+      #{wwwStation,jdbcType=VARCHAR}, #{mainUserId,jdbcType=BIGINT}, #{mainUserName,jdbcType=VARCHAR}, 
+      #{mainUserMobile,jdbcType=VARCHAR}, #{classification,jdbcType=VARCHAR}, #{supplierRemark,jdbcType=VARCHAR}, 
+      #{creditVerification,jdbcType=VARCHAR}, #{creditVerificationState,jdbcType=TINYINT}, 
+      #{creditVerificationTime,jdbcType=TIMESTAMP}, #{creditVerificationName,jdbcType=VARCHAR}, 
+      #{responsetime,jdbcType=TIMESTAMP}, #{recruitid,jdbcType=BIGINT}, #{isKernel,jdbcType=TINYINT}, 
+      #{level,jdbcType=TINYINT}, #{approveRemark,jdbcType=VARCHAR}, #{pageSkip,jdbcType=TINYINT}, 
+      #{businessModel,jdbcType=VARCHAR}, #{customDefId,jdbcType=BIGINT}, #{releaseReason,jdbcType=VARCHAR}, 
+      #{releaseUserId,jdbcType=BIGINT}, #{releaseUserName,jdbcType=VARCHAR}, #{releaseTime,jdbcType=TIMESTAMP}, 
+      #{supplierTaxNum,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, #{bankAccount,jdbcType=VARCHAR}, 
+      #{supplierTradeEvaluation,jdbcType=TINYINT}, #{reportSupplierLevel,jdbcType=VARCHAR}, 
+      #{bsmEvaluationId,jdbcType=BIGINT}, #{lastEvaluationTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateUserId,jdbcType=BIGINT}, #{updateUserName,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, 
+      #{filePath,jdbcType=VARCHAR}, #{companyCode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.bidlink.datacenter.actualize.model.BsmCompanySupplierApply" >
+    insert into bsm_company_supplier_apply
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="companyId != null" >
+        company_id,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="companyRegionCode != null" >
+        company_region_code,
+      </if>
+      <if test="companyRegion != null" >
+        company_region,
+      </if>
+      <if test="companyIndustry != null" >
+        company_industry,
+      </if>
+      <if test="companyIndustryCode != null" >
+        company_industry_code,
+      </if>
+      <if test="supplierId != null" >
+        supplier_id,
+      </if>
+      <if test="supplierName != null" >
+        supplier_name,
+      </if>
+      <if test="supplierStatus != null" >
+        supplier_status,
+      </if>
+      <if test="supplierRegionCode != null" >
+        supplier_region_code,
+      </if>
+      <if test="supplierRegion != null" >
+        supplier_region,
+      </if>
+      <if test="supplierApplyIntro != null" >
+        supplier_apply_intro,
+      </if>
+      <if test="supplierIndustryCode != null" >
+        supplier_industry_code,
+      </if>
+      <if test="supplierIndustry != null" >
+        supplier_industry,
+      </if>
+      <if test="sourceStatus != null" >
+        source_status,
+      </if>
+      <if test="authStatus != null" >
+        auth_status,
+      </if>
+      <if test="authenNumber != null" >
+        authen_number,
+      </if>
+      <if test="tradeNumber != null" >
+        trade_number,
+      </if>
+      <if test="tradePrice != null" >
+        trade_price,
+      </if>
+      <if test="linkman != null" >
+        linkman,
+      </if>
+      <if test="contactInfo != null" >
+        contact_info,
+      </if>
+      <if test="fax != null" >
+        fax,
+      </if>
+      <if test="mail != null" >
+        mail,
+      </if>
+      <if test="spaceAddressUrl != null" >
+        space_address_url,
+      </if>
+      <if test="submitApproveUserId != null" >
+        submit_approve_user_id,
+      </if>
+      <if test="submitApproveUserName != null" >
+        submit_approve_user_name,
+      </if>
+      <if test="approveTime != null" >
+        approve_time,
+      </if>
+      <if test="reserve != null" >
+        reserve,
+      </if>
+      <if test="instanceId != null" >
+        instance_id,
+      </if>
+      <if test="mainProduct != null" >
+        main_product,
+      </if>
+      <if test="supplierCode != null" >
+        supplier_code,
+      </if>
+      <if test="nameEnglish != null" >
+        name_english,
+      </if>
+      <if test="comTypestr != null" >
+        com_typestr,
+      </if>
+      <if test="commuAddr != null" >
+        commu_addr,
+      </if>
+      <if test="bossName != null" >
+        boss_name,
+      </if>
+      <if test="fund != null" >
+        fund,
+      </if>
+      <if test="fundunitValue != null" >
+        fundunit_value,
+      </if>
+      <if test="wwwStation != null" >
+        www_station,
+      </if>
+      <if test="mainUserId != null" >
+        main_user_id,
+      </if>
+      <if test="mainUserName != null" >
+        main_user_name,
+      </if>
+      <if test="mainUserMobile != null" >
+        main_user_mobile,
+      </if>
+      <if test="classification != null" >
+        classification,
+      </if>
+      <if test="supplierRemark != null" >
+        supplier_remark,
+      </if>
+      <if test="creditVerification != null" >
+        credit_verification,
+      </if>
+      <if test="creditVerificationState != null" >
+        credit_verification_state,
+      </if>
+      <if test="creditVerificationTime != null" >
+        credit_verification_time,
+      </if>
+      <if test="creditVerificationName != null" >
+        credit_verification_name,
+      </if>
+      <if test="responsetime != null" >
+        responseTime,
+      </if>
+      <if test="recruitid != null" >
+        recruitId,
+      </if>
+      <if test="isKernel != null" >
+        is_kernel,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="approveRemark != null" >
+        approve_remark,
+      </if>
+      <if test="pageSkip != null" >
+        page_skip,
+      </if>
+      <if test="businessModel != null" >
+        business_model,
+      </if>
+      <if test="customDefId != null" >
+        custom_def_id,
+      </if>
+      <if test="releaseReason != null" >
+        release_reason,
+      </if>
+      <if test="releaseUserId != null" >
+        release_user_id,
+      </if>
+      <if test="releaseUserName != null" >
+        release_user_name,
+      </if>
+      <if test="releaseTime != null" >
+        release_time,
+      </if>
+      <if test="supplierTaxNum != null" >
+        supplier_tax_num,
+      </if>
+      <if test="bankName != null" >
+        bank_name,
+      </if>
+      <if test="bankAccount != null" >
+        bank_account,
+      </if>
+      <if test="supplierTradeEvaluation != null" >
+        supplier_trade_evaluation,
+      </if>
+      <if test="reportSupplierLevel != null" >
+        report_supplier_level,
+      </if>
+      <if test="bsmEvaluationId != null" >
+        bsm_evaluation_id,
+      </if>
+      <if test="lastEvaluationTime != null" >
+        last_evaluation_time,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createUserName != null" >
+        create_user_name,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateUserId != null" >
+        update_user_id,
+      </if>
+      <if test="updateUserName != null" >
+        update_user_name,
+      </if>
+      <if test="fileName != null" >
+        file_name,
+      </if>
+      <if test="filePath != null" >
+        file_path,
+      </if>
+      <if test="companyCode != null" >
+        company_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="companyId != null" >
+        #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyRegionCode != null" >
+        #{companyRegionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="companyRegion != null" >
+        #{companyRegion,jdbcType=VARCHAR},
+      </if>
+      <if test="companyIndustry != null" >
+        #{companyIndustry,jdbcType=VARCHAR},
+      </if>
+      <if test="companyIndustryCode != null" >
+        #{companyIndustryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierId != null" >
+        #{supplierId,jdbcType=BIGINT},
+      </if>
+      <if test="supplierName != null" >
+        #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierStatus != null" >
+        #{supplierStatus,jdbcType=TINYINT},
+      </if>
+      <if test="supplierRegionCode != null" >
+        #{supplierRegionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierRegion != null" >
+        #{supplierRegion,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierApplyIntro != null" >
+        #{supplierApplyIntro,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierIndustryCode != null" >
+        #{supplierIndustryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierIndustry != null" >
+        #{supplierIndustry,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceStatus != null" >
+        #{sourceStatus,jdbcType=TINYINT},
+      </if>
+      <if test="authStatus != null" >
+        #{authStatus,jdbcType=TINYINT},
+      </if>
+      <if test="authenNumber != null" >
+        #{authenNumber,jdbcType=INTEGER},
+      </if>
+      <if test="tradeNumber != null" >
+        #{tradeNumber,jdbcType=INTEGER},
+      </if>
+      <if test="tradePrice != null" >
+        #{tradePrice,jdbcType=INTEGER},
+      </if>
+      <if test="linkman != null" >
+        #{linkman,jdbcType=VARCHAR},
+      </if>
+      <if test="contactInfo != null" >
+        #{contactInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="fax != null" >
+        #{fax,jdbcType=VARCHAR},
+      </if>
+      <if test="mail != null" >
+        #{mail,jdbcType=VARCHAR},
+      </if>
+      <if test="spaceAddressUrl != null" >
+        #{spaceAddressUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="submitApproveUserId != null" >
+        #{submitApproveUserId,jdbcType=BIGINT},
+      </if>
+      <if test="submitApproveUserName != null" >
+        #{submitApproveUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="approveTime != null" >
+        #{approveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reserve != null" >
+        #{reserve,jdbcType=VARCHAR},
+      </if>
+      <if test="instanceId != null" >
+        #{instanceId,jdbcType=BIGINT},
+      </if>
+      <if test="mainProduct != null" >
+        #{mainProduct,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierCode != null" >
+        #{supplierCode,jdbcType=VARCHAR},
+      </if>
+      <if test="nameEnglish != null" >
+        #{nameEnglish,jdbcType=VARCHAR},
+      </if>
+      <if test="comTypestr != null" >
+        #{comTypestr,jdbcType=VARCHAR},
+      </if>
+      <if test="commuAddr != null" >
+        #{commuAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="bossName != null" >
+        #{bossName,jdbcType=VARCHAR},
+      </if>
+      <if test="fund != null" >
+        #{fund,jdbcType=DOUBLE},
+      </if>
+      <if test="fundunitValue != null" >
+        #{fundunitValue,jdbcType=VARCHAR},
+      </if>
+      <if test="wwwStation != null" >
+        #{wwwStation,jdbcType=VARCHAR},
+      </if>
+      <if test="mainUserId != null" >
+        #{mainUserId,jdbcType=BIGINT},
+      </if>
+      <if test="mainUserName != null" >
+        #{mainUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="mainUserMobile != null" >
+        #{mainUserMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="classification != null" >
+        #{classification,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierRemark != null" >
+        #{supplierRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="creditVerification != null" >
+        #{creditVerification,jdbcType=VARCHAR},
+      </if>
+      <if test="creditVerificationState != null" >
+        #{creditVerificationState,jdbcType=TINYINT},
+      </if>
+      <if test="creditVerificationTime != null" >
+        #{creditVerificationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creditVerificationName != null" >
+        #{creditVerificationName,jdbcType=VARCHAR},
+      </if>
+      <if test="responsetime != null" >
+        #{responsetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recruitid != null" >
+        #{recruitid,jdbcType=BIGINT},
+      </if>
+      <if test="isKernel != null" >
+        #{isKernel,jdbcType=TINYINT},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=TINYINT},
+      </if>
+      <if test="approveRemark != null" >
+        #{approveRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="pageSkip != null" >
+        #{pageSkip,jdbcType=TINYINT},
+      </if>
+      <if test="businessModel != null" >
+        #{businessModel,jdbcType=VARCHAR},
+      </if>
+      <if test="customDefId != null" >
+        #{customDefId,jdbcType=BIGINT},
+      </if>
+      <if test="releaseReason != null" >
+        #{releaseReason,jdbcType=VARCHAR},
+      </if>
+      <if test="releaseUserId != null" >
+        #{releaseUserId,jdbcType=BIGINT},
+      </if>
+      <if test="releaseUserName != null" >
+        #{releaseUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="releaseTime != null" >
+        #{releaseTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="supplierTaxNum != null" >
+        #{supplierTaxNum,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null" >
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccount != null" >
+        #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierTradeEvaluation != null" >
+        #{supplierTradeEvaluation,jdbcType=TINYINT},
+      </if>
+      <if test="reportSupplierLevel != null" >
+        #{reportSupplierLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="bsmEvaluationId != null" >
+        #{bsmEvaluationId,jdbcType=BIGINT},
+      </if>
+      <if test="lastEvaluationTime != null" >
+        #{lastEvaluationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null" >
+        #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUserId != null" >
+        #{updateUserId,jdbcType=BIGINT},
+      </if>
+      <if test="updateUserName != null" >
+        #{updateUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null" >
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="filePath != null" >
+        #{filePath,jdbcType=VARCHAR},
+      </if>
+      <if test="companyCode != null" >
+        #{companyCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.bidlink.datacenter.actualize.model.BsmCompanySupplierApply" >
+    update bsm_company_supplier_apply
+    <set >
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyRegionCode != null" >
+        company_region_code = #{companyRegionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="companyRegion != null" >
+        company_region = #{companyRegion,jdbcType=VARCHAR},
+      </if>
+      <if test="companyIndustry != null" >
+        company_industry = #{companyIndustry,jdbcType=VARCHAR},
+      </if>
+      <if test="companyIndustryCode != null" >
+        company_industry_code = #{companyIndustryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierId != null" >
+        supplier_id = #{supplierId,jdbcType=BIGINT},
+      </if>
+      <if test="supplierName != null" >
+        supplier_name = #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierStatus != null" >
+        supplier_status = #{supplierStatus,jdbcType=TINYINT},
+      </if>
+      <if test="supplierRegionCode != null" >
+        supplier_region_code = #{supplierRegionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierRegion != null" >
+        supplier_region = #{supplierRegion,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierApplyIntro != null" >
+        supplier_apply_intro = #{supplierApplyIntro,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierIndustryCode != null" >
+        supplier_industry_code = #{supplierIndustryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierIndustry != null" >
+        supplier_industry = #{supplierIndustry,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceStatus != null" >
+        source_status = #{sourceStatus,jdbcType=TINYINT},
+      </if>
+      <if test="authStatus != null" >
+        auth_status = #{authStatus,jdbcType=TINYINT},
+      </if>
+      <if test="authenNumber != null" >
+        authen_number = #{authenNumber,jdbcType=INTEGER},
+      </if>
+      <if test="tradeNumber != null" >
+        trade_number = #{tradeNumber,jdbcType=INTEGER},
+      </if>
+      <if test="tradePrice != null" >
+        trade_price = #{tradePrice,jdbcType=INTEGER},
+      </if>
+      <if test="linkman != null" >
+        linkman = #{linkman,jdbcType=VARCHAR},
+      </if>
+      <if test="contactInfo != null" >
+        contact_info = #{contactInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="fax != null" >
+        fax = #{fax,jdbcType=VARCHAR},
+      </if>
+      <if test="mail != null" >
+        mail = #{mail,jdbcType=VARCHAR},
+      </if>
+      <if test="spaceAddressUrl != null" >
+        space_address_url = #{spaceAddressUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="submitApproveUserId != null" >
+        submit_approve_user_id = #{submitApproveUserId,jdbcType=BIGINT},
+      </if>
+      <if test="submitApproveUserName != null" >
+        submit_approve_user_name = #{submitApproveUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="approveTime != null" >
+        approve_time = #{approveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reserve != null" >
+        reserve = #{reserve,jdbcType=VARCHAR},
+      </if>
+      <if test="instanceId != null" >
+        instance_id = #{instanceId,jdbcType=BIGINT},
+      </if>
+      <if test="mainProduct != null" >
+        main_product = #{mainProduct,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierCode != null" >
+        supplier_code = #{supplierCode,jdbcType=VARCHAR},
+      </if>
+      <if test="nameEnglish != null" >
+        name_english = #{nameEnglish,jdbcType=VARCHAR},
+      </if>
+      <if test="comTypestr != null" >
+        com_typestr = #{comTypestr,jdbcType=VARCHAR},
+      </if>
+      <if test="commuAddr != null" >
+        commu_addr = #{commuAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="bossName != null" >
+        boss_name = #{bossName,jdbcType=VARCHAR},
+      </if>
+      <if test="fund != null" >
+        fund = #{fund,jdbcType=DOUBLE},
+      </if>
+      <if test="fundunitValue != null" >
+        fundunit_value = #{fundunitValue,jdbcType=VARCHAR},
+      </if>
+      <if test="wwwStation != null" >
+        www_station = #{wwwStation,jdbcType=VARCHAR},
+      </if>
+      <if test="mainUserId != null" >
+        main_user_id = #{mainUserId,jdbcType=BIGINT},
+      </if>
+      <if test="mainUserName != null" >
+        main_user_name = #{mainUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="mainUserMobile != null" >
+        main_user_mobile = #{mainUserMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="classification != null" >
+        classification = #{classification,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierRemark != null" >
+        supplier_remark = #{supplierRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="creditVerification != null" >
+        credit_verification = #{creditVerification,jdbcType=VARCHAR},
+      </if>
+      <if test="creditVerificationState != null" >
+        credit_verification_state = #{creditVerificationState,jdbcType=TINYINT},
+      </if>
+      <if test="creditVerificationTime != null" >
+        credit_verification_time = #{creditVerificationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creditVerificationName != null" >
+        credit_verification_name = #{creditVerificationName,jdbcType=VARCHAR},
+      </if>
+      <if test="responsetime != null" >
+        responseTime = #{responsetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recruitid != null" >
+        recruitId = #{recruitid,jdbcType=BIGINT},
+      </if>
+      <if test="isKernel != null" >
+        is_kernel = #{isKernel,jdbcType=TINYINT},
+      </if>
+      <if test="level != null" >
+        level = #{level,jdbcType=TINYINT},
+      </if>
+      <if test="approveRemark != null" >
+        approve_remark = #{approveRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="pageSkip != null" >
+        page_skip = #{pageSkip,jdbcType=TINYINT},
+      </if>
+      <if test="businessModel != null" >
+        business_model = #{businessModel,jdbcType=VARCHAR},
+      </if>
+      <if test="customDefId != null" >
+        custom_def_id = #{customDefId,jdbcType=BIGINT},
+      </if>
+      <if test="releaseReason != null" >
+        release_reason = #{releaseReason,jdbcType=VARCHAR},
+      </if>
+      <if test="releaseUserId != null" >
+        release_user_id = #{releaseUserId,jdbcType=BIGINT},
+      </if>
+      <if test="releaseUserName != null" >
+        release_user_name = #{releaseUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="releaseTime != null" >
+        release_time = #{releaseTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="supplierTaxNum != null" >
+        supplier_tax_num = #{supplierTaxNum,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null" >
+        bank_name = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccount != null" >
+        bank_account = #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierTradeEvaluation != null" >
+        supplier_trade_evaluation = #{supplierTradeEvaluation,jdbcType=TINYINT},
+      </if>
+      <if test="reportSupplierLevel != null" >
+        report_supplier_level = #{reportSupplierLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="bsmEvaluationId != null" >
+        bsm_evaluation_id = #{bsmEvaluationId,jdbcType=BIGINT},
+      </if>
+      <if test="lastEvaluationTime != null" >
+        last_evaluation_time = #{lastEvaluationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null" >
+        create_user_name = #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUserId != null" >
+        update_user_id = #{updateUserId,jdbcType=BIGINT},
+      </if>
+      <if test="updateUserName != null" >
+        update_user_name = #{updateUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null" >
+        file_name = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="filePath != null" >
+        file_path = #{filePath,jdbcType=VARCHAR},
+      </if>
+      <if test="companyCode != null" >
+        company_code = #{companyCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+      and company_id = #{companyId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.bidlink.datacenter.actualize.model.BsmCompanySupplierApply" >
+    update bsm_company_supplier_apply
+    set company_name = #{companyName,jdbcType=VARCHAR},
+      company_region_code = #{companyRegionCode,jdbcType=VARCHAR},
+      company_region = #{companyRegion,jdbcType=VARCHAR},
+      company_industry = #{companyIndustry,jdbcType=VARCHAR},
+      company_industry_code = #{companyIndustryCode,jdbcType=VARCHAR},
+      supplier_id = #{supplierId,jdbcType=BIGINT},
+      supplier_name = #{supplierName,jdbcType=VARCHAR},
+      supplier_status = #{supplierStatus,jdbcType=TINYINT},
+      supplier_region_code = #{supplierRegionCode,jdbcType=VARCHAR},
+      supplier_region = #{supplierRegion,jdbcType=VARCHAR},
+      supplier_apply_intro = #{supplierApplyIntro,jdbcType=VARCHAR},
+      supplier_industry_code = #{supplierIndustryCode,jdbcType=VARCHAR},
+      supplier_industry = #{supplierIndustry,jdbcType=VARCHAR},
+      source_status = #{sourceStatus,jdbcType=TINYINT},
+      auth_status = #{authStatus,jdbcType=TINYINT},
+      authen_number = #{authenNumber,jdbcType=INTEGER},
+      trade_number = #{tradeNumber,jdbcType=INTEGER},
+      trade_price = #{tradePrice,jdbcType=INTEGER},
+      linkman = #{linkman,jdbcType=VARCHAR},
+      contact_info = #{contactInfo,jdbcType=VARCHAR},
+      fax = #{fax,jdbcType=VARCHAR},
+      mail = #{mail,jdbcType=VARCHAR},
+      space_address_url = #{spaceAddressUrl,jdbcType=VARCHAR},
+      submit_approve_user_id = #{submitApproveUserId,jdbcType=BIGINT},
+      submit_approve_user_name = #{submitApproveUserName,jdbcType=VARCHAR},
+      approve_time = #{approveTime,jdbcType=TIMESTAMP},
+      reserve = #{reserve,jdbcType=VARCHAR},
+      instance_id = #{instanceId,jdbcType=BIGINT},
+      main_product = #{mainProduct,jdbcType=VARCHAR},
+      supplier_code = #{supplierCode,jdbcType=VARCHAR},
+      name_english = #{nameEnglish,jdbcType=VARCHAR},
+      com_typestr = #{comTypestr,jdbcType=VARCHAR},
+      commu_addr = #{commuAddr,jdbcType=VARCHAR},
+      boss_name = #{bossName,jdbcType=VARCHAR},
+      fund = #{fund,jdbcType=DOUBLE},
+      fundunit_value = #{fundunitValue,jdbcType=VARCHAR},
+      www_station = #{wwwStation,jdbcType=VARCHAR},
+      main_user_id = #{mainUserId,jdbcType=BIGINT},
+      main_user_name = #{mainUserName,jdbcType=VARCHAR},
+      main_user_mobile = #{mainUserMobile,jdbcType=VARCHAR},
+      classification = #{classification,jdbcType=VARCHAR},
+      supplier_remark = #{supplierRemark,jdbcType=VARCHAR},
+      credit_verification = #{creditVerification,jdbcType=VARCHAR},
+      credit_verification_state = #{creditVerificationState,jdbcType=TINYINT},
+      credit_verification_time = #{creditVerificationTime,jdbcType=TIMESTAMP},
+      credit_verification_name = #{creditVerificationName,jdbcType=VARCHAR},
+      responseTime = #{responsetime,jdbcType=TIMESTAMP},
+      recruitId = #{recruitid,jdbcType=BIGINT},
+      is_kernel = #{isKernel,jdbcType=TINYINT},
+      level = #{level,jdbcType=TINYINT},
+      approve_remark = #{approveRemark,jdbcType=VARCHAR},
+      page_skip = #{pageSkip,jdbcType=TINYINT},
+      business_model = #{businessModel,jdbcType=VARCHAR},
+      custom_def_id = #{customDefId,jdbcType=BIGINT},
+      release_reason = #{releaseReason,jdbcType=VARCHAR},
+      release_user_id = #{releaseUserId,jdbcType=BIGINT},
+      release_user_name = #{releaseUserName,jdbcType=VARCHAR},
+      release_time = #{releaseTime,jdbcType=TIMESTAMP},
+      supplier_tax_num = #{supplierTaxNum,jdbcType=VARCHAR},
+      bank_name = #{bankName,jdbcType=VARCHAR},
+      bank_account = #{bankAccount,jdbcType=VARCHAR},
+      supplier_trade_evaluation = #{supplierTradeEvaluation,jdbcType=TINYINT},
+      report_supplier_level = #{reportSupplierLevel,jdbcType=VARCHAR},
+      bsm_evaluation_id = #{bsmEvaluationId,jdbcType=BIGINT},
+      last_evaluation_time = #{lastEvaluationTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user_id = #{updateUserId,jdbcType=BIGINT},
+      update_user_name = #{updateUserName,jdbcType=VARCHAR},
+      file_name = #{fileName,jdbcType=VARCHAR},
+      file_path = #{filePath,jdbcType=VARCHAR},
+      company_code = #{companyCode,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+      and company_id = #{companyId,jdbcType=BIGINT}
+  </update>
+</mapper>

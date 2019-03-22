@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.bidlink.datacenter.actualize.persistence.dao.PurchasesWinSupplierRecordMapper" >
+  <resultMap id="BaseResultMap2" type="cn.bidlink.datacenter.actualize.model.PurchasesWinSupplierRecord" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="company_id" property="companyId" jdbcType="BIGINT" />
+    <result column="supplier_id" property="supplierId" jdbcType="BIGINT" />
+    <result column="directory_id" property="directoryId" jdbcType="BIGINT" />
+    <result column="win_bid_time" property="winBidTime" jdbcType="TIMESTAMP" />
+    <result column="sync_time" property="syncTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <select id="selQuotationHistory" resultMap="BaseResultMap2">
+    SELECT
+      spb.id,
+      spb.comp_id as company_id,
+      spb.supplier_id,
+      spib.directory_id,
+      spib.win_bid_time
+    FROM
+      bmpfjz_supplier_project_bid spb
+        INNER JOIN bmpfjz_supplier_project_item_bid spib ON spib.supplier_project_bid_id = spb.id
+        AND spb.comp_id = spib.comp_id
+        INNER JOIN bsm_company_supplier_apply bcsa ON spb.supplier_id = bcsa.supplier_id
+        AND spb.comp_id = bcsa.company_id
+        INNER JOIN bmpfjz_project bp ON bp.id = spib.project_id
+        AND bp.comp_id = spib.comp_id
+    WHERE
+      spib.bid_status = 3
+      and spb.comp_id = #{companyId}
+      AND spb.supplier_bid_status = 6
+      AND spib.directory_id in (${directoryId})
+    GROUP BY
+      spb.supplier_id
+    ORDER BY
+      spb.update_time DESC
+  </select>
+
+</mapper>

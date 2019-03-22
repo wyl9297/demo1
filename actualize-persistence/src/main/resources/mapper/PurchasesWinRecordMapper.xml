@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.bidlink.datacenter.actualize.persistence.dao.PurchasesWinRecordMapper">
+    <resultMap id="BaseResultMap" type="cn.bidlink.datacenter.actualize.model.PurchasesWinRecord">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="comp_id" property="companyId" jdbcType="BIGINT"/>
+        <result column="supplier_id" property="supplierId" jdbcType="BIGINT"/>
+        <result column="project_id" property="projectId" jdbcType="BIGINT"/>
+        <result column="directory_id" property="directoryId" jdbcType="BIGINT"/>
+        <result column="bid_price" property="dealPrice" jdbcType="DECIMAL"/>
+        <result column="win_bid_time" property="winTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id
+        ,
+        project_id,
+        project_name,
+        company_id,
+        supplier_id,
+        supplier_name,
+        directory_id,
+        min_price,
+        max_price,
+        win_time,
+        sync_time
+    </sql>
+    <select id="selWinPrices" resultMap="BaseResultMap">
+        SELECT
+        a.id,
+        a.project_id,
+        a.comp_id,
+        a.supplier_id,
+        a.directory_id,
+        a.bid_price,
+        a.win_bid_time
+        FROM
+        bmpfjz_supplier_project_item_bid a
+        JOIN bmpfjz_project b ON a.project_id = b.id AND a.comp_id = b.comp_id
+        WHERE a.bid_status = 3
+        AND a.comp_id = #{companyId}
+        AND a.directory_id = #{directoryId}
+        <if test="syncTime != null">
+            AND bspib.win_bid_time > #{syncTime}
+        </if>
+        ORDER BY win_bid_time DESC
+    </select>
+
+    <select id="getDirectoryPriceTopAndLow" resultType="map">
+        SELECT IFNULL(MAX(deal_price), 0) topprice,IFNULL(MIN(deal_price), 0) lowprice
+        FROM
+            purchases_win_price_record a
+        WHERE a.company_id = #{companyId}
+          AND a.supplier_id = #{supplierId}
+          AND a.directory_id = #{directoryId}
+        ORDER BY win_time
+    </select>
+</mapper>

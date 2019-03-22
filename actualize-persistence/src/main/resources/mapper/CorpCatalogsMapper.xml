@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.bidlink.datacenter.actualize.persistence.dao.CorpCatalogsMapper" >
+  <resultMap id="resultMap" type="cn.bidlink.datacenter.actualize.model.CorpCatalogs" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="OLD_ID" property="oldId" jdbcType="BIGINT" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="DEMO" property="demo" jdbcType="VARCHAR" />
+    <result column="PARENT_ID" property="parentId" jdbcType="BIGINT" />
+    <result column="IS_ROOT" property="isRoot" jdbcType="TINYINT" />
+    <result column="TREEPATH" property="treepath" jdbcType="VARCHAR" />
+    <result column="ERP_ID" property="erpId" jdbcType="VARCHAR" />
+    <result column="ERPCODE" property="erpcode" jdbcType="VARCHAR" />
+    <result column="FLAG_ASSOCIATE_USER" property="flagAssociateUser" jdbcType="TINYINT" />
+    <result column="FLAG_ASSOCIATE_SUPPLIER" property="flagAssociateSupplier" jdbcType="TINYINT" />
+    <result column="CATALOG_NAME_PATH" property="catalogNamePath" jdbcType="VARCHAR" />
+    <result column="COMPANY_ID" property="companyId" jdbcType="BIGINT" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="CREATOR" property="creator" jdbcType="BIGINT" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="MODIFIER" property="modifier" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    cc.ID, cc.OLD_ID,cc.name,cc.code,cc.DEMO,cc.parent_id,cc.COMP_ID,cc.is_root,cc.TREEPATH,cc.CATALOG_NAME_PATH,cc.company_id,cc.create_time,cc.creator,cc.update_time,cc.modifier
+  </sql>
+  <sql id="base_catalogs">
+    id, name,code,PARENT_ID,IS_ROOT,TREEPATH,CATALOG_NAME_PATH,company_id,creator,create_time,modifier,update_time
+  </sql>
+
+  <select id="selCataLogsByCompanyId" resultMap="resultMap" parameterType="long">
+    select <include refid="base_catalogs"/>
+    from corp_catalogs where company_id=#{companyId};
+  </select>
+  <select id="selCataLogsByCompanyIdWtihCount" resultType="long" parameterType="long">
+    select count(1)
+    from corp_catalogs where company_id=#{companyId};
+  </select>
+  <select id="selCataLogsByCompanyIdWithPageing" resultMap="resultMap" >
+    select <include refid="base_catalogs"/>
+    from corp_catalogs where company_id=#{companyId} limit #{startPage} , #{pageSize};
+  </select>
+
+</mapper>

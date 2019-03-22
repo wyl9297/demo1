@@ -1,0 +1,152 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <groupId>cn.bidlink.datacenter.actualize</groupId>
+        <artifactId>actualize</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>actualize-web</artifactId>
+    <packaging>war</packaging>
+    <name>actualize-web</name>
+    <url>http://maven.apache.org</url>
+    <properties>
+        <resource.delimiter>${}</resource.delimiter>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>cn.bidlink.datacenter.actualize</groupId>
+            <artifactId>actualize-service</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.bidlink.datacenter.actualize</groupId>
+            <artifactId>actualize-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dubbo</artifactId>
+            <version>2.6.6-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>*.properties</include>
+                    <include>*.xml</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>templates/*</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+
+    <profiles>
+
+        <profile>
+            <!-- 正式环境 -->
+            <id>product</id>
+            <properties>
+                <!-- #悦采数据源 -->
+                <pom.spring.datasource.yuecai.type>com.alibaba.druid.pool.DruidDataSource
+                </pom.spring.datasource.yuecai.type>
+                <pom.spring.datasource.yuecai.driver-class-name>com.mysql.jdbc.Driver
+                </pom.spring.datasource.yuecai.driver-class-name>
+                <pom.spring.datasource.yuecai.url>jdbc:mysql://172.16.1.24:3306/nyc?characterEncoding=utf8&amp;zeroDateTimeBehavior=convertToNull&amp;allowMultiQueries=true</pom.spring.datasource.yuecai.url>
+                <pom.spring.datasource.yuecai.username>yanlinwang</pom.spring.datasource.yuecai.username>
+                <pom.spring.datasource.yuecai.password>a@20190320</pom.spring.datasource.yuecai.password>
+                <!-- #ACL数据源 -->
+                <pom.spring.datasource.acl.type>com.alibaba.druid.pool.DruidDataSource</pom.spring.datasource.acl.type>
+                <pom.spring.datasource.acl.driver-class-name>com.mysql.jdbc.Driver
+                </pom.spring.datasource.acl.driver-class-name>
+                <pom.spring.datasource.acl.url>
+                    jdbc:mysql://usercenter-mariadb.internal.cg-xt.com:3312/resacl?characterEncoding=utf8&amp;zeroDateTimeBehavior=convertToNull&amp;allowMultiQueries=true
+                </pom.spring.datasource.acl.url>
+                <pom.spring.datasource.acl.username>yanlinwang</pom.spring.datasource.acl.username>
+                <pom.spring.datasource.acl.password>a@20190320</pom.spring.datasource.acl.password>
+                <!-- #unireg(中心库)数据源 -->
+                <pom.spring.datasource.unireg.type>com.alibaba.druid.pool.DruidDataSource
+                </pom.spring.datasource.unireg.type>
+                <pom.spring.datasource.unireg.driver-class-name>com.mysql.jdbc.Driver
+                </pom.spring.datasource.unireg.driver-class-name>
+                <pom.spring.datasource.unireg.url>
+                    jdbc:mysql://usercenter-mariadb.internal.cg-xt.com:3312/usercenter?characterEncoding=utf8&amp;zeroDateTimeBehavior=convertToNull&amp;allowMultiQueries=true
+                </pom.spring.datasource.unireg.url>
+                <pom.spring.datasource.unireg.username>yanlinwang</pom.spring.datasource.unireg.username>
+                <pom.spring.datasource.unireg.password>a@20190320</pom.spring.datasource.unireg.password>
+                <!-- #approve(中心库)数据源 -->
+                <pom.spring.datasource.approve.type>com.alibaba.druid.pool.DruidDataSource
+                </pom.spring.datasource.approve.type>
+                <pom.spring.datasource.approve.driver-class-name>com.mysql.jdbc.Driver
+                </pom.spring.datasource.approve.driver-class-name>
+                <pom.spring.datasource.approve.url>
+                    jdbc:mysql://approve-mariadb.internal.cg-xt.com:3309/approve?characterEncoding=utf8&amp;zeroDateTimeBehavior=convertToNull&amp;allowMultiQueries=true
+                </pom.spring.datasource.approve.url>
+                <pom.spring.datasource.approve.username>yanlinwang</pom.spring.datasource.approve.username>
+                <pom.spring.datasource.approve.password>a@20190320</pom.spring.datasource.approve.password>
+
+                <pom.zk.registry>zookeeper://192.168.2.137:2181?backup=192.168.2.135:2181,192.168.2.132:2181</pom.zk.registry>
+            </properties>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <!-- 测试环境 -->
+            <id>test</id>
+            <properties>
+                <!-- #悦采数据源 -->
+                <pom.spring.datasource.yuecai.type>com.alibaba.druid.pool.DruidDataSource
+                </pom.spring.datasource.yuecai.type>
+                <pom.spring.datasource.yuecai.driver-class-name>com.mysql.jdbc.Driver
+                </pom.spring.datasource.yuecai.driver-class-name>
+                <pom.spring.datasource.yuecai.url>jdbc:mysql://100.100.0.5:3305/yuecai?characterEncoding=utf8&amp;zeroDateTimeBehavior=convertToNull&amp;allowMultiQueries=true</pom.spring.datasource.yuecai.url>
+                <pom.spring.datasource.yuecai.username>develop</pom.spring.datasource.yuecai.username>
+                <pom.spring.datasource.yuecai.password>123123</pom.spring.datasource.yuecai.password>
+                <!-- #ACL数据源 -->
+                <pom.spring.datasource.acl.type>com.alibaba.druid.pool.DruidDataSource</pom.spring.datasource.acl.type>
+                <pom.spring.datasource.acl.driver-class-name>com.mysql.jdbc.Driver
+                </pom.spring.datasource.acl.driver-class-name>
+                <pom.spring.datasource.acl.url>jdbc:mysql://100.100.0.5:3306/resacl?characterEncoding=utf8&amp;zeroDateTimeBehavior=convertToNull&amp;allowMultiQueries=true</pom.spring.datasource.acl.url>
+                <pom.spring.datasource.acl.username>resacl</pom.spring.datasource.acl.username>
+                <pom.spring.datasource.acl.password>bidlink!@#$</pom.spring.datasource.acl.password>
+                <!-- #unireg(中心库)数据源 -->
+                <pom.spring.datasource.unireg.type>com.alibaba.druid.pool.DruidDataSource
+                </pom.spring.datasource.unireg.type>
+                <pom.spring.datasource.unireg.driver-class-name>com.mysql.jdbc.Driver
+                </pom.spring.datasource.unireg.driver-class-name>
+                <pom.spring.datasource.unireg.url>jdbc:mysql://100.100.0.5:3306/unireg?characterEncoding=utf8&amp;zeroDateTimeBehavior=convertToNull&amp;allowMultiQueries=true</pom.spring.datasource.unireg.url>
+                <pom.spring.datasource.unireg.username>yanlinwang</pom.spring.datasource.unireg.username>
+                <pom.spring.datasource.unireg.password>4rfv3edc</pom.spring.datasource.unireg.password>
+                <!-- #approve(中心库)数据源 -->
+                <pom.spring.datasource.approve.type>com.alibaba.druid.pool.DruidDataSource
+                </pom.spring.datasource.approve.type>
+                <pom.spring.datasource.approve.driver-class-name>com.mysql.jdbc.Driver
+                </pom.spring.datasource.approve.driver-class-name>
+                <pom.spring.datasource.approve.url>jdbc:mysql://100.100.0.5:3306/approve?characterEncoding=utf8&amp;zeroDateTimeBehavior=convertToNull&amp;allowMultiQueries=true</pom.spring.datasource.approve.url>
+                <pom.spring.datasource.approve.username>zhucongyao</pom.spring.datasource.approve.username>
+                <pom.spring.datasource.approve.password>a654321</pom.spring.datasource.approve.password>
+
+                <pom.zk.registry>zookeeper://testzookeeper:2181</pom.zk.registry>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+    </profiles>
+</project>

@@ -1,7 +1,5 @@
 package com.demo.service;
 
-import cn.bidlink.usercenter.server.entity.TRegUser;
-
 import java.util.Map;
 
 /**
@@ -18,7 +16,7 @@ public interface CorpExportService {
     Map<String,Object> exportDirectorys(Long originCompanyId , Long destCompanyId);
 
     // 根据companyID查询中心库信息
-    TRegUser findByCondition(Long companyId);
+    Map<String , Object> findByCondition(Long companyId);
 
     // 校验采购品信息是否符合条件
     Map<String , Object> checkCorp(Long originCompanyId , Long destCompanyId);

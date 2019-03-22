@@ -1,7 +1,5 @@
 package com.demo.model;
 
-import cn.afterturn.easypoi.excel.annotation.Excel;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -51,10 +49,9 @@ public class CorpDirectorysNew implements Serializable {
     // 不为空，直接存储，否则，查询主账号
     private Long createUserId;
 
-    @Excel(name = "createUserName")
     private String createUserName;
 
-     // value = 2
+    // value = 2
     private Long unitPrecision;
 
     // value = 2

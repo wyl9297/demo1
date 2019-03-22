@@ -25,12 +25,12 @@
     <result column="supplier_id" jdbcType="BIGINT" property="supplierId" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, company_id, proc_instance_id, task_id, task_def_key, assign, current_node_index, 
-    type, status, mult_instance, approve_suggestion, approve_type, approve_time, create_time, 
+    id, company_id, proc_instance_id, task_id, task_def_key, assign, current_node_index,
+    type, status, mult_instance, approve_suggestion, approve_type, approve_time, create_time,
     create_user_id, update_time, update_user_id, description, custom_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="com.demo.model.ApproveTaskRecodeKey" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from approve_task_recode
     where id = #{id,jdbcType=BIGINT}
@@ -42,19 +42,19 @@
       and company_id = #{companyId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.demo.model.ApproveTaskRecode">
-    insert into approve_task_recode (id, company_id, proc_instance_id, 
-      task_id, task_def_key, assign, 
-      current_node_index, type, status, 
-      mult_instance, approve_suggestion, approve_type, 
-      approve_time, create_time, create_user_id, 
-      update_time, update_user_id, description, 
+    insert into approve_task_recode (id, company_id, proc_instance_id,
+      task_id, task_def_key, assign,
+      current_node_index, type, status,
+      mult_instance, approve_suggestion, approve_type,
+      approve_time, create_time, create_user_id,
+      update_time, update_user_id, description,
       custom_id)
-    values (#{id,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT}, #{procInstanceId,jdbcType=VARCHAR}, 
-      #{taskId,jdbcType=VARCHAR}, #{taskDefKey,jdbcType=VARCHAR}, #{assign,jdbcType=VARCHAR}, 
-      #{currentNodeIndex,jdbcType=TINYINT}, #{type,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
-      #{multInstance,jdbcType=TINYINT}, #{approveSuggestion,jdbcType=VARCHAR}, #{approveType,jdbcType=BIT}, 
-      #{approveTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=BIGINT}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{updateUserId,jdbcType=BIGINT}, #{description,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT}, #{procInstanceId,jdbcType=VARCHAR},
+      #{taskId,jdbcType=VARCHAR}, #{taskDefKey,jdbcType=VARCHAR}, #{assign,jdbcType=VARCHAR},
+      #{currentNodeIndex,jdbcType=TINYINT}, #{type,jdbcType=TINYINT}, #{status,jdbcType=TINYINT},
+      #{multInstance,jdbcType=TINYINT}, #{approveSuggestion,jdbcType=VARCHAR}, #{approveType,jdbcType=BIT},
+      #{approveTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=BIGINT},
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateUserId,jdbcType=BIGINT}, #{description,jdbcType=VARCHAR},
       #{customId,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" parameterType="com.demo.model.ApproveTaskRecode">

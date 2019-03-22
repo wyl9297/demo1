@@ -30,7 +30,7 @@
     ID, company_id, OLD_ID, CODE, CATALOG_ID, CATALOG_NAME, DEMO, NAME, SPEC,
     ABANDON, PCODE, PRODUCTOR, TREEPATH, LASTMODIFYTIME,UNITNAME,
     CREATE_TIME, PRODUCING_ADDRESS , BRAND, PURPOSE, MARKET_PRICE, SPECIALITY, tech_parameters,
-    creator, modifier
+   creator, modifier
   </sql>
 
   <select id="findByCompanyId" parameterType="long" resultMap="BaseResultMap">
@@ -66,7 +66,7 @@
     <include refid="Base_Column_List" />
     from corp_directorys
     where ID = #{id,jdbcType=BIGINT}
-    and company_id = #{companyId,jdbcType=BIGINT}
+      and company_id = #{companyId,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="com.demo.model.CorpDirectorysKey" >
     delete from corp_directorys
@@ -78,33 +78,33 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into corp_directorys (company_id, OLD_ID, CODE,
-    CATALOG_ID, CATALOG_NAME, DEMO,
-    NAME, ORGID, SPEC, UNITTYPE,
-    ABANDON, PCODE, PRODUCTOR,
-    TREEPATH, LASTMODIFYTIME, MODIFYMODE,
-    MODIFYER, ERPCODE, PID_ERPCODE,
-    DIR_PIC, DIR_OTHER_PIC, COMP_ID,
-    IMG_ID, IMG_NAME, IMG_OTHER_ID,
-    IMG_OTHER_NAME, UNITEXTNAME, UNITNAME,
-    FLAG_ASSOCIATE_USER, FLAG_ASSOCIATE_SUPPLIER,
-    CREATE_TIME, PRODUCING_ADDRESS, BRAND,
-    PURPOSE, MARKET_PRICE, SPECIALITY,
-    tech_parameters, erp_id, creator,
-    modifier, md5)
+      CATALOG_ID, CATALOG_NAME, DEMO,
+      NAME, ORGID, SPEC, UNITTYPE,
+      ABANDON, PCODE, PRODUCTOR,
+      TREEPATH, LASTMODIFYTIME, MODIFYMODE,
+      MODIFYER, ERPCODE, PID_ERPCODE,
+      DIR_PIC, DIR_OTHER_PIC, COMP_ID,
+      IMG_ID, IMG_NAME, IMG_OTHER_ID,
+      IMG_OTHER_NAME, UNITEXTNAME, UNITNAME,
+      FLAG_ASSOCIATE_USER, FLAG_ASSOCIATE_SUPPLIER,
+      CREATE_TIME, PRODUCING_ADDRESS, BRAND,
+      PURPOSE, MARKET_PRICE, SPECIALITY,
+      tech_parameters, erp_id, creator,
+      modifier, md5)
     values (#{companyId,jdbcType=BIGINT}, #{oldId,jdbcType=BIGINT}, #{code,jdbcType=VARCHAR},
-    #{catalogId,jdbcType=BIGINT}, #{catalogName,jdbcType=VARCHAR}, #{demo,jdbcType=VARCHAR},
-    #{name,jdbcType=VARCHAR}, #{orgid,jdbcType=BIGINT}, #{spec,jdbcType=VARCHAR}, #{unittype,jdbcType=VARCHAR},
-    #{abandon,jdbcType=BIGINT}, #{pcode,jdbcType=VARCHAR}, #{productor,jdbcType=VARCHAR},
-    #{treepath,jdbcType=VARCHAR}, #{lastmodifytime,jdbcType=TIMESTAMP}, #{modifymode,jdbcType=TINYINT},
-    #{modifyer,jdbcType=VARCHAR}, #{erpcode,jdbcType=VARCHAR}, #{pidErpcode,jdbcType=VARCHAR},
-    #{dirPic,jdbcType=VARCHAR}, #{dirOtherPic,jdbcType=VARCHAR}, #{compId,jdbcType=BIGINT},
-    #{imgId,jdbcType=VARCHAR}, #{imgName,jdbcType=VARCHAR}, #{imgOtherId,jdbcType=VARCHAR},
-    #{imgOtherName,jdbcType=VARCHAR}, #{unitextname,jdbcType=VARCHAR}, #{unitname,jdbcType=VARCHAR},
-    #{flagAssociateUser,jdbcType=TINYINT}, #{flagAssociateSupplier,jdbcType=TINYINT},
-    #{createTime,jdbcType=TIMESTAMP}, #{producingAddress,jdbcType=VARCHAR}, #{brand,jdbcType=VARCHAR},
-    #{purpose,jdbcType=VARCHAR}, #{marketPrice,jdbcType=VARCHAR}, #{speciality,jdbcType=VARCHAR},
-    #{techParameters,jdbcType=VARCHAR}, #{erpId,jdbcType=VARCHAR}, #{creator,jdbcType=BIGINT},
-    #{modifier,jdbcType=BIGINT}, #{md5,jdbcType=VARCHAR})
+      #{catalogId,jdbcType=BIGINT}, #{catalogName,jdbcType=VARCHAR}, #{demo,jdbcType=VARCHAR},
+      #{name,jdbcType=VARCHAR}, #{orgid,jdbcType=BIGINT}, #{spec,jdbcType=VARCHAR}, #{unittype,jdbcType=VARCHAR},
+      #{abandon,jdbcType=BIGINT}, #{pcode,jdbcType=VARCHAR}, #{productor,jdbcType=VARCHAR},
+      #{treepath,jdbcType=VARCHAR}, #{lastmodifytime,jdbcType=TIMESTAMP}, #{modifymode,jdbcType=TINYINT},
+      #{modifyer,jdbcType=VARCHAR}, #{erpcode,jdbcType=VARCHAR}, #{pidErpcode,jdbcType=VARCHAR},
+      #{dirPic,jdbcType=VARCHAR}, #{dirOtherPic,jdbcType=VARCHAR}, #{compId,jdbcType=BIGINT},
+      #{imgId,jdbcType=VARCHAR}, #{imgName,jdbcType=VARCHAR}, #{imgOtherId,jdbcType=VARCHAR},
+      #{imgOtherName,jdbcType=VARCHAR}, #{unitextname,jdbcType=VARCHAR}, #{unitname,jdbcType=VARCHAR},
+      #{flagAssociateUser,jdbcType=TINYINT}, #{flagAssociateSupplier,jdbcType=TINYINT},
+      #{createTime,jdbcType=TIMESTAMP}, #{producingAddress,jdbcType=VARCHAR}, #{brand,jdbcType=VARCHAR},
+      #{purpose,jdbcType=VARCHAR}, #{marketPrice,jdbcType=VARCHAR}, #{speciality,jdbcType=VARCHAR},
+      #{techParameters,jdbcType=VARCHAR}, #{erpId,jdbcType=VARCHAR}, #{creator,jdbcType=BIGINT},
+      #{modifier,jdbcType=BIGINT}, #{md5,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.demo.model.CorpDirectorys" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
@@ -487,50 +487,50 @@
       </if>
     </set>
     where ID = #{id,jdbcType=BIGINT}
-    and company_id = #{companyId,jdbcType=BIGINT}
+      and company_id = #{companyId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.demo.model.CorpDirectorys" >
     update corp_directorys
     set OLD_ID = #{oldId,jdbcType=BIGINT},
-        CODE = #{code,jdbcType=VARCHAR},
-        CATALOG_ID = #{catalogId,jdbcType=BIGINT},
-        CATALOG_NAME = #{catalogName,jdbcType=VARCHAR},
-        DEMO = #{demo,jdbcType=VARCHAR},
-        NAME = #{name,jdbcType=VARCHAR},
-        ORGID = #{orgid,jdbcType=BIGINT},
-        SPEC = #{spec,jdbcType=VARCHAR},
-        UNITTYPE = #{unittype,jdbcType=VARCHAR},
-        ABANDON = #{abandon,jdbcType=BIGINT},
-        PCODE = #{pcode,jdbcType=VARCHAR},
-        PRODUCTOR = #{productor,jdbcType=VARCHAR},
-        TREEPATH = #{treepath,jdbcType=VARCHAR},
-        LASTMODIFYTIME = #{lastmodifytime,jdbcType=TIMESTAMP},
-        MODIFYMODE = #{modifymode,jdbcType=TINYINT},
-        MODIFYER = #{modifyer,jdbcType=VARCHAR},
-        ERPCODE = #{erpcode,jdbcType=VARCHAR},
-        PID_ERPCODE = #{pidErpcode,jdbcType=VARCHAR},
-        DIR_PIC = #{dirPic,jdbcType=VARCHAR},
-        DIR_OTHER_PIC = #{dirOtherPic,jdbcType=VARCHAR},
-        COMP_ID = #{compId,jdbcType=BIGINT},
-        IMG_ID = #{imgId,jdbcType=VARCHAR},
-        IMG_NAME = #{imgName,jdbcType=VARCHAR},
-        IMG_OTHER_ID = #{imgOtherId,jdbcType=VARCHAR},
-        IMG_OTHER_NAME = #{imgOtherName,jdbcType=VARCHAR},
-        UNITEXTNAME = #{unitextname,jdbcType=VARCHAR},
-        UNITNAME = #{unitname,jdbcType=VARCHAR},
-        FLAG_ASSOCIATE_USER = #{flagAssociateUser,jdbcType=TINYINT},
-        FLAG_ASSOCIATE_SUPPLIER = #{flagAssociateSupplier,jdbcType=TINYINT},
-        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
-        PRODUCING_ADDRESS = #{producingAddress,jdbcType=VARCHAR},
-        BRAND = #{brand,jdbcType=VARCHAR},
-        PURPOSE = #{purpose,jdbcType=VARCHAR},
-        MARKET_PRICE = #{marketPrice,jdbcType=VARCHAR},
-        SPECIALITY = #{speciality,jdbcType=VARCHAR},
-        tech_parameters = #{techParameters,jdbcType=VARCHAR},
-        erp_id = #{erpId,jdbcType=VARCHAR},
-        creator = #{creator,jdbcType=BIGINT},
-        modifier = #{modifier,jdbcType=BIGINT},
-        md5 = #{md5,jdbcType=VARCHAR}
+      CODE = #{code,jdbcType=VARCHAR},
+      CATALOG_ID = #{catalogId,jdbcType=BIGINT},
+      CATALOG_NAME = #{catalogName,jdbcType=VARCHAR},
+      DEMO = #{demo,jdbcType=VARCHAR},
+      NAME = #{name,jdbcType=VARCHAR},
+      ORGID = #{orgid,jdbcType=BIGINT},
+      SPEC = #{spec,jdbcType=VARCHAR},
+      UNITTYPE = #{unittype,jdbcType=VARCHAR},
+      ABANDON = #{abandon,jdbcType=BIGINT},
+      PCODE = #{pcode,jdbcType=VARCHAR},
+      PRODUCTOR = #{productor,jdbcType=VARCHAR},
+      TREEPATH = #{treepath,jdbcType=VARCHAR},
+      LASTMODIFYTIME = #{lastmodifytime,jdbcType=TIMESTAMP},
+      MODIFYMODE = #{modifymode,jdbcType=TINYINT},
+      MODIFYER = #{modifyer,jdbcType=VARCHAR},
+      ERPCODE = #{erpcode,jdbcType=VARCHAR},
+      PID_ERPCODE = #{pidErpcode,jdbcType=VARCHAR},
+      DIR_PIC = #{dirPic,jdbcType=VARCHAR},
+      DIR_OTHER_PIC = #{dirOtherPic,jdbcType=VARCHAR},
+      COMP_ID = #{compId,jdbcType=BIGINT},
+      IMG_ID = #{imgId,jdbcType=VARCHAR},
+      IMG_NAME = #{imgName,jdbcType=VARCHAR},
+      IMG_OTHER_ID = #{imgOtherId,jdbcType=VARCHAR},
+      IMG_OTHER_NAME = #{imgOtherName,jdbcType=VARCHAR},
+      UNITEXTNAME = #{unitextname,jdbcType=VARCHAR},
+      UNITNAME = #{unitname,jdbcType=VARCHAR},
+      FLAG_ASSOCIATE_USER = #{flagAssociateUser,jdbcType=TINYINT},
+      FLAG_ASSOCIATE_SUPPLIER = #{flagAssociateSupplier,jdbcType=TINYINT},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      PRODUCING_ADDRESS = #{producingAddress,jdbcType=VARCHAR},
+      BRAND = #{brand,jdbcType=VARCHAR},
+      PURPOSE = #{purpose,jdbcType=VARCHAR},
+      MARKET_PRICE = #{marketPrice,jdbcType=VARCHAR},
+      SPECIALITY = #{speciality,jdbcType=VARCHAR},
+      tech_parameters = #{techParameters,jdbcType=VARCHAR},
+      erp_id = #{erpId,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=BIGINT},
+      modifier = #{modifier,jdbcType=BIGINT},
+      md5 = #{md5,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=BIGINT}
       and company_id = #{companyId,jdbcType=BIGINT}
   </update>

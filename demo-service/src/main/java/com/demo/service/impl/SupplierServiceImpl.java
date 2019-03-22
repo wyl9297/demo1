@@ -1,13 +1,11 @@
 package com.demo.service.impl;
 
-import cn.bidlink.base.ServiceResult;
 import cn.bidlink.framework.util.gen.IdWork;
-import cn.bidlink.usercenter.server.entity.TRegUser;
-import cn.bidlink.usercenter.server.service.DubboTRegUserService;
 import com.demo.model.*;
 import com.demo.persistence.dao.*;
 import com.demo.service.SupplierService;
 import com.google.common.collect.Maps;
+import org.apache.shiro.util.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +20,6 @@ import java.util.*;
 public class SupplierServiceImpl implements SupplierService {
 
     private static final Logger log = LoggerFactory.getLogger(SupplierServiceImpl.class);
-
-    @Autowired
-    private DubboTRegUserService tRegUserService;
 
     @Autowired
     @Qualifier("uniregJdbcTemplate")
@@ -55,22 +50,13 @@ public class SupplierServiceImpl implements SupplierService {
      *
      * @return
      */
-    public List<TRegUser> findByCondition(Long companyId) {
-        TRegUser tRegUser = new TRegUser();
-        tRegUser.setCompanyId(companyId);
-        tRegUser.setIsSubuser(0);
-
-        ServiceResult<List<TRegUser>> byCondition = tRegUserService.findByCondition(tRegUser);
-        if (!byCondition.getSuccess()) {
-            log.error("{}调用{}时发生未知异常,error Message:{}", "com.demo.controller.CorpExportController.test",
-                    "byCondition", byCondition.getCode() + "_" + byCondition.getMessage());
-            throw new RuntimeException("err_code:" + byCondition.getCode() + ",err_msg:" + byCondition.getMessage());
+    public Map<String, Object> findByCondition(Long companyId) {
+        Map<String, Object> map = uniregJdbcTemplate.queryForMap(" select id,name from t_reg_user where company_id = ? and is_subuser = 0", companyId);
+        if (CollectionUtils.isEmpty(map)) {
+            throw new RuntimeException("查询中心库信息失败");
+        } else {
+            return map;
         }
-        List<TRegUser> result = byCondition.getResult();
-        if (result == null) {
-            log.warn("com.demo.controller.CorpExportController.test时未获取到结果");
-        }
-        return result;
     }
 
     @Override
@@ -79,28 +65,24 @@ public class SupplierServiceImpl implements SupplierService {
                 "create_user_name, create_user_id, update_time, update_user_name, update_user_id )  " +
                 "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         // 查询中心库信息
-        List<TRegUser> tRegUsers = findByCondition(companyId);
+        Map<String, Object> userMap = findByCondition(companyId);
+        long main_user_id = (long) userMap.get("id");
+        String main_user_name = (String) userMap.get("name");
         List<Object[]> parms = new ArrayList<>();
-        if (tRegUsers.size() > 0) {
-
-            TRegUser tRegUser = tRegUsers.get(0);
-            Map<Long, bsmCompanySupplier> supplierInfoMap = bsmCompanySupplierMapper.getSupplierInfoList(oriCompanyId, list);
-            for (int i = 0; i < list.size(); i++) {
-                log.info("-------------进入循环，开始遍历，需要遍历的数量:{}----------", list.size());
-                Long id = IdWork.nextId();
-                Long supplierId = list.get(i);
-                Date nowTime = new Date();
-                bsmCompanySupplier info = supplierInfoMap.get(supplierId);
-                if (null != info) {
-                    parms.add(new Object[]{id, companyId, supplierId, info.getCreateTime(), info.getCreateTime(), info.getCreateUserName(), info.getResponseTime(), null, 0, nowTime, tRegUser.getName(), tRegUser.getId(), nowTime, tRegUser.getName(), tRegUser.getId()});
-                } else {
-                    System.out.println("未查到供应商信息：" + supplierId);
-                    parms.add(new Object[]{id, companyId, supplierId, nowTime, nowTime, null, nowTime, null, 0, nowTime, tRegUser.getName(), tRegUser.getId(), nowTime, tRegUser.getName(), tRegUser.getId()});
-                }
-                log.info("newId:{}", id);
+        Map<Long, bsmCompanySupplier> supplierInfoMap = bsmCompanySupplierMapper.getSupplierInfoList(oriCompanyId, list);
+        for (int i = 0; i < list.size(); i++) {
+            log.info("-------------进入循环，开始遍历，需要遍历的数量:{}----------", list.size());
+            Long id = IdWork.nextId();
+            Long supplierId = list.get(i);
+            Date nowTime = new Date();
+            bsmCompanySupplier info = supplierInfoMap.get(supplierId);
+            if (null != info) {
+                parms.add(new Object[]{id, companyId, supplierId, info.getCreateTime(), info.getCreateTime(), info.getCreateUserName(), info.getResponseTime(), null, 0, nowTime, main_user_name, main_user_id, nowTime, main_user_name, main_user_id});
+            } else {
+                System.out.println("未查到供应商信息：" + supplierId);
+                parms.add(new Object[]{id, companyId, supplierId, nowTime, nowTime, null, nowTime, null, 0, nowTime, main_user_name, main_user_id, nowTime, main_user_name, main_user_id});
             }
-        } else {
-            log.error("查询用户中心失败，companyId为：{}", companyId);
+            log.info("newId:{}", id);
         }
         int[] batchUpdate = uniregJdbcTemplate.batchUpdate(sql, parms);
         for (int i = 0; i < batchUpdate.length; i++) {
@@ -254,10 +236,9 @@ public class SupplierServiceImpl implements SupplierService {
         List<ApproveTaskRecode> approveTaskRecodes = approveTaskRecodeMapper.selTaskRecodeBySupplierIds(supplierIds, originCompanyId);
 
         List<Object[]> parms = new ArrayList<>();
-        List<TRegUser> tRegUser = this.findByCondition(originCompanyId);
-        if (tRegUser.size() <= 0) {
-            log.error("用户信息查询失败");
-        }
+        Map<String, Object> userMap = this.findByCondition(originCompanyId);
+        long main_user_id = (long) userMap.get("id");
+        String main_user_name = (String) userMap.get("name");
 
         List<Map<String, Object>> idMaps = uniregJdbcTemplate.queryForList("select id,supplier_id from supplier_admittance_record where company_id = ?", destCompanyId);
         Map<Long, Long> converMap = Maps.newHashMap();
@@ -268,18 +249,12 @@ public class SupplierServiceImpl implements SupplierService {
         Set<String> hashSet = new HashSet<>();
         StringBuilder stringBuilder = new StringBuilder();
 
-        Map<String, Object> map = uniregJdbcTemplate.queryForMap(" select id,name from t_reg_user where company_id = ? and is_subuser = 0", destCompanyId);
-        long main_user_id = (long) map.get("id");
-        String main_user_name = (String) map.get("name");
-
         // 遍历查询结果  批量插入
         for (int i = 0; i < approveTaskRecodes.size(); i++) {
             ApproveTaskRecode approveTaskRecode = approveTaskRecodes.get(i);
             String procInstanceId = approveTaskRecode.getProcInstanceId();
 
             String assign = approveTaskRecode.getAssign();
-
-            Byte currentNodeIndex = approveTaskRecode.getCurrentNodeIndex();
 
             Byte type;
             if (approveTaskRecode.getType() == 1) {
@@ -310,8 +285,8 @@ public class SupplierServiceImpl implements SupplierService {
                 parms.add(new Object[]{IdWork.nextId(), "yc_" + approveTaskRecode.getProcInstanceId(), "yc_" + approveTaskRecode.getTaskId(), converMap.get(supplierId), approveTaskRecode.getCustomId(),
                         approveTaskRecode.getTaskDefKey(), approveTaskRecode.getCurrentNodeIndex(), type, approveTaskRecode.getStatus(), approveTaskRecode.getMultInstance(),
                         approveTaskRecode.getApproveSuggestion(), approveTaskRecode.getApproveType(), approveTaskRecode.getApproveTime(), approveTaskRecode.getAssign(), assignId,
-                        assignName, approveTaskRecode.getDescription(), destCompanyId, approveTaskRecode.getCreateUserId(), tRegUser.get(0).getName(), approveTaskRecode.getCreateTime(),
-                        approveTaskRecode.getUpdateUserId(), tRegUser.get(0).getName(), new Date()});
+                        assignName, approveTaskRecode.getDescription(), destCompanyId, approveTaskRecode.getCreateUserId(), main_user_name, approveTaskRecode.getCreateTime(),
+                        approveTaskRecode.getUpdateUserId(), main_user_name, new Date()});
             }
             if (!hashSet.contains(procInstanceId)) {
                 stringBuilder.append(procInstanceId);
@@ -333,7 +308,7 @@ public class SupplierServiceImpl implements SupplierService {
                 log.info("projectId 对应的id为null");
             } else {
                 approvingParms.add(new Object[]{IdWork.nextId(), converMap.get(approving.getProjectId()), approving.getProjectNo(), approving.getProjectName(), approving.getProjectStatus(), approving.getProjectCreateUserId(), approving.getProjectCreateUserName(), approving.getCreateTime(), 6, 61, "yc_" + approving.getProcInstId()
-                        , -1, null, approving.getCustomVersion(), approving.getApproveStatus(), approving.getApproveResult(), destCompanyId, tRegUser.get(0).getId(), tRegUser.get(0).getName(), new Date(), tRegUser.get(0).getId(), tRegUser.get(0).getName(), new Date()});
+                        , -1, null, approving.getCustomVersion(), approving.getApproveStatus(), approving.getApproveResult(), destCompanyId, main_user_id, main_user_name, new Date(), main_user_id, main_user_name, new Date()});
             }
         }
 

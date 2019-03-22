@@ -1,15 +1,16 @@
 package com.demo.service.impl;
 
-import cn.bidlink.base.ServiceResult;
 import cn.bidlink.framework.util.gen.IdWork;
-import cn.bidlink.usercenter.server.entity.TRegUser;
-import cn.bidlink.usercenter.server.service.DubboTRegUserService;
-import com.demo.model.*;
+import com.demo.model.CorpCatalogNew;
+import com.demo.model.CorpCatalogs;
+import com.demo.model.CorpDirectorys;
+import com.demo.model.CorpDirectorysNew;
 import com.demo.persistence.dao.CorpCatalogsMapper;
 import com.demo.persistence.dao.CorpDirectorysMapper;
 import com.demo.service.CorpExportService;
 import com.google.common.collect.Maps;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.shiro.util.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +35,12 @@ import java.util.Map;
 public class CorpExportServiceImpl implements CorpExportService {
 
     private static Logger log = LoggerFactory.getLogger(CorpExportServiceImpl.class);
+
     @Autowired
     private CorpCatalogsMapper corpCatalogsMapper;
 
     @Autowired
     private CorpDirectorysMapper corpDirectorysMapper;
-
-    @Autowired
-    private DubboTRegUserService dubboTRegUserService;
 
     /* 本地数据源，仅供测试
     @Autowired
@@ -113,7 +112,8 @@ public class CorpExportServiceImpl implements CorpExportService {
         List<Object[]> middle = new ArrayList<>();
 
         // 根据companyID查询用户中心信息
-        TRegUser tRegUser = findByCondition(originCompanyId);
+        Map<String, Object> userMap = this.findByCondition(originCompanyId);
+
 
         // 存储分页信息
         List<CorpCatalogs> corpCatalogs = null;
@@ -136,18 +136,18 @@ public class CorpExportServiceImpl implements CorpExportService {
                 pageNum += (int) PAGESIZE;
 
                 // 批量插入采购品目录信息
-                dealWithCatalogs(destCompanyId, failList, newCatalogs, middle, corpCatalogs, tRegUser);
+                this.dealWithCatalogs(destCompanyId, failList, newCatalogs, middle, corpCatalogs, userMap);
                 // 更新采购品目录树形结构
-                updateCatalogTreePath(originCompanyId);
+                this.updateCatalogTreePath(originCompanyId);
             }
         } else {
             log.info("---------- 读取数据 ---------");
             // 批量插入采购品目录信息
             corpCatalogs = corpCatalogsMapper.selCataLogsByCompanyIdWithPageing(originCompanyId, 0, count.intValue());
             // 批量插入采购品目录信息
-            dealWithCatalogs(destCompanyId, failList, newCatalogs, middle, corpCatalogs, tRegUser);
+            this.dealWithCatalogs(destCompanyId, failList, newCatalogs, middle, corpCatalogs, userMap);
             // 更新采购品目录树形结构
-            updateCatalogTreePath(originCompanyId);
+            this.updateCatalogTreePath(originCompanyId);
         }
         //不符合存储条件的数据，放入map集合
         if (failList.size() != 0 && failList != null) {
@@ -189,14 +189,15 @@ public class CorpExportServiceImpl implements CorpExportService {
      * @param newCatalogs   新采购品目录信息存储
      * @param middle        采购品目录 新旧id对照表
      * @param corpCatalogs  采购品目录集合
-     * @param tRegUser      用户信息
+     * @param map           用户信息
      */
-    private void dealWithCatalogs(Long destCompanyId, List<CorpCatalogs> failList, List<Object[]> newCatalogs, List<Object[]> middle, List<CorpCatalogs> corpCatalogs, TRegUser tRegUser) {
+    private void dealWithCatalogs(Long destCompanyId, List<CorpCatalogs> failList, List<Object[]> newCatalogs, List<Object[]> middle, List<CorpCatalogs> corpCatalogs, Map<String, Object> map) {
 
         log.info("进入方法 {} , 处理采购品目录信息", "com.demo.service.impl.CorpExportServiceImpl.dealWithCatalogs");
         // 获取新旧Id对照Map
-        Map<Long, Long> idsMap = idMap(corpCatalogs, destCompanyId);
-
+        Map<Long, Long> idsMap = idMap(corpCatalogs, destCompanyId);;
+        long main_user_id = (long) map.get("id");
+        String main_user_name = (String) map.get("name");
         String insertCatalogsSQL = "INSERT INTO `corp_catalog`(`ID`, `NAME`, `CODE`, `PARENT_ID`, `IS_ROOT`, `ID_PATH`, `NAME_PATH`, `company_id`, `create_user_id`, `create_user_name`, " +
                 "`create_time`, `update_user_id`, `update_user_name`, `update_time`) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
@@ -217,15 +218,15 @@ public class CorpExportServiceImpl implements CorpExportService {
 
                     if (catalog.getCreator() == null || catalog.getModifier() == null) { // 如果creator为null或者modifier为null，使用主账号的信息
                         log.warn("creator 为null:{}", catalog.getCreator());
-                        catalogNew.setCreateUserId(tRegUser.getId());
-                        catalogNew.setCreateUserName(tRegUser.getName());
-                        catalogNew.setUpdateUserId(tRegUser.getId());
-                        catalogNew.setUpdateUserName(tRegUser.getName());
+                        catalogNew.setCreateUserId(main_user_id);
+                        catalogNew.setCreateUserName(main_user_name);
+                        catalogNew.setUpdateUserId(main_user_id);
+                        catalogNew.setUpdateUserName(main_user_name);
                     } else {
                         catalogNew.setCreateUserId(catalog.getCreator());
-                        catalogNew.setCreateUserName(tRegUser.getName());
+                        catalogNew.setCreateUserName(main_user_name);
                         catalogNew.setUpdateUserId(catalog.getModifier());
-                        catalogNew.setUpdateUserName(tRegUser.getName());
+                        catalogNew.setUpdateUserName(main_user_name);
                     }
 
                     /**
@@ -302,7 +303,7 @@ public class CorpExportServiceImpl implements CorpExportService {
         List<CorpDirectorys> failList = new ArrayList<>();
 
         // 根据companyID查询用户中心信息
-        TRegUser tRegUser = findByCondition(originCompanyId);
+        Map<String, Object> userMap = this.findByCondition(originCompanyId);
 
         // 存储 中间表信息    包含：directory_id  oldId   companyId
         List<Object[]> middle = new ArrayList<>();
@@ -323,11 +324,11 @@ public class CorpExportServiceImpl implements CorpExportService {
                     pageNum += (int) PAGESIZE;
 
                 }
-                dealWithDirectory(tRegUser, originCompanyId, destCompanyId, params, failList, byCompanyIdWithPageing, middle);
+                this.dealWithDirectory(userMap, originCompanyId, destCompanyId, params, failList, byCompanyIdWithPageing, middle);
             }
         } else {
             byCompanyIdWithPageing = corpDirectorysMapper.findByCompanyIdWithPageing(originCompanyId, 0, count.intValue());
-            dealWithDirectory(tRegUser, originCompanyId, destCompanyId, params, failList, byCompanyIdWithPageing, middle);
+            this.dealWithDirectory(userMap, originCompanyId, destCompanyId, params, failList, byCompanyIdWithPageing, middle);
         }
         // 不符合存储条件的数据，放入map集合
         if (failList.size() != 0 && failList != null) {
@@ -343,7 +344,7 @@ public class CorpExportServiceImpl implements CorpExportService {
     /**
      * 采购品信息 处理
      *
-     * @param tRegUser               用户中心信息
+     * @param userMap                用户中心信息
      * @param originCompanyId        原companyId
      * @param destCompanyId          新companyId
      * @param params                 批处理 参数
@@ -351,8 +352,10 @@ public class CorpExportServiceImpl implements CorpExportService {
      * @param byCompanyIdWithPageing 分页数据
      * @param middle                 采购品中间表
      */
-    private void dealWithDirectory(TRegUser tRegUser, Long originCompanyId, Long destCompanyId, List<Object[]> params, List<CorpDirectorys> failList, List<CorpDirectorys> byCompanyIdWithPageing, List<Object[]> middle) {
+    private void dealWithDirectory(Map<String, Object> userMap, Long originCompanyId, Long destCompanyId, List<Object[]> params, List<CorpDirectorys> failList, List<CorpDirectorys> byCompanyIdWithPageing, List<Object[]> middle) {
 
+        long main_user_id = (long) userMap.get("id");
+        String main_user_name = (String) userMap.get("name");
         log.info("进入方法：{} , 处理采购品", "com.demo.service.impl.CorpExportServiceImpl.dealWithDirectory");
         // 插入采购品信息 SQL
         String insertSql = "INSERT INTO `corp_directory`\n" +
@@ -378,15 +381,15 @@ public class CorpExportServiceImpl implements CorpExportService {
 
                 // 赋值规则：判断悦采的creator 和 modifier 字段中是否有空值，如果有，使用中心库中的id,name为 createUserId、createUserName、updateUserId、updateUserName
                 if (directorys.getCreator() == null || directorys.getModifier() == null) {
-                    corpDirectorysNew.setCreateUserId(tRegUser.getId());
-                    corpDirectorysNew.setCreateUserName(tRegUser.getName());
-                    corpDirectorysNew.setUpdateUserId(tRegUser.getId().intValue());
-                    corpDirectorysNew.setUpdateUserName(tRegUser.getName());
+                    corpDirectorysNew.setCreateUserId(main_user_id);
+                    corpDirectorysNew.setCreateUserName(main_user_name);
+                    corpDirectorysNew.setUpdateUserId((int) main_user_id);
+                    corpDirectorysNew.setUpdateUserName(main_user_name);
                 } else {
                     corpDirectorysNew.setCreateUserId(directorys.getCreator());
-                    corpDirectorysNew.setCreateUserName(tRegUser.getName());
+                    corpDirectorysNew.setCreateUserName(main_user_name);
                     corpDirectorysNew.setUpdateUserId(directorys.getModifier().intValue());
-                    corpDirectorysNew.setUpdateUserName(tRegUser.getName());
+                    corpDirectorysNew.setUpdateUserName(main_user_name);
                 }
                 if (directorys.getName().length() > 200 || (directorys.getCode() != null && directorys.getCode().length() > 20) || (directorys.getSpec() != null && directorys.getSpec().length() > 500)) {
                     log.error("字符长度过长，存储失败,name 长度为：{},code 长度为：{},spec 长度为：{}", directorys.getName().length(), directorys.getCode().length(), directorys.getSpec().length());
@@ -434,25 +437,14 @@ public class CorpExportServiceImpl implements CorpExportService {
      *
      * @return
      */
-    public TRegUser findByCondition(Long companyId) {
+    public Map<String, Object> findByCondition(Long companyId) {
 
-        TRegUser tRegUser = new TRegUser();
-        tRegUser.setCompanyId(companyId);
-        tRegUser.setIsSubuser(0);
+        Map<String, Object> map = uniregJdbcTemplate.queryForMap(" select id,name from t_reg_user where company_id = ? and is_subuser = 0", companyId);
 
-        ServiceResult<List<TRegUser>> byCondition = dubboTRegUserService.findByCondition(tRegUser);
-        if (!byCondition.getSuccess()) {
-            log.error("{}调用{}时发生未知异常,error Message:{}", "cn.bidlink.usercenter.server.service.DubboTRegUserService.findByCondition(cn.bidlink.usercenter.server.entity.TRegUser)",
-                    "byCondition", byCondition.getCode() + "_" + byCondition.getMessage());
-            throw new RuntimeException("err_code:" + byCondition.getCode() + ",err_msg:" + byCondition.getMessage());
-        }
-        List<TRegUser> result = byCondition.getResult();
-        if (result == null) {
-            log.error("查询 中心库信息为 null");
-            return null;
+        if (CollectionUtils.isEmpty(map)) {
+            throw new RuntimeException("查询中心库信息失败");
         } else {
-            TRegUser user = result.get(0);
-            return user;
+            return map;
         }
     }
 

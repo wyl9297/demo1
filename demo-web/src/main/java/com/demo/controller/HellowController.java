@@ -1,8 +1,6 @@
 package com.demo.controller;
 
-import cn.bidlink.base.ServiceResult;
 import cn.bidlink.procurement.materials.dal.server.entity.CorpCatalogs;
-import cn.bidlink.procurement.materials.dal.server.service.DubboCorpCatalogsService;
 import com.demo.model.Company;
 import com.demo.persistence.dao.RegDepartmentMapper;
 import com.demo.service.DemoService;
@@ -27,9 +25,6 @@ public class HellowController {
     @Autowired
     @Qualifier("DemoService")
     private DemoService demoService;
-
-    @Autowired
-    private DubboCorpCatalogsService dubboCorpCatalogsService;
 
     @Autowired
     @Qualifier("aclJdbcTemplate")
@@ -60,7 +55,6 @@ public class HellowController {
         CorpCatalogs corpCatalogs = new CorpCatalogs();
         corpCatalogs.setId(283248124493824000L);
         corpCatalogs.setCompanyId(1113172744L);
-        ServiceResult<Integer> delete = dubboCorpCatalogsService.delete(corpCatalogs);
         /*System.out.println(delete.getResult());
         while ( i < 100 ){
             System.out.println(IdWork.nextId());

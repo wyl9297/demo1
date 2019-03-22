@@ -1,25 +1,19 @@
 package com.demo.service.impl;
 
-import cn.bidlink.base.BusinessException;
-import cn.bidlink.base.ServiceResult;
 import cn.bidlink.framework.util.gen.IdWork;
-import cn.bidlink.resacl.dto.CallBackDTO;
 import cn.bidlink.resacl.model.Org;
-import cn.bidlink.resacl.service.OrgcService;
-import cn.bidlink.usercenter.server.entity.TRegCompany;
 import cn.bidlink.usercenter.server.entity.TRegUser;
-import cn.bidlink.usercenter.server.service.DubboTRegCompanyService;
-import cn.bidlink.usercenter.server.service.DubboTRegUserService;
 import com.demo.model.RegDepartment;
 import com.demo.persistence.dao.RegDepartmentMapper;
 import com.demo.service.RegDepartmentService;
+import com.esotericsoftware.minlog.Log;
+import org.apache.shiro.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service("RegDepartmentService")
@@ -27,15 +21,6 @@ public class RegDepartmentServiceImpl implements RegDepartmentService {
 
     @Autowired
     private RegDepartmentMapper regDepartmentMapper;
-
-    @Autowired
-    private OrgcService orgcService;
-
-    @Autowired
-    private DubboTRegUserService dubboTRegUserService;
-
-    @Autowired
-    private DubboTRegCompanyService dubboTRegCompanyService;
 
     @Autowired
     @Qualifier("aclJdbcTemplate")
@@ -51,11 +36,13 @@ public class RegDepartmentServiceImpl implements RegDepartmentService {
         TRegUser regUser = new TRegUser();
         regUser.setCompanyId(destCompanyId);
         regUser.setIsSubuser(0);
-        ServiceResult<List<TRegUser>> condition = dubboTRegUserService.findByCondition(regUser);
-        if( !condition.getSuccess() || condition.getResult().size() == 0 ){
+        Map<String, Object> userMap = uniregJdbcTemplate.queryForMap(" select id,name from t_reg_user where company_id = ? and is_subuser = 0", originCompanyId);
+
+        if (CollectionUtils.isEmpty(userMap)) {
+            Log.error("查询中心库信息失败");
             return "error" ;
         }
-        List<TRegUser> regUserList = condition.getResult();
+
         List<Map<String,String>> userRelation = regDepartmentMapper.getDepUserRelation(originCompanyId);
         List<RegDepartment> department = regDepartmentMapper.getRegDepartmentByCompanyId(originCompanyId);
 
@@ -63,7 +50,7 @@ public class RegDepartmentServiceImpl implements RegDepartmentService {
         System.out.println("有" + count + "条用户数据没有创建时间 自动设置为当前时间");
 
         //悦采 reg_department 转换为隆道云的 sys_org 数据格式
-        Map<Long,Org> orgMap = convertDepartmentToOrg(department, regUserList.get(0), destCompanyId);
+        Map<Long,Org> orgMap = convertDepartmentToOrg(department, userMap, destCompanyId);
 
         //将人员关系的list按照部门分配到对应的map中
         Map<String,List<Map<String,String>>> userOrgRelationMap = new HashMap();
@@ -112,13 +99,11 @@ public class RegDepartmentServiceImpl implements RegDepartmentService {
         return "success";
     }
 
-    private Map<Long,Org> convertDepartmentToOrg(List<RegDepartment> regDepartmentList,TRegUser regUser,Long companyId){
+    private Map<Long,Org> convertDepartmentToOrg(List<RegDepartment> regDepartmentList,Map<String ,Object> userMap,Long companyId){
+
+        long main_user_id = (long) userMap.get("id");
+
         Map<Long,Org> map = new HashMap();
-        ServiceResult<TRegCompany> tRegCompanyServiceByPk = dubboTRegCompanyService.findByPk(companyId);
-        if( !tRegCompanyServiceByPk.getSuccess() || tRegCompanyServiceByPk.getResult() == null ){
-            throw new BusinessException("未找到 【" + companyId + "】对应的隆道云企业");
-        }
-        TRegCompany company = tRegCompanyServiceByPk.getResult();
         //新旧id对照的map key旧id value新id
         Map<Long, Long> oldToNewMap = new HashMap();
         //最上级分类
@@ -137,7 +122,7 @@ public class RegDepartmentServiceImpl implements RegDepartmentService {
                 org.setPath( companyId +  "." + newId + ".");
                 org.setOrgPathname("/" + regDepartment.getName());
                 aclJdbcTemplate.update("INSERT INTO sys_user_org (USERORGID, ORGID, USERID, ISPRIMARY, ISCHARGE, CREATEBY, CREATETIME) " +
-                        "VALUES (?, ?, ?, '1', '0', NULL , ?);\n",IdWork.nextId(),newId,regUser.getId(),new Date());
+                        "VALUES (?, ?, ?, '1', '0', NULL , ?);\n",IdWork.nextId(),newId,main_user_id,new Date());
             }else {
                 org.setOrgSupId(Long.valueOf(regDepartment.getParentId().toString()));
             }
@@ -151,8 +136,8 @@ public class RegDepartmentServiceImpl implements RegDepartmentService {
             org.setOrgType((short) ("1".equals(regDepartment.getIsCompany())?2:3));
             org.setCreatetime(new Date());
             org.setUpdatetime(new Date());
-            org.setCreateBy(regUser.getId().toString());
-            org.setUpdateBy(regUser.getId().toString());
+            org.setCreateBy(String.valueOf(main_user_id));
+            org.setUpdateBy(String.valueOf(main_user_id));
             map.put(oldId,org);
         }
         Set<Long> keys = map.keySet();

@@ -59,7 +59,7 @@
     <profiles>
 
         <profile>
-            <!-- 测试环境 -->
+            <!-- 正式环境 -->
             <id>product</id>
             <properties>
                 <!-- #悦采数据源 -->
@@ -99,6 +99,8 @@
                 </pom.spring.datasource.approve.url>
                 <pom.spring.datasource.approve.username>yanlinwang</pom.spring.datasource.approve.username>
                 <pom.spring.datasource.approve.password>a@20190320</pom.spring.datasource.approve.password>
+
+                <pom.zk.registry>zookeeper://192.168.2.137:2181?backup=192.168.2.135:2181,192.168.2.132:2181</pom.zk.registry>
             </properties>
             <activation>
                 <activeByDefault>false</activeByDefault>
@@ -139,6 +141,8 @@
                 <pom.spring.datasource.approve.url>jdbc:mysql://100.100.0.5:3306/approve?characterEncoding=utf8&amp;zeroDateTimeBehavior=convertToNull&amp;allowMultiQueries=true</pom.spring.datasource.approve.url>
                 <pom.spring.datasource.approve.username>zhucongyao</pom.spring.datasource.approve.username>
                 <pom.spring.datasource.approve.password>a654321</pom.spring.datasource.approve.password>
+
+                <pom.zk.registry>zookeeper://testzookeeper:2181</pom.zk.registry>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>

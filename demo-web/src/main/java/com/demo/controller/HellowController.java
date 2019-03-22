@@ -40,8 +40,12 @@ public class HellowController {
     protected JdbcTemplate uniregJdbcTemplate;
 
     @Autowired
+    @Qualifier("approveJdbcTemplate")
+    protected JdbcTemplate approveJdbcTemplate;
+
+   /* @Autowired
     @Qualifier("purchaseJdbcTemplate")
-    protected JdbcTemplate purchaseJdbcTemplate;
+    protected JdbcTemplate purchaseJdbcTemplate;*/
 /*
     @Autowired
     @Qualifier("yuecaiProJdbcTemplate")
@@ -83,10 +87,11 @@ public class HellowController {
     @RequestMapping( value = "testMutilDataSource")
     public String testMutilDataSource( HttpServletRequest request , HttpServletResponse response ){
         aclJdbcTemplate.queryForMap("select ORGNAME FROM SYS_ORG WHERE ORGID = 100");
-        uniregJdbcTemplate.queryForMap("select create_user_name FROM supplier WHERE ID = 174957304234377216");
+        uniregJdbcTemplate.queryForMap("select create_user_name FROM supplier limit 1");
+        approveJdbcTemplate.queryForMap("select * from  approve limit 1");
         regDepartmentMapper.getDepUserRelation(1113172701L);
-        purchaseJdbcTemplate.queryForList("select * from transaction_record");
-//        List<Map<String, Object>> maps = yuecaiProJdbcTemplate.queryForList("select count(1) from corp_directorys where company_id=270513113");
+        //purchaseJdbcTemplate.queryForList("select * from transaction_record");
+        //List<Map<String, Object>> maps = yuecaiProJdbcTemplate.queryForList("select count(1) from corp_directorys where company_id=270513113");
         return "success";
     }
 }

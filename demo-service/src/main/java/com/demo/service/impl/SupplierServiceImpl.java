@@ -74,7 +74,7 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public String handleSupplierAdmittanceRecode(Long companyId,Long oriCompanyId, List<Long> list) {
+    public String handleSupplierAdmittanceRecode(Long companyId, Long oriCompanyId, List<Long> list) {
         String sql = "INSERT INTO supplier_admittance_record ( id, company_id, supplier_id, starting_time, admittance_time, admittance_user_name, join_time, reason, is_past_due, create_time, " +
                 "create_user_name, create_user_id, update_time, update_user_name, update_user_id )  " +
                 "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -91,11 +91,11 @@ public class SupplierServiceImpl implements SupplierService {
                 Long supplierId = list.get(i);
                 Date nowTime = new Date();
                 bsmCompanySupplier info = supplierInfoMap.get(supplierId);
-                if( null != info ){
+                if (null != info) {
                     parms.add(new Object[]{id, companyId, supplierId, info.getCreateTime(), info.getCreateTime(), info.getCreateUserName(), info.getResponseTime(), null, 0, nowTime, tRegUser.getName(), tRegUser.getId(), nowTime, tRegUser.getName(), tRegUser.getId()});
                 } else {
                     System.out.println("未查到供应商信息：" + supplierId);
-                    parms.add(new Object[]{id, companyId, supplierId, nowTime , nowTime , null , nowTime , null, 0, nowTime, tRegUser.getName(), tRegUser.getId(), nowTime, tRegUser.getName(), tRegUser.getId()});
+                    parms.add(new Object[]{id, companyId, supplierId, nowTime, nowTime, null, nowTime, null, 0, nowTime, tRegUser.getName(), tRegUser.getId(), nowTime, tRegUser.getName(), tRegUser.getId()});
                 }
                 log.info("newId:{}", id);
             }
@@ -163,7 +163,7 @@ public class SupplierServiceImpl implements SupplierService {
         //插入供应商主表
         int[] batchUpdate = uniregJdbcTemplate.batchUpdate(sql, parms);
         //添加准入记录
-        String s = this.handleSupplierAdmittanceRecode(destCompanyId,originCompanyId, supplierIdList);
+        String s = this.handleSupplierAdmittanceRecode(destCompanyId, originCompanyId, supplierIdList);
         return "success";
     }
 
@@ -242,11 +242,10 @@ public class SupplierServiceImpl implements SupplierService {
                 "create_time,\n" +
                 "update_user_id,\n" +
                 "update_user_name,\n" +
-                "update_time ,\n" +
-                "platform \n" +
+                "update_time \n" +
                 ")\n" +
                 "VALUES\n" +
-                "\t( ?, ?, ?, ?, ?,?,?,?, ?, ?, ?, ?,?, ?, ?, ?, ?,?,?,? ,? ,? , ? ,?, ?)";
+                "\t( ?, ?, ?, ?, ?,?,?,?, ?, ?, ?, ?,?, ?, ?, ?, ?,?,?,? ,? ,? , ? ,?)";
 
         // 根据悦采companyId生成 供应商supplierId拼接字段
         String supplierIds = approveTaskRecodeMapper.concatSupplierId(originCompanyId);
@@ -282,10 +281,10 @@ public class SupplierServiceImpl implements SupplierService {
 
             Byte currentNodeIndex = approveTaskRecode.getCurrentNodeIndex();
 
-            Byte type ;
-            if( approveTaskRecode.getType() == 1 ){
+            Byte type;
+            if (approveTaskRecode.getType() == 1) {
                 type = 2;
-            } else if ( approveTaskRecode.getType() == 2 || approveTaskRecode.getType() == 4  ) {
+            } else if (approveTaskRecode.getType() == 2 || approveTaskRecode.getType() == 4) {
                 type = 1;
             } else {
                 type = approveTaskRecode.getType();
@@ -295,26 +294,26 @@ public class SupplierServiceImpl implements SupplierService {
 
             // 若供应商无审批记录，project_id 设置为-1
             // 创建人名称 + 更新人名称  --> 使用新companyId查询中心库获取name
-            if(converMap.get(supplierId) == null){
+            if (converMap.get(supplierId) == null) {
                 log.info("supplierId 对应的id为null");
-            }else{
+            } else {
                 Long assignId = main_user_id;
                 String assignName = main_user_name;
                 RegUser regUser = new RegUser();
                 regUser.setLoginName(assign);
                 regUser.setCompanyId(originCompanyId);
                 RegUser user = regUserMapper.findByCondition(regUser);
-                if( null != user ){
+                if (null != user) {
                     assignId = user.getBidlinkId();
                     assignName = user.getName();
                 }
                 parms.add(new Object[]{IdWork.nextId(), "yc_" + approveTaskRecode.getProcInstanceId(), "yc_" + approveTaskRecode.getTaskId(), converMap.get(supplierId), approveTaskRecode.getCustomId(),
                         approveTaskRecode.getTaskDefKey(), approveTaskRecode.getCurrentNodeIndex(), type, approveTaskRecode.getStatus(), approveTaskRecode.getMultInstance(),
-                        approveTaskRecode.getApproveSuggestion(), approveTaskRecode.getApproveType(),approveTaskRecode.getApproveTime(), approveTaskRecode.getAssign() , assignId ,
-                        assignName ,  approveTaskRecode.getDescription(), destCompanyId, approveTaskRecode.getCreateUserId(), tRegUser.get(0).getName(), approveTaskRecode.getCreateTime(),
-                        approveTaskRecode.getUpdateUserId(), tRegUser.get(0).getName(), new Date() , 20});
+                        approveTaskRecode.getApproveSuggestion(), approveTaskRecode.getApproveType(), approveTaskRecode.getApproveTime(), approveTaskRecode.getAssign(), assignId,
+                        assignName, approveTaskRecode.getDescription(), destCompanyId, approveTaskRecode.getCreateUserId(), tRegUser.get(0).getName(), approveTaskRecode.getCreateTime(),
+                        approveTaskRecode.getUpdateUserId(), tRegUser.get(0).getName(), new Date()});
             }
-            if( !hashSet.contains(procInstanceId) ){
+            if (!hashSet.contains(procInstanceId)) {
                 stringBuilder.append(procInstanceId);
                 stringBuilder.append(",");
                 hashSet.add(procInstanceId);
@@ -322,25 +321,25 @@ public class SupplierServiceImpl implements SupplierService {
         }
 
         String insertApproveSql = " INSERT INTO  approve  ( id ,  project_id ,  project_no ,  project_name ,  project_status ,  project_create_user_id ,  project_create_user_name ,  project_create_time ,  `module` ,  module_node_type ,  proc_inst_id " +
-                " ,  custom_id ,  apply_reason ,  custom_version ,  approve_status ,  approve_result ,  company_id ,  create_user_id ,  create_user_name ,  create_time ,  update_user_id ,  update_user_name ,  update_time ,  platform )" +
-                " VALUES ( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ?, ?) ";
+                " ,  custom_id ,  apply_reason ,  custom_version ,  approve_status ,  approve_result ,  company_id ,  create_user_id ,  create_user_name ,  create_time ,  update_user_id ,  update_user_name ,  update_time )" +
+                " VALUES ( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ?) ";
         String procInsanceIds = stringBuilder.toString().substring(0, stringBuilder.length() - 1);
         // 查询悦采审批信息 条件：流程实例  + 悦采 companyId
         List<Approving> approvingList = approvingMapper.selApprovingByProcInstanceIds(procInsanceIds, originCompanyId);
         List<Object[]> approvingParms = new ArrayList<>();
-        for( Approving approving : approvingList ){
+        for (Approving approving : approvingList) {
 
-            if(converMap.get(approving.getProjectId()) == null){
+            if (converMap.get(approving.getProjectId()) == null) {
                 log.info("projectId 对应的id为null");
-            }else {
-                approvingParms.add(new Object[]{IdWork.nextId(), converMap.get(approving.getProjectId()), approving.getProjectNo(), approving.getProjectName() , approving.getProjectStatus() , approving.getProjectCreateUserId() , approving.getProjectCreateUserName() , approving.getCreateTime() , 6 , 61 , "yc_" + approving.getProcInstId()
-                                                , -1 , null , approving.getCustomVersion() , approving.getApproveStatus() , approving.getApproveResult() , destCompanyId , tRegUser.get(0).getId() , tRegUser.get(0).getName() , new Date() , tRegUser.get(0).getId() , tRegUser.get(0).getName() , new Date() , 20 });
+            } else {
+                approvingParms.add(new Object[]{IdWork.nextId(), converMap.get(approving.getProjectId()), approving.getProjectNo(), approving.getProjectName(), approving.getProjectStatus(), approving.getProjectCreateUserId(), approving.getProjectCreateUserName(), approving.getCreateTime(), 6, 61, "yc_" + approving.getProcInstId()
+                        , -1, null, approving.getCustomVersion(), approving.getApproveStatus(), approving.getApproveResult(), destCompanyId, tRegUser.get(0).getId(), tRegUser.get(0).getName(), new Date(), tRegUser.get(0).getId(), tRegUser.get(0).getName(), new Date()});
             }
         }
 
-       int[] batchUpdate = approveJdbcTemplate.batchUpdate(insertSql, parms);
-       int[] update = approveJdbcTemplate.batchUpdate(insertApproveSql, approvingParms);
-       return "success";
+        int[] batchUpdate = approveJdbcTemplate.batchUpdate(insertSql, parms);
+        int[] update = approveJdbcTemplate.batchUpdate(insertApproveSql, approvingParms);
+        return "success";
     }
 
 }

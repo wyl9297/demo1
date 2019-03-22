@@ -1,13 +1,11 @@
 package com.demo.model;
 
-import groovy.transform.ToString;
 
 import java.util.Date;
 
 /**
  * 采购品  历史供应商成交价
  */
-@ToString
 public class PurchasesWinRecord {
     private Long id;
 

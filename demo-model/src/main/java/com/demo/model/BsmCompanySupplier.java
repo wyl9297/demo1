@@ -2,7 +2,7 @@ package com.demo.model;
 
 import java.util.Date;
 
-public class bsmCompanySupplier extends bsmCompanySupplierKey {
+public class BsmCompanySupplier extends BsmCompanySupplierKey {
     private String companyName;
 
     private Long supplierId;

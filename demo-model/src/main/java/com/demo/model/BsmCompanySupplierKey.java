@@ -1,6 +1,6 @@
 package com.demo.model;
 
-public class bsmCompanySupplierKey {
+public class BsmCompanySupplierKey {
     private Long id;
 
     private Long companyId;

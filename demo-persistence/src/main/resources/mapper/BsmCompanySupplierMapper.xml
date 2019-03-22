@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.demo.persistence.dao.BsmCompanySupplierMapper" >
-  <resultMap id="BaseResultMap" type="com.demo.model.bsmCompanySupplier" >
+  <resultMap id="BaseResultMap" type="com.demo.model.BsmCompanySupplier" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <id column="company_id" property="companyId" jdbcType="BIGINT" />
     <result column="company_name" property="companyName" jdbcType="VARCHAR" />
@@ -66,7 +66,7 @@
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
 
-  <resultMap id="BaseResultMapNew" type="com.demo.model.bsmCompanySupplier" >
+  <resultMap id="BaseResultMapNew" type="com.demo.model.BsmCompanySupplier" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <id column="company_id" property="companyId" jdbcType="BIGINT" />
     <result column="company_name" property="companyName" jdbcType="VARCHAR" />
@@ -160,7 +160,7 @@
     bcs.last_evaluation_time, bcs.remove_time, bcs.create_user_id, bcs.create_user_name, bcs.create_time,
     bcs.update_user_id, bcs.update_user_name, bcs.update_time , bcsa.responseTime
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.demo.model.bsmCompanySupplierKey" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.demo.model.BsmCompanySupplierKey" >
     select 
     <include refid="Base_Column_List" />
     from bsm_company_supplier
@@ -194,12 +194,12 @@
        #{supplierId}
     </foreach>
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="com.demo.model.bsmCompanySupplierKey" >
+  <delete id="deleteByPrimaryKey" parameterType="com.demo.model.BsmCompanySupplierKey" >
     delete from bsm_company_supplier
     where id = #{id,jdbcType=BIGINT}
       and company_id = #{companyId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.demo.model.bsmCompanySupplier" >
+  <insert id="insert" parameterType="com.demo.model.BsmCompanySupplier" >
     insert into bsm_company_supplier (id, company_id, company_name, 
       supplier_id, supplier_name, supplier_level, 
       supplier_score, supplier_evaluate_date, supplier_status, 
@@ -245,7 +245,7 @@
       #{createTime,jdbcType=TIMESTAMP}, #{updateUserId,jdbcType=BIGINT}, #{updateUserName,jdbcType=VARCHAR}, 
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.demo.model.bsmCompanySupplier" >
+  <insert id="insertSelective" parameterType="com.demo.model.BsmCompanySupplier" >
     insert into bsm_company_supplier
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -624,7 +624,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.demo.model.bsmCompanySupplier" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.demo.model.BsmCompanySupplier" >
     update bsm_company_supplier
     <set >
       <if test="companyName != null" >
@@ -811,7 +811,7 @@
     where id = #{id,jdbcType=BIGINT}
       and company_id = #{companyId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.demo.model.bsmCompanySupplier" >
+  <update id="updateByPrimaryKey" parameterType="com.demo.model.BsmCompanySupplier" >
     update bsm_company_supplier
     set company_name = #{companyName,jdbcType=VARCHAR},
       supplier_id = #{supplierId,jdbcType=BIGINT},

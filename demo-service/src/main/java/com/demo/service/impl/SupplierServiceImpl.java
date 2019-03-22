@@ -69,13 +69,13 @@ public class SupplierServiceImpl implements SupplierService {
         long main_user_id = (long) userMap.get("id");
         String main_user_name = (String) userMap.get("name");
         List<Object[]> parms = new ArrayList<>();
-        Map<Long, bsmCompanySupplier> supplierInfoMap = bsmCompanySupplierMapper.getSupplierInfoList(oriCompanyId, list);
+        Map<Long, BsmCompanySupplier> supplierInfoMap = bsmCompanySupplierMapper.getSupplierInfoList(oriCompanyId, list);
         for (int i = 0; i < list.size(); i++) {
             log.info("-------------进入循环，开始遍历，需要遍历的数量:{}----------", list.size());
             Long id = IdWork.nextId();
             Long supplierId = list.get(i);
             Date nowTime = new Date();
-            bsmCompanySupplier info = supplierInfoMap.get(supplierId);
+            BsmCompanySupplier info = supplierInfoMap.get(supplierId);
             if (null != info) {
                 parms.add(new Object[]{id, companyId, supplierId, info.getCreateTime(), info.getCreateTime(), info.getCreateUserName(), info.getResponseTime(), null, 0, nowTime, main_user_name, main_user_id, nowTime, main_user_name, main_user_id});
             } else {
@@ -126,8 +126,8 @@ public class SupplierServiceImpl implements SupplierService {
         }
 
         //合作供应商
-        List<bsmCompanySupplier> cooperateSupplier = bsmCompanySupplierMapper.getCooperateSupplier(originCompanyId);
-        for (bsmCompanySupplier bsmCompanySupplier : cooperateSupplier) {
+        List<BsmCompanySupplier> cooperateSupplier = bsmCompanySupplierMapper.getCooperateSupplier(originCompanyId);
+        for (BsmCompanySupplier bsmCompanySupplier : cooperateSupplier) {
             Long createUserId = main_user_id;
             String createUserName = main_user_name;
             if (bsmCompanySupplier.getCreateUserId() != null) {

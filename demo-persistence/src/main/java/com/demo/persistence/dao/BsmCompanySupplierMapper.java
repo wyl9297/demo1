@@ -1,7 +1,7 @@
 package com.demo.persistence.dao;
 
-import com.demo.model.bsmCompanySupplier;
-import com.demo.model.bsmCompanySupplierKey;
+import com.demo.model.BsmCompanySupplier;
+import com.demo.model.BsmCompanySupplierKey;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
 
@@ -9,22 +9,22 @@ import java.util.List;
 import java.util.Map;
 
 public interface BsmCompanySupplierMapper {
-    int deleteByPrimaryKey(bsmCompanySupplierKey key);
+    int deleteByPrimaryKey(BsmCompanySupplierKey key);
 
-    int insert(bsmCompanySupplier record);
+    int insert(BsmCompanySupplier record);
 
-    int insertSelective(bsmCompanySupplier record);
+    int insertSelective(BsmCompanySupplier record);
 
-    bsmCompanySupplier selectByPrimaryKey(bsmCompanySupplierKey key);
+    BsmCompanySupplier selectByPrimaryKey(BsmCompanySupplierKey key);
 
-    int updateByPrimaryKeySelective(bsmCompanySupplier record);
+    int updateByPrimaryKeySelective(BsmCompanySupplier record);
 
-    int updateByPrimaryKey(bsmCompanySupplier record);
+    int updateByPrimaryKey(BsmCompanySupplier record);
 
-    List<bsmCompanySupplier> getCooperateSupplier(@Param("companyId") Long companyId );
+    List<BsmCompanySupplier> getCooperateSupplier(@Param("companyId") Long companyId );
 
-    bsmCompanySupplier getSupplierInfo(@Param("companyId") Long companyId ,@Param("supplierId") Long supplierId );
+    BsmCompanySupplier getSupplierInfo(@Param("companyId") Long companyId , @Param("supplierId") Long supplierId );
 
     @MapKey("supplierId")
-    Map<Long , bsmCompanySupplier> getSupplierInfoList(@Param("companyId") Long companyId , @Param("supplierIds") List<Long> supplierIds );
+    Map<Long , BsmCompanySupplier> getSupplierInfoList(@Param("companyId") Long companyId , @Param("supplierIds") List<Long> supplierIds );
 }

@@ -3,7 +3,6 @@ package cn.bidlink.datacenter.actualize.service.impl;
 import cn.bidlink.datacenter.actualize.service.RegDepartmentService;
 import cn.bidlink.framework.util.gen.IdWork;
 import cn.bidlink.resacl.model.Org;
-import cn.bidlink.usercenter.server.entity.TRegUser;
 import cn.bidlink.datacenter.actualize.model.RegDepartment;
 import cn.bidlink.datacenter.actualize.persistence.dao.RegDepartmentMapper;
 import com.esotericsoftware.minlog.Log;
@@ -33,13 +32,10 @@ public class RegDepartmentServiceImpl implements RegDepartmentService {
     //迁移部门
     @Override
     public String handleRegDepartment(Long originCompanyId , Long destCompanyId) {
-        TRegUser regUser = new TRegUser();
-        regUser.setCompanyId(destCompanyId);
-        regUser.setIsSubuser(0);
+
         Map<String, Object> userMap = uniregJdbcTemplate.queryForMap(" select id,name from t_reg_user where company_id = ? and is_subuser = 0", originCompanyId);
 
         if (CollectionUtils.isEmpty(userMap)) {
-            Log.error("查询中心库信息失败");
             return "error" ;
         }
 

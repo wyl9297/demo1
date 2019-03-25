@@ -1,6 +1,5 @@
 package cn.bidlink.datacenter.actualize.web.controller;
 
-import cn.bidlink.procurement.materials.dal.server.entity.CorpCatalogs;
 import cn.bidlink.datacenter.actualize.model.Company;
 import cn.bidlink.datacenter.actualize.persistence.dao.RegDepartmentMapper;
 import cn.bidlink.datacenter.actualize.service.DemoService;
@@ -52,9 +51,9 @@ public class HellowController {
     @RequestMapping( value = "success")
     public ModelAndView success(HttpServletRequest request , HttpServletResponse response){
         int i = 0;
-        CorpCatalogs corpCatalogs = new CorpCatalogs();
+        /*CorpCatalogs corpCatalogs = new CorpCatalogs();
         corpCatalogs.setId(283248124493824000L);
-        corpCatalogs.setCompanyId(1113172744L);
+        corpCatalogs.setCompanyId(1113172744L);*/
         /*System.out.println(delete.getResult());
         while ( i < 100 ){
             System.out.println(IdWork.nextId());
